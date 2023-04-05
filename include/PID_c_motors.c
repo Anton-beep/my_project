@@ -1,0 +1,106 @@
+// Getting last motor Ratio
+
+#include "PID_c.c"
+#include "tools.c"
+
+// calculation of an error
+
+short ERR_MODE;
+/*
+0 - powers are zeros
+1 - different signs
+2 - same signs
+3 - one is zero
+*/
+
+float getPIDErrMot(float ratioMotB, float ratioMotC, float startDegMotB, float startDegMotC)
+{
+    switch (ERR_MODE)
+    {
+    case 0:
+        return (nMotorEncoder[motC] - startDegMotC) - (nMotorEncoder[motB] - startDegMotB);
+        break;
+
+    case 1:
+        return (ratioMotB * (nMotorEncoder[motC] - startDegMotC) - (nMotorEncoder[motB] - startDegMotB) * ratioMotC) / (ratioMotC - ratioMotB);
+        break;
+
+    case 2:
+        return (ratioMotB * (nMotorEncoder[motC] - startDegMotC) - (nMotorEncoder[motB] - startDegMotB) * ratioMotC) / (ratioMotC + ratioMotB);
+        break;
+
+    default:
+        return 0;
+        break;
+    }
+}
+
+// DO NOT CHANGE VALUES, ONLY THROUGH FUNCTION
+short POWER_MOT_B = 0;
+short POWER_MOT_C = 0;
+int START_DEG_MOT_B = 0;
+int START_DEG_MOT_C = 0;
+
+short out_PID;
+PIDSettings MOT_PID_SETTINGS;
+
+task PIDEngineMot()
+{
+    MOT_PID_SETTINGS.Kp = 1;
+    MOT_PID_SETTINGS.Ki = 0;
+    MOT_PID_SETTINGS.Kd = 0;
+    MOT_PID_SETTINGS.prevErr = 0;
+    MOT_PID_SETTINGS.integral = 0;
+    MOT_PID_SETTINGS.errNow = 0;
+    MOT_PID_SETTINGS.dt = 0.01;
+    MOT_PID_SETTINGS.pauseAction = false;
+
+    while (true)
+    {
+        MOT_PID_SETTINGS.errNow = getPIDErrMot(POWER_MOT_B, POWER_MOT_C, START_DEG_MOT_B, START_DEG_MOT_C);
+        out_PID = PIDFunction(&MOT_PID_SETTINGS);
+        switch (ERR_MODE)
+        {
+        case 1:
+            motor[motB] = POWER_MOT_B + out_PID;
+            motor[motC] = POWER_MOT_C + out_PID;
+            break;
+
+        default:
+            motor[motB] = POWER_MOT_B + out_PID;
+            motor[motC] = POWER_MOT_C - out_PID;
+            break;
+        }
+        sleep(MOT_PID_SETTINGS.dt * 1000);
+    }
+}
+
+void setNewMotBCPowers(float powerMotB, float powerMotC)
+{
+    POWER_MOT_B = powerMotB;
+    POWER_MOT_C = powerMotC;
+
+    // PIDReset(&)
+
+    if (powerMotB == 0 && powerMotC == 0)
+    {
+        ERR_MODE = 0;
+    }
+    else if (difSignsFloat(powerMotB, powerMotC))
+    {
+        // dif signs
+        ERR_MODE = 1;
+    }
+    else if (!(difSignsFloat(powerMotB, powerMotC)))
+    {
+        // same signs
+        ERR_MODE = 2;
+    }
+    else if (powerMotB == 0 || powerMotC == 0)
+    {
+        ERR_MODE = 3;
+    }
+
+    START_DEG_MOT_B = nMotorEncoder[motB];
+    START_DEG_MOT_C = nMotorEncoder[motC];
+}

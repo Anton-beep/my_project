@@ -21,3 +21,7 @@ float min(float a, float b){
 float max(float a, float b){
     return a > b ? a : b;
 }
+
+float circleDegToCm(float circleDeg){
+    return BASE_LEN * PI * circleDeg / 360;
+}

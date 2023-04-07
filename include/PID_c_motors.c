@@ -4,6 +4,7 @@
 #include "tools.c"
 
 // calculation of an error
+// it calculates using RATIO_MOT vars
 
 short ERR_MODE;
 /*
@@ -38,6 +39,8 @@ float getPIDErrMot(float ratioMotB, float ratioMotC, float startDegMotB, float s
 // DO NOT CHANGE VALUES, ONLY THROUGH FUNCTION
 short POWER_MOT_B = 0;
 short POWER_MOT_C = 0;
+float RATIO_MOT_B = 0;
+float RATIO_MOT_C = 0;
 int START_DEG_MOT_B = 0;
 int START_DEG_MOT_C = 0;
 
@@ -57,7 +60,7 @@ task PIDEngineMot()
 
     while (true)
     {
-        MOT_PID_SETTINGS.errNow = getPIDErrMot(POWER_MOT_B, POWER_MOT_C, START_DEG_MOT_B, START_DEG_MOT_C);
+        MOT_PID_SETTINGS.errNow = getPIDErrMot(RATIO_MOT_B, RATIO_MOT_C, START_DEG_MOT_B, START_DEG_MOT_C);
         out_PID = PIDFunction(&MOT_PID_SETTINGS);
         switch (ERR_MODE)
         {
@@ -75,13 +78,8 @@ task PIDEngineMot()
     }
 }
 
-void setNewMotBCPowers(float powerMotB, float powerMotC)
+void setErrModeAndStartDeg(float powerMotB, float powerMotC)
 {
-    POWER_MOT_B = powerMotB;
-    POWER_MOT_C = powerMotC;
-
-    // PIDReset(&)
-
     if (powerMotB == 0 && powerMotC == 0)
     {
         ERR_MODE = 0;
@@ -103,4 +101,41 @@ void setNewMotBCPowers(float powerMotB, float powerMotC)
 
     START_DEG_MOT_B = nMotorEncoder[motB];
     START_DEG_MOT_C = nMotorEncoder[motC];
+}
+
+void setNewMotBCPowersAndRatio(float powerMotB, float powerMotC)
+{
+    RATIO_MOT_B = powerMotB;
+    RATIO_MOT_C = powerMotC;
+    POWER_MOT_B = powerMotB;
+    POWER_MOT_C = powerMotC;
+
+    // PIDReset(&)
+    setErrModeAndStartDeg(powerMotB, powerMotC)
+}
+
+void setNewMotBCOnlyPowers(short powerMotB, short powerMotC)
+{
+    POWER_MOT_B = powerMotB;
+    POWER_MOT_C = powerMotC;
+
+    setErrModeAndStartDeg(powerMotB, powerMotC)
+}
+
+void setNewMotBCOnlyRatio(float powerMotB, float powerMotC)
+{
+    RATIO_MOT_B = powerMotB;
+    RATIO_MOT_C = powerMotC;
+
+    setErrModeAndStartDeg(powerMotB, powerMotC)
+}
+
+void pausePIDMot()
+{
+    MOT_PID_SETTINGS.pauseAction = true;
+}
+
+void resumePIDMot()
+{
+    MOT_PID_SETTINGS.pauseAction = false;
 }

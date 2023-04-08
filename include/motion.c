@@ -4,8 +4,21 @@
 float DEG_DEFECT_B;
 float DEG_DEFECT_C;
 
-// returns defect
-float moveBC(float dist, float powB, float powC)
+// TO CHANGE DIRECTION YOU MAY USE ONLY POWER, NOT DISTANCE!!!!!!!!!!!!!!!!
+
+void stopBC()
+{
+    setMotorBrakeMode(motB, motorBrake);
+    setMotorBrakeMode(motC, motorBrake);
+}
+
+void coastBC()
+{
+    setMotorBrakeMode(motB, motorCoast);
+    setMotorBrakeMode(motC, motorCoast);
+}
+
+void moveBC(float dist, float powB, float powC)
 {
     int startDegB = nMotorEncoder[motB];
     float endDegB;
@@ -23,11 +36,9 @@ float moveBC(float dist, float powB, float powC)
         while (nMotorEncoder[motB] > endDegB)
             ;
     }
-    return getFractionalPart(endDegB);
 }
 
-// returns defect
-float moveB(float dist, float pow)
+void moveB(float dist, float pow)
 {
     int startDegB = nMotorEncoder[motB];
     float endDegB;
@@ -45,11 +56,9 @@ float moveB(float dist, float pow)
         while (nMotorEncoder[motB] > endDegB)
             ;
     }
-    return getFractionalPart(endDegB);
 }
 
-// returns defect
-float moveC(float dist, float pow)
+void moveC(float dist, float pow)
 {
     int startDegC = nMotorEncoder[motC];
     float endDegC;
@@ -67,7 +76,6 @@ float moveC(float dist, float pow)
         while (nMotorEncoder[motC] > endDegC)
             ;
     }
-    return getFractionalPart(endDegC);
 }
 
 void tryRepairDefect(float powB, float powC)
@@ -75,14 +83,16 @@ void tryRepairDefect(float powB, float powC)
     short repB = (short)DEG_DEFECT_B;
     short repC = (short)DEG_DEFECT_C;
 
-    if (repB < 0){
+    if (repB < 0)
+    {
         powB = powB * -1;
         repB = repB * -1;
     }
-    if (repC < 0){
+    if (repC < 0)
+    {
         powC = powC * -1;
         repC = repC * -1;
-    } 
+    }
 
     if (repB == repC)
     {
@@ -101,20 +111,51 @@ void tryRepairDefect(float powB, float powC)
     }
 }
 
-void moveBCWithRepair(float dist, float powB, float powC){
-    DEG_DEFECT_B += moveBC(dist, powB, powC);
+float applyDefectB(float dist, float pow)
+{
+    if (pow > 0)
+    {
+        DEG_DEFECT_B += getFractionalPart(cmToDeg(dist));
+    }
+    else if (pow < 0)
+    {
+        DEG_DEFECT_B -= getFractionalPart(cmToDeg(dist));
+    }
+}
+
+float applyDefectC(float dist, float pow)
+{
+    if (pow > 0)
+    {
+        DEG_DEFECT_C += getFractionalPart(cmToDeg(dist));
+    }
+    else if (pow < 0)
+    {
+        DEG_DEFECT_C -= getFractionalPart(cmToDeg(dist));
+    }
+}
+
+void moveBCWithRepair(float dist, float powB, float powC)
+{
+    applyDefectB(dist, powB);
     tryRepairDefect(powB, powC);
+    moveBC(dist, powB, powC);
 }
 
-void moveBWithRepair(float dist, float pow){
-    DEG_DEFECT_B += moveB(dist, pow);
+void moveBWithRepair(float dist, float pow)
+{
+    applyDefectB(dist, pow);
     tryRepairDefect(pow, pow);
+    moveB(dist, pow);
 }
 
-void moveCWithRepair(float dist, float pow){
-    DEG_DEFECT_C += moveC(dist, pow);
+void moveCWithRepair(float dist, float pow)
+{
+    applyDefectC(dist, pow);
     tryRepairDefect(pow, pow);
+    moveC(dist, pow);
 }
+
 /*
 Will not across the border MOTORS_MIN_POWER and MOTORS_MAX_POWER in any situation
 Return true, when nothing to change more, false in other cases
@@ -161,6 +202,7 @@ bool applyNewAccels(short *powB, short *powC, float *newPowB, float *newPowC)
 
 void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, float accelC)
 {
+    tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
     int startDegC = nMotorEncoder[motC];
 
@@ -212,11 +254,11 @@ void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, fl
         }
     }
     DEG_DEFECT_B += getFractionalPart(endDegB);
-    tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
 }
 
 void moveBCCustomAccelMainC(float dist, float powB, float powC, float accelB, float accelC)
 {
+    tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
     int startDegC = nMotorEncoder[motC];
 
@@ -268,7 +310,6 @@ void moveBCCustomAccelMainC(float dist, float powB, float powC, float accelB, fl
         }
     }
     DEG_DEFECT_C += getFractionalPart(endDegC);
-    tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
 }
 
 void moveBCAccelPartMainB(float dist, float startPowB, float startPowC, float endPowB, float endPowC)

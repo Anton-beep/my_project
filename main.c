@@ -11,6 +11,7 @@
 #include "include/debug_PID.c"
 #include "include/motion.c"
 #include "include/sen_for_colors.c"
+#include "include/motion_with_sensors.c"
 
 task main (){
 	// define everything

@@ -1,28 +1,5 @@
 #include "tools.c"
-
-typedef struct SenSettings
-{
-    short minR;
-    short minG;
-    short minB;
-    short maxR;
-    short maxG;
-    short maxB;
-} SenSettings;
-
-typedef struct SenRGBVals
-{
-    float R;
-    float G;
-    float B;
-} SenRGBVals;
-
-typedef struct SenHSVVals
-{
-    float H;
-    float S;
-    float V;
-} SenHSVVals;
+#include "structures.c"
 
 void readCalibratedSenRGB(short sen, SenSettings *senParams, SenRGBVals *outParams)
 {
@@ -31,6 +8,12 @@ void readCalibratedSenRGB(short sen, SenSettings *senParams, SenRGBVals *outPara
     outParams->R = map(r, senParams->minR, senParams->maxR, 0, 255);
     outParams->G = map(g, senParams->minG, senParams->maxG, 0, 255);
     outParams->B = map(b, senParams->minB, senParams->maxB, 0, 255);
+}
+
+float readCalibratedSenSumRGB(short sen, SenSettings *senParams){
+    int r, g, b;
+    getColorRawRGB(sen, r, g, b);
+    return r + g + b;
 }
 
 void RGBtoHSV(SenRGBVals *inRGB, SenHSVVals *outHSV)

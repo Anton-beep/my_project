@@ -1,15 +1,4 @@
-typedef struct PIDSettings 
-{
-    float Kp;
-    float Ki;
-    float Kd;
-    float prevErr;
-    float integral;
-    float errNow;
-    float dt;   // IN SECONDS!!!!!!!!!
-    bool pauseAction;
-} PIDSettings;
-
+#include "structures.c"
 
 float PIDFunction (PIDSettings *params){
     if (params->pauseAction){

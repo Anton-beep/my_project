@@ -1,5 +1,3 @@
-// Getting last motor Ratio
-
 #include "PID_c.c"
 #include "tools.c"
 #include "../robot_cfg.c"

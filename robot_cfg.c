@@ -1,4 +1,5 @@
 #include "include/PID_c.c"
+#include "structures.c"
 
 // ALL DISTANCES IN CM
 
@@ -12,6 +13,12 @@ short MOTORS_MIN_POWER = 10;
 
 PIDSettings MOT_PID_SETTINGS;
 
+SenSettings SEN1_CALIBRATION;
+SenSettings SEN2_CALIBRATION;
+SenSettings SEN3_CALIBRATION;
+
+BLACK_LINE_RGB_SUM = 0;
+
 void defStructures()
 {
     MOT_PID_SETTINGS.Kp = 1;
@@ -22,4 +29,34 @@ void defStructures()
     MOT_PID_SETTINGS.errNow = 0;
     MOT_PID_SETTINGS.dt = 0.01;
     MOT_PID_SETTINGS.pauseAction = false;
+
+    // ----------------------------------
+
+    SEN1_CALIBRATION.minR = 0;
+    SEN1_CALIBRATION.minG = 0;
+    SEN1_CALIBRATION.minB = 0;
+
+    SEN1_CALIBRATION.maxR = 400;
+    SEN1_CALIBRATION.maxG = 400;
+    SEN1_CALIBRATION.maxB = 400;
+
+    // ----------------------------------
+
+    SEN2_CALIBRATION.minR = 0;
+    SEN2_CALIBRATION.minG = 0;
+    SEN2_CALIBRATION.minB = 0;
+
+    SEN2_CALIBRATION.maxR = 400;
+    SEN2_CALIBRATION.maxG = 400;
+    SEN2_CALIBRATION.maxB = 400;
+
+    // ----------------------------------
+
+    SEN3_CALIBRATION.minR = 0;
+    SEN3_CALIBRATION.minG = 0;
+    SEN3_CALIBRATION.minB = 0;
+
+    SEN3_CALIBRATION.maxR = 400;
+    SEN3_CALIBRATION.maxG = 400;
+    SEN3_CALIBRATION.maxB = 400;
 }

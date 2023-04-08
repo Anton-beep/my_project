@@ -13,11 +13,12 @@ short MOTORS_MIN_POWER = 10;
 
 PIDSettings MOT_PID_SETTINGS;
 
+PIDSettings KEEP_MOVING_B_SETTINGS;
+PIDSettings KEEP_MOVING_C_SETTINGS;
+
 SenSettings SEN1_CALIBRATION;
 SenSettings SEN2_CALIBRATION;
 SenSettings SEN3_CALIBRATION;
-
-BLACK_LINE_RGB_SUM = 0;
 
 void defStructures()
 {
@@ -29,6 +30,28 @@ void defStructures()
     MOT_PID_SETTINGS.errNow = 0;
     MOT_PID_SETTINGS.dt = 0.01;
     MOT_PID_SETTINGS.pauseAction = false;
+
+    // ----------------------------------
+
+    KEEP_MOVING_B_SETTINGS.Kp = 0.1;
+    KEEP_MOVING_B_SETTINGS.Ki = 0;
+    KEEP_MOVING_B_SETTINGS.Kd = 0;
+    KEEP_MOVING_B_SETTINGS.prevErr = 0;
+    KEEP_MOVING_B_SETTINGS.integral = 0;
+    KEEP_MOVING_B_SETTINGS.errNow = 0;
+    KEEP_MOVING_B_SETTINGS.dt = 0.01;
+    KEEP_MOVING_B_SETTINGS.pauseAction = false;
+
+    // ----------------------------------
+
+    KEEP_MOVING_C_SETTINGS.Kp = 0.1;
+    KEEP_MOVING_C_SETTINGS.Ki = 0;
+    KEEP_MOVING_C_SETTINGS.Kd = 0;
+    KEEP_MOVING_C_SETTINGS.prevErr = 0;
+    KEEP_MOVING_C_SETTINGS.integral = 0;
+    KEEP_MOVING_C_SETTINGS.errNow = 0;
+    KEEP_MOVING_C_SETTINGS.dt = 0.01;
+    KEEP_MOVING_C_SETTINGS.pauseAction = false;
 
     // ----------------------------------
 

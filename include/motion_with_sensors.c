@@ -24,16 +24,16 @@ void line2SenDist(PIDSettings *PIDSet, float dist, float pow)
     }
 }
 
-void lineSen1InDist(PIDSettings *PIDSet, float dist, float pow)
+void lineSen1InDist(PIDSettings *PIDSet, float dist, float pow, float target)
 {
     int startDegB = nMotorEncoder[motB];
     float endDegB;
-    if (powB > 0)
+    if (pow > 0)
     {
         endDegB = startDegB + cmToDeg(dist);
         while (nMotorEncoder[motB] < endDegB)
         {
-            PIDSen1InWork(PIDSet, pow);
+            PIDSen1InWork(PIDSet, target, pow);
         }
     }
     else
@@ -41,21 +41,21 @@ void lineSen1InDist(PIDSettings *PIDSet, float dist, float pow)
         endDegB = startDegB - cmToDeg(dist);
         while (nMotorEncoder[motB] > endDegB)
         {
-            PIDSen1InWork(PIDSet, pow);
+            PIDSen1InWork(PIDSet, target, pow);
         }
     }
 }
 
-void lineSen2InDist(PIDSettings *PIDSet, float dist, float pow)
+void lineSen2InDist(PIDSettings *PIDSet, float dist, float pow, float target)
 {
     int startDegB = nMotorEncoder[motB];
     float endDegB;
-    if (powB > 0)
+    if (pow > 0)
     {
         endDegB = startDegB + cmToDeg(dist);
         while (nMotorEncoder[motB] < endDegB)
         {
-            PIDSen2InWork(PIDSet, pow);
+            PIDSen2InWork(PIDSet, target, pow);
         }
     }
     else
@@ -63,21 +63,21 @@ void lineSen2InDist(PIDSettings *PIDSet, float dist, float pow)
         endDegB = startDegB - cmToDeg(dist);
         while (nMotorEncoder[motB] > endDegB)
         {
-            PIDSen2InWork(PIDSet, pow);
+            PIDSen2InWork(PIDSet, target, pow);
         }
     }
 }
 
-void lineSen1OutDist(PIDSettings *PIDSet, float dist, float pow)
+void lineSen1OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
 {
     int startDegB = nMotorEncoder[motB];
     float endDegB;
-    if (powB > 0)
+    if (pow > 0)
     {
         endDegB = startDegB + cmToDeg(dist);
         while (nMotorEncoder[motB] < endDegB)
         {
-            PIDSen1InWork(PIDSet, pow);
+            PIDSen1InWork(PIDSet, target, pow);
         }
     }
     else
@@ -85,21 +85,21 @@ void lineSen1OutDist(PIDSettings *PIDSet, float dist, float pow)
         endDegB = startDegB - cmToDeg(dist);
         while (nMotorEncoder[motB] > endDegB)
         {
-            PIDSen1InWork(PIDSet, pow);
+            PIDSen1InWork(PIDSet, target, pow);
         }
     }
 }
 
-void lineSen2OutDist(PIDSettings *PIDSet, float dist, float pow)
+void lineSen2OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
 {
     int startDegB = nMotorEncoder[motB];
     float endDegB;
-    if (powB > 0)
+    if (pow > 0)
     {
         endDegB = startDegB + cmToDeg(dist);
         while (nMotorEncoder[motB] < endDegB)
         {
-            PIDSen2InWork(PIDSet, pow);
+            PIDSen2InWork(PIDSet, target, pow);
         }
     }
     else
@@ -107,7 +107,7 @@ void lineSen2OutDist(PIDSettings *PIDSet, float dist, float pow)
         endDegB = startDegB - cmToDeg(dist);
         while (nMotorEncoder[motB] > endDegB)
         {
-            PIDSen2InWork(PIDSet, pow);
+            PIDSen2InWork(PIDSet, target, pow);
         }
     }
 }
@@ -153,14 +153,14 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
             if (!(flagAccel) && time1[T1] % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
-                newPowB = -1 * round(sqrt(madeDist * 2 * accelB + pow(powB, 2)));
-                if (powC >= 0)
+                newPowB = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
+                if (power >= 0)
                 {
-                    newPowC = round(sqrt(madeDist * 2 * accelC + pow(powC, 2)));
+                    newPowC = round(sqrt(madeDist * 2 * accel + pow(power, 2)));
                 }
                 else
                 {
-                    newPowC = -1 * round(sqrt(madeDist * 2 * accelC + pow(powC, 2)));
+                    newPowC = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
                 }
                 flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
             }
@@ -169,7 +169,7 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
     }
 }
 
-void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel)
+void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target)
 {
     tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
@@ -199,7 +199,7 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
                 }
                 flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
             }
-            PIDSen1InWork(PIDSet, power);
+            PIDSen1InWork(PIDSet, target, power);
         }
     }
     else
@@ -210,23 +210,23 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
             if (!(flagAccel) && time1[T1] % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
-                newPowB = -1 * round(sqrt(madeDist * 2 * accelB + pow(powB, 2)));
-                if (powC >= 0)
+                newPowB = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
+                if (power >= 0)
                 {
-                    newPowC = round(sqrt(madeDist * 2 * accelC + pow(powC, 2)));
+                    newPowC = round(sqrt(madeDist * 2 * accel + pow(power, 2)));
                 }
                 else
                 {
-                    newPowC = -1 * round(sqrt(madeDist * 2 * accelC + pow(powC, 2)));
+                    newPowC = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
                 }
                 flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
             }
-            PIDSen1InWork(PIDSet, power);
+            PIDSen1InWork(PIDSet, target, power);
         }
     }
 }
 
-void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel)
+void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target)
 {
     tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
@@ -256,7 +256,7 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
                 }
                 flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
             }
-            PIDSen2InWork(PIDSet, power);
+            PIDSen2InWork(PIDSet, target, power);
         }
     }
     else
@@ -267,23 +267,23 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
             if (!(flagAccel) && time1[T1] % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
-                newPowB = -1 * round(sqrt(madeDist * 2 * accelB + pow(powB, 2)));
-                if (powC >= 0)
+                newPowB = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
+                if (power >= 0)
                 {
-                    newPowC = round(sqrt(madeDist * 2 * accelC + pow(powC, 2)));
+                    newPowC = round(sqrt(madeDist * 2 * accel + pow(power, 2)));
                 }
                 else
                 {
-                    newPowC = -1 * round(sqrt(madeDist * 2 * accelC + pow(powC, 2)));
+                    newPowC = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
                 }
                 flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
             }
-            PIDSen2InWork(PIDSet, power);
+            PIDSen2InWork(PIDSet, target, power);
         }
     }
 }
 
-void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel)
+void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target)
 {
     tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
@@ -313,7 +313,7 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
                 }
                 flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
             }
-            PIDSen1OutWork(PIDSet, power);
+            PIDSen1OutWork(PIDSet, target, power);
         }
     }
     else
@@ -324,23 +324,23 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
             if (!(flagAccel) && time1[T1] % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
-                newPowB = -1 * round(sqrt(madeDist * 2 * accelB + pow(powB, 2)));
-                if (powC >= 0)
+                newPowB = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
+                if (power >= 0)
                 {
-                    newPowC = round(sqrt(madeDist * 2 * accelC + pow(powC, 2)));
+                    newPowC = round(sqrt(madeDist * 2 * accel + pow(power, 2)));
                 }
                 else
                 {
-                    newPowC = -1 * round(sqrt(madeDist * 2 * accelC + pow(powC, 2)));
+                    newPowC = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
                 }
                 flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
             }
-            PIDSen1OutWork(PIDSet, power);
+            PIDSen1OutWork(PIDSet, target, power);
         }
     }
 }
 
-void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel)
+void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target)
 {
     tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
@@ -370,7 +370,7 @@ void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
                 }
                 flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
             }
-            PIDSen2OutWork(PIDSet, power);
+            PIDSen2OutWork(PIDSet, target, power);
         }
     }
     else
@@ -381,18 +381,18 @@ void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
             if (!(flagAccel) && time1[T1] % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
-                newPowB = -1 * round(sqrt(madeDist * 2 * accelB + pow(powB, 2)));
-                if (powC >= 0)
+                newPowB = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
+                if (power >= 0)
                 {
-                    newPowC = round(sqrt(madeDist * 2 * accelC + pow(powC, 2)));
+                    newPowC = round(sqrt(madeDist * 2 * accel + pow(power, 2)));
                 }
                 else
                 {
-                    newPowC = -1 * round(sqrt(madeDist * 2 * accelC + pow(powC, 2)));
+                    newPowC = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
                 }
                 flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
             }
-            PIDSen2OutWork(PIDSet, power);
+            PIDSen2OutWork(PIDSet, target, power);
         }
     }
 }
@@ -403,28 +403,28 @@ void line2SenAccelPart(PIDSettings *PIDSet, float dist, float startPow, float en
     line2SenCustomAccel(PIDSet, dist, startPow, accel);
 }
 
-void lineSen1InAccelPart(PIDSettings *PIDSet, float dist, float startPow, float endPow)
+void lineSen1InAccelPart(PIDSettings *PIDSet, float dist, float startPow, float endPow, float target)
 {
     float accel = (pow(endPow, 2) - pow(startPow, 2)) / (cmToDeg(dist) * 2);
-    lineSen1InCustomAccel(PIDSet, dist, startPow, accel);
+    lineSen1InCustomAccel(PIDSet, dist, startPow, accel, target);
 }
 
-void lineSen1OutAccelPart(PIDSettings *PIDSet, float dist, float startPow, float endPow)
+void lineSen1OutAccelPart(PIDSettings *PIDSet, float dist, float startPow, float endPow, float target)
 {
     float accel = (pow(endPow, 2) - pow(startPow, 2)) / (cmToDeg(dist) * 2);
-    lineSen1OutCustomAccel(PIDSet, dist, startPow, accel);
+    lineSen1OutCustomAccel(PIDSet, dist, startPow, accel, target);
 }
 
-void lineSen2InAccelPart(PIDSettings *PIDSet, float dist, float startPow, float endPow)
+void lineSen2InAccelPart(PIDSettings *PIDSet, float dist, float startPow, float endPow, float target)
 {
     float accel = (pow(endPow, 2) - pow(startPow, 2)) / (cmToDeg(dist) * 2);
-    lineSen2InCustomAccel(PIDSet, dist, startPow, accel);
+    lineSen2InCustomAccel(PIDSet, dist, startPow, accel, target);
 }
 
-void lineSen2OutAccelPart(PIDSettings *PIDSet, float dist, float startPow, float endPow)
+void lineSen2OutAccelPart(PIDSettings *PIDSet, float dist, float startPow, float endPow, float target)
 {
     float accel = (pow(endPow, 2) - pow(startPow, 2)) / (cmToDeg(dist) * 2);
-    lineSen2OutCustomAccel(PIDSet, dist, startPow, accel);
+    lineSen2OutCustomAccel(PIDSet, dist, startPow, accel, target);
 }
 
 void line2Sen3Parts(PIDSettings *PIDSet1, PIDSettings *PIDSet2, PIDSettings *PIDSet3, float dist1, float dist2, float dist3, float startPow, float maxPow, float endPow)
@@ -439,9 +439,9 @@ void line2Sen3PartsOneSet(PIDSettings *PIDSet, float dist1, float dist2, float d
     line2Sen3Parts(PIDSet, PIDSet, PIDSet, dist1, dist2, dist3, startPow, maxPow, endPow);
 }
 
-void line2SenCrawl(PIDSettings *PIDSet, float pow, float blackLineSumRGBSen1, float float blackLineSumRGBSen2)
+void line2SenCrawl(PIDSettings *PIDSet, float pow, float blackLineSumRGBSen1, float blackLineSumRGBSen2)
 {
-    while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineMeanSumRGBSen1 && readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineMeanSumRGBSen2)
+    while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGBSen1 && readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGBSen2)
     {
         PID2SensWork(PIDSet, pow);
     }
@@ -456,7 +456,7 @@ void tankTurnSenCrawl(float pow1, float pow2, float blackLineSumRGB1, float blac
         while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(pow2, pow2 * -1);
-        while (readCalibratedSenRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB2)
             ;
     }
     else
@@ -465,7 +465,7 @@ void tankTurnSenCrawl(float pow1, float pow2, float blackLineSumRGB1, float blac
         while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(pow2, pow2 * -1);
-        while (readCalibratedSenRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB2)
             ;
     }
 }
@@ -478,7 +478,7 @@ void turnBSenCrawl(float pow1, float pow2, float blackLineSumRGB1, float blackLi
         while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(pow2, 0);
-        while (readCalibratedSenRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB2)
             ;
     }
     else
@@ -487,7 +487,7 @@ void turnBSenCrawl(float pow1, float pow2, float blackLineSumRGB1, float blackLi
         while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(pow2, 0);
-        while (readCalibratedSenRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB2)
             ;
     }
 }
@@ -501,7 +501,7 @@ void turnCSenCraw(float pow1, float pow2, float blackLineSumRGB1, float blackLin
         while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(0, pow2 * -1);
-        while (readCalibratedSenRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB2)
             ;
     }
     else
@@ -510,7 +510,7 @@ void turnCSenCraw(float pow1, float pow2, float blackLineSumRGB1, float blackLin
         while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(0, pow2 * -1);
-        while (readCalibratedSenRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB2)
             ;
     }
 }

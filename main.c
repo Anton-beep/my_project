@@ -19,11 +19,13 @@ task main (){
 	setMotorBrakeMode(motB, motorCoast);
 	setMotorBrakeMode(motC, motorCoast);
 	startTask(PIDEngineMot);
+	startTask(keepBMoving);
+	startTask(keepCMoving);
 
-	while (true){
-		eraseDisplay();
-		int r, g, b;
-		getColorRawRGB(sen1, r, g, b);
-		writeDebugStreamLine("Colour detected: %d, %d, %d", r, g, b);
-	}
+	setNewMotBCPowersAndRatio(2, 0);
+
+	while (true)
+		{
+			writeDebugStreamLine("%f %d", getMotorRPM(motB), KEEP_MOVING_B_WORKING);
+		};
 }

@@ -128,3 +128,64 @@ void resumePIDMot()
 {
     MOT_PID_SETTINGS.pauseAction = false;
 }
+
+bool KEEP_MOVING_B_WORKING = false;
+bool KEEP_MOVING_C_WORKING = false;
+
+task keepBMoving()
+{
+    while (true)
+    {
+        if (getMotorRPM(motB) == 0 && POWER_MOT_B != 0)
+        {
+            if (!(KEEP_MOVING_B_WORKING))
+            {
+                clearTimer(T2);
+                KEEP_MOVING_B_WORKING = true;
+            }
+            KEEP_MOVING_B_SETTINGS.errNow = time1[T2];
+            if (POWER_MOT_B > 0)
+            {
+                motor[motB] += PIDFunction(&KEEP_MOVING_B_SETTINGS);
+            }
+            else
+            {
+                motor[motB] -= PIDFunction(&KEEP_MOVING_B_SETTINGS);
+            }
+            sleep(KEEP_MOVING_B_SETTINGS.dt * 1000);
+        }
+        else
+        {
+            KEEP_MOVING_B_WORKING = false;
+        }
+    }
+}
+
+task keepCMoving()
+{
+    while (true)
+    {
+        if (getMotorRPM(motC) == 0 && POWER_MOT_C != 0)
+        {
+            if (!(KEEP_MOVING_C_WORKING))
+            {
+                clearTimer(T2);
+                KEEP_MOVING_C_WORKING = true;
+            }
+            KEEP_MOVING_C_SETTINGS.errNow = time1[T2];
+            if (POWER_MOT_C > 0)
+            {
+                motor[motC] += PIDFunction(&KEEP_MOVING_C_SETTINGS);
+            }
+            else
+            {
+                motor[motC] -= PIDFunction(&KEEP_MOVING_C_SETTINGS);
+            }
+            sleep(KEEP_MOVING_C_SETTINGS.dt * 1000);
+        }
+        else
+        {
+            KEEP_MOVING_C_WORKING = false;
+        }
+    }
+}

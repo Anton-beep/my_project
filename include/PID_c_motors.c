@@ -2,6 +2,7 @@
 
 #include "PID_c.c"
 #include "tools.c"
+#include "../robot_cfg.c"
 
 // calculation of an error
 // it calculates using RATIO_MOT vars
@@ -45,19 +46,9 @@ int START_DEG_MOT_B = 0;
 int START_DEG_MOT_C = 0;
 
 short out_PID;
-PIDSettings MOT_PID_SETTINGS;
 
 task PIDEngineMot()
 {
-    MOT_PID_SETTINGS.Kp = 1;
-    MOT_PID_SETTINGS.Ki = 0;
-    MOT_PID_SETTINGS.Kd = 0;
-    MOT_PID_SETTINGS.prevErr = 0;
-    MOT_PID_SETTINGS.integral = 0;
-    MOT_PID_SETTINGS.errNow = 0;
-    MOT_PID_SETTINGS.dt = 0.01;
-    MOT_PID_SETTINGS.pauseAction = false;
-
     while (true)
     {
         MOT_PID_SETTINGS.errNow = getPIDErrMot(RATIO_MOT_B, RATIO_MOT_C, START_DEG_MOT_B, START_DEG_MOT_C);

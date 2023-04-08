@@ -1,4 +1,4 @@
-#include "init.c"
+#include "../robot_cfg.c"
 
 char* floatToString(float val){
     char str[10];

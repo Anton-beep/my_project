@@ -4,7 +4,8 @@
 float DEG_DEFECT_B;
 float DEG_DEFECT_C;
 
-void moveBC(float dist, float powB, float powC)
+// returns defect
+float moveBC(float dist, float powB, float powC)
 {
     int startDegB = nMotorEncoder[motB];
     float endDegB;
@@ -22,11 +23,11 @@ void moveBC(float dist, float powB, float powC)
         while (nMotorEncoder[motB] > endDegB)
             ;
     }
-    DEG_DEFECT_B += getFractionalPart(endDegB);
-    tryRepairDefect(powB, powC);
+    return getFractionalPart(endDegB);
 }
 
-void moveB(float dist, float pow)
+// returns defect
+float moveB(float dist, float pow)
 {
     int startDegB = nMotorEncoder[motB];
     float endDegB;
@@ -44,11 +45,11 @@ void moveB(float dist, float pow)
         while (nMotorEncoder[motB] > endDegB)
             ;
     }
-    DEG_DEFECT_B += getFractionalPart(endDegB);
-    tryRepairDefect(pow, pow);
+    return getFractionalPart(endDegB);
 }
 
-void moveC(float dist, float pow)
+// returns defect
+float moveC(float dist, float pow)
 {
     int startDegC = nMotorEncoder[motC];
     float endDegC;
@@ -66,8 +67,7 @@ void moveC(float dist, float pow)
         while (nMotorEncoder[motC] > endDegC)
             ;
     }
-    DEG_DEFECT_C += getFractionalPart(endDegC);
-    tryRepairDefect(pow, pow);
+    return getFractionalPart(endDegC);
 }
 
 void tryRepairDefect(float powB, float powC)
@@ -92,19 +92,34 @@ void tryRepairDefect(float powB, float powC)
     {
         if (repB != 0)
         {
-            moveB(repB, powB, powC);
+            moveB(repB, powB);
         }
         if (repC != 0)
         {
-            moveC(repC, powB, powC);
+            moveC(repC, powC);
         }
     }
+}
+
+void moveBCWithRepair(float dist, float powB, float powC){
+    DEG_DEFECT_B += moveBC(dist, powB, powC);
+    tryRepairDefect(powB, powC);
+}
+
+void moveBWithRepair(float dist, float pow){
+    DEG_DEFECT_B += moveB(dist, pow);
+    tryRepairDefect(pow, pow);
+}
+
+void moveCWithRepair(float dist, float pow){
+    DEG_DEFECT_C += moveC(dist, pow);
+    tryRepairDefect(pow, pow);
 }
 /*
 Will not across the border MOTORS_MIN_POWER and MOTORS_MAX_POWER in any situation
 Return true, when nothing to change more, false in other cases
 */
-bool applyNewAccels(float *powB, float *powC, float *newPowB, float *newPowC)
+bool applyNewAccels(short *powB, short *powC, float *newPowB, float *newPowC)
 {
 
     bool newBInBorder = *newPowB >= MOTORS_MIN_POWER && *newPowB <= MOTORS_MAX_POWER;

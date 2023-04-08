@@ -1,68 +1,110 @@
 #include "tools.c"
 #include "PID_c_motors.c"
 
+float DEG_DEFECT_B;
+float DEG_DEFECT_C;
+
 void moveBC(float dist, float powB, float powC)
 {
     int startDegB = nMotorEncoder[motB];
+    float endDegB;
     if (powB > 0)
     {
-        int endDegB = startDegB + cmToDeg(dist);
+        endDegB = startDegB + cmToDeg(dist);
         setNewMotBCPowersAndRatio(powB, powC);
         while (nMotorEncoder[motB] < endDegB)
             ;
     }
     else
     {
-        int endDegB = startDegB - cmToDeg(dist);
+        endDegB = startDegB - cmToDeg(dist);
         setNewMotBCPowersAndRatio(powB, powC);
         while (nMotorEncoder[motB] > endDegB)
             ;
     }
+    DEG_DEFECT_B += getFractionalPart(endDegB);
+    tryRepairDefect(powB, powC);
 }
 
 void moveB(float dist, float pow)
 {
     int startDegB = nMotorEncoder[motB];
+    float endDegB;
     if (pow > 0)
     {
-        int endDegB = startDegB + cmToDeg(dist);
+        endDegB = startDegB + cmToDeg(dist);
         setNewMotBCPowersAndRatio(pow, 0);
         while (nMotorEncoder[motB] < endDegB)
             ;
     }
     else
     {
-        int endDegB = startDegB - cmToDeg(dist);
+        endDegB = startDegB - cmToDeg(dist);
         setNewMotBCPowersAndRatio(pow, 0);
         while (nMotorEncoder[motB] > endDegB)
             ;
     }
+    DEG_DEFECT_B += getFractionalPart(endDegB);
+    tryRepairDefect(pow, pow);
 }
 
 void moveC(float dist, float pow)
 {
     int startDegC = nMotorEncoder[motC];
+    float endDegC;
     if (pow > 0)
     {
-        int endDegC = startDegC  + cmToDeg(dist);
+        endDegC = startDegC + cmToDeg(dist);
         setNewMotBCPowersAndRatio(pow, 0);
         while (nMotorEncoder[motC] < endDegC)
             ;
     }
     else
     {
-        int endDegC = startDegC - cmToDeg(dist);
+        endDegC = startDegC - cmToDeg(dist);
         setNewMotBCPowersAndRatio(pow, 0);
         while (nMotorEncoder[motC] > endDegC)
             ;
     }
+    DEG_DEFECT_C += getFractionalPart(endDegC);
+    tryRepairDefect(pow, pow);
 }
 
+void tryRepairDefect(float powB, float powC)
+{
+    short repB = (short)DEG_DEFECT_B;
+    short repC = (short)DEG_DEFECT_C;
+
+    if (repB < 0){
+        powB = powB * -1;
+        repB = repB * -1;
+    }
+    if (repC < 0){
+        powC = powC * -1;
+        repC = repC * -1;
+    } 
+
+    if (repB == repC)
+    {
+        moveBC(repB, powB, powC);
+    }
+    else
+    {
+        if (repB != 0)
+        {
+            moveB(repB, powB, powC);
+        }
+        if (repC != 0)
+        {
+            moveC(repC, powB, powC);
+        }
+    }
+}
 /*
 Will not across the border MOTORS_MIN_POWER and MOTORS_MAX_POWER in any situation
 Return true, when nothing to change more, false in other cases
 */
-bool applyNewAccels(short *powB, short *powC, short *newPowB, short *newPowC)
+bool applyNewAccels(float *powB, float *powC, float *newPowB, float *newPowC)
 {
 
     bool newBInBorder = *newPowB >= MOTORS_MIN_POWER && *newPowB <= MOTORS_MAX_POWER;
@@ -102,18 +144,19 @@ bool applyNewAccels(short *powB, short *powC, short *newPowB, short *newPowC)
     return false;
 }
 
-void moveBCCustomAccelMainB(float dist, short powB, short powC, float accelB, float accelC)
+void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, float accelC)
 {
     int startDegB = nMotorEncoder[motB];
     int startDegC = nMotorEncoder[motC];
 
-    short newPowB;
-    short newPowC;
+    float newPowB;
+    float newPowC;
     clearTimer(T1);
     bool flagAccel = false;
+    float endDegB;
     if (powB >= 0)
     {
-        int endDegB = startDegB + cmToDeg(dist);
+        endDegB = startDegB + cmToDeg(dist);
         setNewMotBCPowersAndRatio(powB, powC);
         while (nMotorEncoder[motB] < endDegB)
         {
@@ -134,7 +177,7 @@ void moveBCCustomAccelMainB(float dist, short powB, short powC, float accelB, fl
     }
     else
     {
-        int endDegB = startDegB - cmToDeg(dist);
+        endDegB = startDegB - cmToDeg(dist);
         setNewMotBCPowersAndRatio(powB, powC);
         while (nMotorEncoder[motB] > endDegB)
         {
@@ -153,20 +196,23 @@ void moveBCCustomAccelMainB(float dist, short powB, short powC, float accelB, fl
             }
         }
     }
+    DEG_DEFECT_B += getFractionalPart(endDegB);
+    tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
 }
 
-void moveBCCustomAccelMainC(float dist, short powB, short powC, float accelB, float accelC)
+void moveBCCustomAccelMainC(float dist, float powB, float powC, float accelB, float accelC)
 {
     int startDegB = nMotorEncoder[motB];
     int startDegC = nMotorEncoder[motC];
 
-    short newPowB;
-    short newPowC;
+    float newPowB;
+    float newPowC;
     clearTimer(T1);
     bool flagAccel = false;
+    float endDegC;
     if (powC >= 0)
     {
-        int endDegC = startDegC + cmToDeg(dist);
+        endDegC = startDegC + cmToDeg(dist);
         setNewMotBCPowersAndRatio(powB, powC);
         while (nMotorEncoder[motC] < endDegC)
         {
@@ -187,7 +233,7 @@ void moveBCCustomAccelMainC(float dist, short powB, short powC, float accelB, fl
     }
     else
     {
-        int endDegC = startDegC - cmToDeg(dist);
+        endDegC = startDegC - cmToDeg(dist);
         setNewMotBCPowersAndRatio(powB, powC);
         while (nMotorEncoder[motC] > endDegC)
         {
@@ -206,16 +252,18 @@ void moveBCCustomAccelMainC(float dist, short powB, short powC, float accelB, fl
             }
         }
     }
+    DEG_DEFECT_C += getFractionalPart(endDegC);
+    tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
 }
 
-void moveBCAccelPartMainB(float dist, short startPowB, short startPowC, short endPowB, short endPowC)
+void moveBCAccelPartMainB(float dist, float startPowB, float startPowC, float endPowB, float endPowC)
 {
     float accelB = (pow(endPowB, 2) - pow(startPowB, 2)) / (cmToDeg(dist) * 2);
     float accelC = (pow(endPowC, 2) - pow(startPowC, 2)) / (cmToDeg(dist) * 2);
     moveBCCustomAccelMainB(dist, startPowB, startPowC, accelB, accelC);
 }
 
-void moveBCAccelPartMainC(float dist, short startPowB, short startPowC, short endPowB, short endPowC)
+void moveBCAccelPartMainC(float dist, float startPowB, float startPowC, float endPowB, float endPowC)
 {
     float accelB = (pow(endPowB, 2) - pow(startPowB, 2)) / (cmToDeg(dist) * 2);
     float accelC = (pow(endPowC, 2) - pow(startPowC, 2)) / (cmToDeg(dist) * 2);
@@ -224,32 +272,17 @@ void moveBCAccelPartMainC(float dist, short startPowB, short startPowC, short en
 
 // moving forward or curves
 // -------------------------------------------------------------------------------------------------------------------------
-void moveBCEqualAccelPart(float dist, short startPow, short endPow)
+void moveBCEqualAccelPart(float dist, float startPow, float endPow)
 {
     moveBCAccelPartMainB(dist, startPow, startPow, endPow, endPow);
 }
 
-void moveBAccel(float dist, short startPow, float accel)
-{
-    moveBCCustomAccelMainB(dist, startPow, 0, accel, 0);
-}
-
-void moveCAccel(float dist, short startPow, float accel)
-{
-    moveBCCustomAccelMainC(dist, 0, startPow, 0, accel);
-}
-
-void moveBCEqualAccels(float dist, short startPow, short accel)
-{
-    moveBCCustomAccelMainB(dist, startPow, startPow, accel, accel);
-}
-
-void moveBPart(float dist, short startPow, short endPow)
+void moveBPart(float dist, float startPow, float endPow)
 {
     moveBCAccelPartMainB(dist, startPow, 0, endPow, 0);
 }
 
-void moveCPart(float dist, short startPow, short endPow)
+void moveCPart(float dist, float startPow, float endPow)
 {
     moveBCAccelPartMainC(dist, 0, startPow, 0, endPow);
 }
@@ -268,30 +301,11 @@ void moveC3Parts(float dist1, float dist2, float dist3, float startPow, float ma
     moveCPart(dist3, maxPow, endPow);
 }
 
-void moveBC3Parts(float dist1, float dist2, float dist3, short startPowB, short startPowC, short maxPowB, short maxPowC, short endPowB, short endPowC)
+void moveBC3Parts(float dist1, float dist2, float dist3, float startPowB, float startPowC, float maxPowB, float maxPowC, float endPowB, float endPowC)
 {
     moveBCAccelPartMainB(dist1, startPowB, startPowC, maxPowB, maxPowC);
     moveBC(dist2, maxPowB, maxPowC);
     moveBCAccelPartMainB(dist3, maxPowB, maxPowC, endPowB, endPowC);
-}
-
-void moveBC3PartsEqual(float dist1, float dist2, float dist3, short startPow, short maxPow, short endPow)
-{
-    moveBC3Parts(dist1, dist2, dist3, startPow, startPow, maxPow, maxPow, endPow, endPow);
-}
-
-void moveBC3Accels(float dist1, float dist2, float dist3, short startPowB, short startPowC, float accelB1, float accelC1, float accelB2, float accelC2)
-{
-    moveBCCustomAccelMainB(dist1, startPowB, startPowC, accelB1, accelC1);
-    moveBC(dist2, POWER_MOT_B, POWER_MOT_B);
-    moveBCCustomAccelMainB(dist3, POWER_MOT_B, POWER_MOT_C, accelB2, accelC2);
-}
-
-void moveBC3Def(float dist, short startPow, short endPow)
-{
-    moveBCEqualAccels(dist * DEF_RAT_1PART, startPow, DEF_ACCEL_INC);
-    moveBC(dist * DEF_RAT_2PART, POWER_MOT_B, POWER_MOT_C);
-    moveBCEqualAccelPart(dist * DEF_RAT_3PART, POWER_MOT_B, endPow);
 }
 
 // turns one wheel or tank
@@ -299,41 +313,26 @@ void moveBC3Def(float dist, short startPow, short endPow)
 
 void turnBDegr(float circleDeg1, float circleDeg2, float circleDeg3, float startPow, float maxPow, float endPow)
 {
-    moveB3Parts(circleDegToCm(circleDeg1), circleDegToCm(circleDeg2), circleDegToCm(circleDeg3), startPow, maxPow, endPow);
+    float dist1 = circleDegToCm(circleDeg1);
+    float dist2 = circleDegToCm(circleDeg2);
+    float dist3 = circleDegToCm(circleDeg3);
+    moveB3Parts(dist1, dist2, dist3, startPow, maxPow, endPow);
 }
 
 void turnCDegr(float circleDeg1, float circleDeg2, float circleDeg3, float startPow, float maxPow, float endPow)
 {
-    moveC3Parts(circleDegToCm(circleDeg1), circleDegToCm(circleDeg2), circleDegToCm(circleDeg3), startPow, maxPow, endPow);
+    float dist1 = circleDegToCm(circleDeg1);
+    float dist2 = circleDegToCm(circleDeg2);
+    float dist3 = circleDegToCm(circleDeg3);
+    moveC3Parts(dist1, dist2, dist3, startPow, maxPow, endPow);
 }
 
 // NS - no sensors
 // clock turn -> +
-void tankTurnNS3Parts(float circleDeg1, float circleDeg2, float circleDeg3, float startPow, float maxPow, float endPow){
-    float spb, spc, mpb, mpc, epb, epc;
-    if (circleDeg1 >= 0){
-        spb = startPow;
-        spc = startPow * -1;
-    }
-    else{
-        spb = startPow * -1;
-        spc = startPow;
-    }
-    if (circleDeg2 >= 0){
-        mpb = maxPow;
-        mpc = maxPow * -1;
-    }
-    else{
-        mpb = maxPow * -1;
-        mpc = maxPow;
-    }
-    if (circleDeg3 >= 0){
-        epb = endPow;
-        epc = endPow * -1;
-    }
-    else{
-        epb = endPow * -1;
-        epc = endPow;
-    }
-    moveBC3Parts(circleDegToCm(circleDeg1), circleDegToCm(circleDeg2), circleDegToCm(circleDeg3), spb, spc, mpb, mpc, epb, epc);
+void tankTurnNS3Parts(float circleDeg1, float circleDeg2, float circleDeg3, float startPow, float maxPow, float endPow)
+{
+    float dist1 = circleDegToCm(circleDeg1);
+    float dist2 = circleDegToCm(circleDeg2);
+    float dist3 = circleDegToCm(circleDeg3);
+    moveBC3Parts(dist1, dist2, dist3, startPow, startPow * -1, maxPow, maxPow * -1, endPow, endPow * -1);
 }

@@ -16,8 +16,4 @@ task main (){
 	setMotorBrakeMode(motC, motorCoast);
 	startTask(PIDEngineMot);
 
-
-	moveBC3Parts(400, 400, 400, 20, 20, 80, 80, 30, 30);
-	setMotorBrakeMode(motB, motorBrake);
-	setMotorBrakeMode(motC, motorBrake);
-}
+	}

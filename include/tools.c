@@ -22,6 +22,10 @@ float max(float a, float b){
     return a > b ? a : b;
 }
 
-float circleDegToCm(float circleDeg){
-    return BASE_LEN * PI * circleDeg / 360;
+float circleDegToCm(float cd){
+    return BASE_LEN * PI * cd / 360;
+}
+
+float getFractionalPart(float val){
+    return val - (int) val;
 }

@@ -111,7 +111,7 @@ void setNewMotBCPowersAndRatio(float powerMotB, float powerMotC)
     POWER_MOT_C = powerMotC;
 
     // PIDReset(&)
-    setErrModeAndStartDeg(powerMotB, powerMotC)
+    setErrModeAndStartDeg(powerMotB, powerMotC);
 }
 
 void setNewMotBCOnlyPowers(short powerMotB, short powerMotC)
@@ -119,7 +119,7 @@ void setNewMotBCOnlyPowers(short powerMotB, short powerMotC)
     POWER_MOT_B = powerMotB;
     POWER_MOT_C = powerMotC;
 
-    setErrModeAndStartDeg(powerMotB, powerMotC)
+    setErrModeAndStartDeg(powerMotB, powerMotC);
 }
 
 void setNewMotBCOnlyRatio(float powerMotB, float powerMotC)
@@ -127,7 +127,7 @@ void setNewMotBCOnlyRatio(float powerMotB, float powerMotC)
     RATIO_MOT_B = powerMotB;
     RATIO_MOT_C = powerMotC;
 
-    setErrModeAndStartDeg(powerMotB, powerMotC)
+    setErrModeAndStartDeg(powerMotB, powerMotC);
 }
 
 void pausePIDMot()

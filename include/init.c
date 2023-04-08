@@ -5,9 +5,3 @@ float BASE_LEN = 0;
 
 short MOTORS_MAX_POWER = 94;
 short MOTORS_MIN_POWER = 10;
-
-float DEF_ACCEL_INC = 0.1;
-float DEF_ACCEL_DEC = 0.1;
-float DEF_RAT_1PART = 0.2;
-float DEF_RAT_2PART = 0.6;
-float DEF_RAT_3PART = 0.2;

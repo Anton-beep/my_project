@@ -22,7 +22,7 @@ typedef struct SenHSVVals
     float V;
 } SenHSVVals;
 
-typedef struct PIDSettings 
+typedef struct PIDSettings
 {
     float Kp;
     float Ki;
@@ -30,6 +30,6 @@ typedef struct PIDSettings
     float prevErr;
     float integral;
     float errNow;
-    float dt;   // IN SECONDS!!!!!!!!!
+    float dt; // IN SECONDS!!!!!!!!!
     bool pauseAction;
 } PIDSettings;

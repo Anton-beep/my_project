@@ -111,7 +111,7 @@ void tryRepairDefect(float powB, float powC)
     }
 }
 
-float applyDefectB(float dist, float pow)
+void applyDefectB(float dist, float pow)
 {
     if (pow > 0)
     {
@@ -123,7 +123,7 @@ float applyDefectB(float dist, float pow)
     }
 }
 
-float applyDefectC(float dist, float pow)
+void applyDefectC(float dist, float pow)
 {
     if (pow > 0)
     {

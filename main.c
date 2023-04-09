@@ -22,10 +22,5 @@ task main (){
 	startTask(keepBMoving);
 	startTask(keepCMoving);
 
-	setNewMotBCPowersAndRatio(2, 0);
 
-	while (true)
-		{
-			writeDebugStreamLine("%f %d", getMotorRPM(motB), KEEP_MOVING_B_WORKING);
-		};
 }

@@ -112,7 +112,7 @@ void lineSen2OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
     }
 }
 
-void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel)
+void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float updateTime = 100)
 {
     tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
@@ -120,7 +120,7 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
 
     float newPowB;
     float newPowC;
-    clearTimer(T1);
+    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
     if (power >= 0)
@@ -128,7 +128,7 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
         endDegB = startDegB + cmToDeg(dist);
         while (nMotorEncoder[motB] < endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
                 newPowB = round(sqrt(madeDist * 2 * accel + pow(power, 2)));
@@ -150,7 +150,7 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
         endDegB = startDegB - cmToDeg(dist);
         while (nMotorEncoder[motB] > endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
                 newPowB = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
@@ -169,7 +169,7 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
     }
 }
 
-void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target)
+void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
 {
     tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
@@ -177,7 +177,7 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
 
     float newPowB;
     float newPowC;
-    clearTimer(T1);
+    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
     if (power >= 0)
@@ -185,7 +185,7 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
         endDegB = startDegB + cmToDeg(dist);
         while (nMotorEncoder[motB] < endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
                 newPowB = round(sqrt(madeDist * 2 * accel + pow(power, 2)));
@@ -207,7 +207,7 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
         endDegB = startDegB - cmToDeg(dist);
         while (nMotorEncoder[motB] > endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
                 newPowB = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
@@ -226,7 +226,7 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
     }
 }
 
-void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target)
+void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
 {
     tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
@@ -234,7 +234,7 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
 
     float newPowB;
     float newPowC;
-    clearTimer(T1);
+    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
     if (power >= 0)
@@ -242,7 +242,7 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
         endDegB = startDegB + cmToDeg(dist);
         while (nMotorEncoder[motB] < endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
                 newPowB = round(sqrt(madeDist * 2 * accel + pow(power, 2)));
@@ -264,7 +264,7 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
         endDegB = startDegB - cmToDeg(dist);
         while (nMotorEncoder[motB] > endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
                 newPowB = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
@@ -283,7 +283,7 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
     }
 }
 
-void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target)
+void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
 {
     tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
@@ -291,7 +291,7 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
 
     float newPowB;
     float newPowC;
-    clearTimer(T1);
+    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
     if (power >= 0)
@@ -299,7 +299,7 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
         endDegB = startDegB + cmToDeg(dist);
         while (nMotorEncoder[motB] < endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
                 newPowB = round(sqrt(madeDist * 2 * accel + pow(power, 2)));
@@ -321,7 +321,7 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
         endDegB = startDegB - cmToDeg(dist);
         while (nMotorEncoder[motB] > endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
                 newPowB = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));
@@ -340,7 +340,7 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
     }
 }
 
-void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target)
+void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
 {
     tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
@@ -348,7 +348,7 @@ void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
 
     float newPowB;
     float newPowC;
-    clearTimer(T1);
+    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
     if (power >= 0)
@@ -356,7 +356,7 @@ void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
         endDegB = startDegB + cmToDeg(dist);
         while (nMotorEncoder[motB] < endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
                 newPowB = round(sqrt(madeDist * 2 * accel + pow(power, 2)));
@@ -378,7 +378,7 @@ void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
         endDegB = startDegB - cmToDeg(dist);
         while (nMotorEncoder[motB] > endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 madeDist = fabs(nMotorEncoder[motB] - startDegB);
                 newPowB = -1 * round(sqrt(madeDist * 2 * accel + pow(power, 2)));

@@ -43,24 +43,30 @@ float RATIO_MOT_C = 0;
 int START_DEG_MOT_B = 0;
 int START_DEG_MOT_C = 0;
 
-short out_PID;
+short outPID;
 
 task PIDEngineMot()
 {
     while (true)
     {
         MOT_PID_SETTINGS.errNow = getPIDErrMot(RATIO_MOT_B, RATIO_MOT_C, START_DEG_MOT_B, START_DEG_MOT_C);
-        out_PID = PIDFunction(&MOT_PID_SETTINGS);
         switch (ERR_MODE)
         {
         case 1:
-            motor[motB] = POWER_MOT_B + out_PID;
-            motor[motC] = POWER_MOT_C + out_PID;
+            outPID = PIDFunction(&MOT_PID_SETTINGS);
+            motor[motB] = POWER_MOT_B + outPID;
+            motor[motC] = POWER_MOT_C + outPID;
+            break;
+
+        case 3:
+            motor[motB] = POWER_MOT_B;
+            motor[motC] = POWER_MOT_C;
             break;
 
         default:
-            motor[motB] = POWER_MOT_B + out_PID;
-            motor[motC] = POWER_MOT_C - out_PID;
+            outPID = PIDFunction(&MOT_PID_SETTINGS);
+            motor[motB] = POWER_MOT_B + outPID;
+            motor[motC] = POWER_MOT_C - outPID;
             break;
         }
         sleep(MOT_PID_SETTINGS.dt * 1000);
@@ -136,6 +142,7 @@ bool PAUSE_KEEP_MOVING_C = false;
 
 task keepBMoving()
 {
+    float startTimeKeepMovingB = 0;
     while (true)
     {
         if (!(PAUSE_KEEP_MOVING_B))
@@ -144,10 +151,10 @@ task keepBMoving()
             {
                 if (!(KEEP_MOVING_B_WORKING))
                 {
-                    clearTimer(T2);
+                    startTimeKeepMovingB = nPgmTime;
                     KEEP_MOVING_B_WORKING = true;
                 }
-                KEEP_MOVING_B_SETTINGS.errNow = time1[T2];
+                KEEP_MOVING_B_SETTINGS.errNow = nPgmTime - startTimeKeepMovingB;
                 if (POWER_MOT_B > 0)
                 {
                     motor[motB] += PIDFunction(&KEEP_MOVING_B_SETTINGS);
@@ -168,6 +175,7 @@ task keepBMoving()
 
 task keepCMoving()
 {
+    float startTimeKeepMovingC = 0;
     while (true)
     {
         if (!(PAUSE_KEEP_MOVING_C))
@@ -176,10 +184,10 @@ task keepCMoving()
             {
                 if (!(KEEP_MOVING_C_WORKING))
                 {
-                    clearTimer(T2);
+                    startTimeKeepMovingC = nPgmTime;
                     KEEP_MOVING_C_WORKING = true;
                 }
-                KEEP_MOVING_C_SETTINGS.errNow = time1[T2];
+                KEEP_MOVING_C_SETTINGS.errNow = nPgmTime - startTimeKeepMovingC;
                 if (POWER_MOT_C > 0)
                 {
                     motor[motC] += PIDFunction(&KEEP_MOVING_C_SETTINGS);

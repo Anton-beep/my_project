@@ -200,7 +200,7 @@ bool applyNewAccels(short *powB, short *powC, float *newPowB, float *newPowC)
     return false;
 }
 
-void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, float accelC)
+void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, float accelC, float updateTime = 100)
 {
     tryRepairDefect(POWER_MOT_B, POWER_MOT_C);
     int startDegB = nMotorEncoder[motB];
@@ -208,7 +208,7 @@ void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, fl
 
     float newPowB;
     float newPowC;
-    clearTimer(T1);
+    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
     if (powB >= 0)
@@ -217,7 +217,7 @@ void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, fl
         setNewMotBCPowersAndRatio(powB, powC);
         while (nMotorEncoder[motB] < endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 newPowB = round(sqrt(fabs(nMotorEncoder[motB] - startDegB) * 2 * accelB + pow(powB, 2)));
                 if (powC >= 0)
@@ -238,7 +238,7 @@ void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, fl
         setNewMotBCPowersAndRatio(powB, powC);
         while (nMotorEncoder[motB] > endDegB)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 newPowB = -1 * round(sqrt(fabs(nMotorEncoder[motB] - startDegB) * 2 * accelB + pow(powB, 2)));
                 if (powC >= 0)
@@ -264,7 +264,7 @@ void moveBCCustomAccelMainC(float dist, float powB, float powC, float accelB, fl
 
     float newPowB;
     float newPowC;
-    clearTimer(T1);
+    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegC;
     if (powC >= 0)
@@ -273,7 +273,7 @@ void moveBCCustomAccelMainC(float dist, float powB, float powC, float accelB, fl
         setNewMotBCPowersAndRatio(powB, powC);
         while (nMotorEncoder[motC] < endDegC)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 newPowC = round(sqrt(fabs(nMotorEncoder[motC] - startDegC) * 2 * accelC + pow(powC, 2)));
                 if (powB >= 0)
@@ -294,7 +294,7 @@ void moveBCCustomAccelMainC(float dist, float powB, float powC, float accelB, fl
         setNewMotBCPowersAndRatio(powB, powC);
         while (nMotorEncoder[motC] > endDegC)
         {
-            if (!(flagAccel) && time1[T1] % 100 == 0)
+            if (!(flagAccel) && (nPgmTime - startTime) % 100 == 0)
             {
                 newPowC = -1 * round(sqrt(fabs(nMotorEncoder[motC] - startDegC) * 2 * accelC + pow(powC, 2)));
                 if (powB > 0)

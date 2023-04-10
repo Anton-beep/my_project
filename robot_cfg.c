@@ -20,6 +20,11 @@ SenSettings SEN1_CALIBRATION;
 SenSettings SEN2_CALIBRATION;
 SenSettings SEN3_CALIBRATION;
 
+PIDSettings MANIP_A_PID_SETTINGS;
+PIDSettings MANIP_D_PID_SETTINGS;
+PIDSettings *MANIP_A_PID_PTR;
+PIDSettings *MANIP_D_PID_PTR;
+
 void defStructures()
 {
     MOT_PID_SETTINGS.Kp = 1;
@@ -82,4 +87,28 @@ void defStructures()
     SEN3_CALIBRATION.maxR = 400;
     SEN3_CALIBRATION.maxG = 400;
     SEN3_CALIBRATION.maxB = 400;
+
+    // ----------------------------------
+
+    MANIP_A_PID_SETTINGS.Kp = 0.1;
+    MANIP_A_PID_SETTINGS.Ki = 0;
+    MANIP_A_PID_SETTINGS.Kd = 0;
+    MANIP_A_PID_SETTINGS.prevErr = 0;
+    MANIP_A_PID_SETTINGS.integral = 0;
+    MANIP_A_PID_SETTINGS.errNow = 0;
+    MANIP_A_PID_SETTINGS.dt = 0.1;
+    MANIP_A_PID_SETTINGS.pauseAction = false;
+    MANIP_A_PID_PTR = &MANIP_A_PID_SETTINGS;
+
+    // ----------------------------------
+
+    MANIP_D_PID_SETTINGS.Kp = 0.1;
+    MANIP_D_PID_SETTINGS.Ki = 0;
+    MANIP_D_PID_SETTINGS.Kd = 0;
+    MANIP_D_PID_SETTINGS.prevErr = 0;
+    MANIP_D_PID_SETTINGS.integral = 0;
+    MANIP_D_PID_SETTINGS.errNow = 0;
+    MANIP_D_PID_SETTINGS.dt = 0.1;
+    MANIP_D_PID_SETTINGS.pauseAction = false;
+    MANIP_D_PID_PTR = &MANIP_D_PID_SETTINGS;
 }

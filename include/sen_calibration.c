@@ -29,7 +29,7 @@ void RGBtoHSV(SenRGBVals *inRGB, SenHSVVals *outHSV)
     float cmax = max(buf, b); // maximum of r, g, b
     buf = min(r, g);
     float cmin = min(buf, b); // minimum of r, g, b
-    float diff = cmax - cmin;  // diff of cmax and cmin.
+    float diff = cmax - cmin; // diff of cmax and cmin.
     if (cmax == cmin)
         outHSV->H = 0;
     else if (cmax == r)

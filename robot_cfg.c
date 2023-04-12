@@ -4,10 +4,10 @@
 // ALL DISTANCES IN CM
 
 float WHEEL_DIAMETER = 5.6;
-float BASE_LEN = 0;
+float BASE_LEN = 18.5;
 
-short MOTORS_MAX_POWER = 94;
-short MOTORS_MIN_POWER = 10;
+short MOTORS_MAX_POWER = 100;
+short MOTORS_MIN_POWER = 0;
 
 // MOTORS PID CONTROLLER
 
@@ -20,6 +20,8 @@ SenSettings SEN1_CALIBRATION;
 SenSettings SEN2_CALIBRATION;
 SenSettings SEN3_CALIBRATION;
 
+PIDSettings DEFAULT_LINE_PID;
+
 PIDSettings MANIP_A_PID_SETTINGS;
 PIDSettings MANIP_D_PID_SETTINGS;
 PIDSettings *MANIP_A_PID_PTR;
@@ -27,13 +29,13 @@ PIDSettings *MANIP_D_PID_PTR;
 
 void defStructures()
 {
-    MOT_PID_SETTINGS.Kp = 1;
-    MOT_PID_SETTINGS.Ki = 0;
+    MOT_PID_SETTINGS.Kp = 10;
+    MOT_PID_SETTINGS.Ki = 3;
     MOT_PID_SETTINGS.Kd = 0;
     MOT_PID_SETTINGS.prevErr = 0;
     MOT_PID_SETTINGS.integral = 0;
     MOT_PID_SETTINGS.errNow = 0;
-    MOT_PID_SETTINGS.dt = 0.01;
+    MOT_PID_SETTINGS.dt = 0.001;
     MOT_PID_SETTINGS.pauseAction = false;
 
     // ----------------------------------
@@ -87,6 +89,17 @@ void defStructures()
     SEN3_CALIBRATION.maxR = 400;
     SEN3_CALIBRATION.maxG = 400;
     SEN3_CALIBRATION.maxB = 400;
+
+    // ----------------------------------
+
+    DEFAULT_LINE_PID.Kp = 0.01;
+    DEFAULT_LINE_PID.Ki = 0.01;
+    DEFAULT_LINE_PID.Kd = 0;
+    DEFAULT_LINE_PID.prevErr = 0;
+    DEFAULT_LINE_PID.integral = 0;
+    DEFAULT_LINE_PID.errNow = 0;
+    DEFAULT_LINE_PID.dt = 0.001;
+    DEFAULT_LINE_PID.pauseAction = false;
 
     // ----------------------------------
 

@@ -12,6 +12,7 @@
 #include "include/sen_for_colors.c"
 #include "include/motion_with_sensors.c"
 #include "include/PID_c_manip.c"
+#include "logic/main_logic.c"
 
 task main (){
 	// define everything
@@ -19,39 +20,13 @@ task main (){
 	setMotorBrakeMode(motB, motorCoast);
 	setMotorBrakeMode(motC, motorCoast);
 	startTask(PIDEngineMot);
-	startTask(keepBMoving);
-	startTask(keepCMoving);
+	//startTask(keepBMoving);
+	//startTask(keepCMoving);
 
-	SenRGBVals nothing;
-	SenRGBVals white;
+	//mainLogic();
 
-	nothing.R = 0;
-	nothing.G = 0;
-	nothing.B = 0;
-
-	white.R = 100;
-	white.G = 100;
-	white.B = 100;
-
-	int inPtrs[2] = {(int) &nothing, (int) &white};
-	int lenInPtrs = 2;
-
-	int *resPtrs = startReadRowOfObjectsRGB(inPtrs, lenInPtrs, sen3, &SEN3_CALIBRATION);
-	waitForButtonPress();
-	stopTask(readRowOfObjectsRGB);
-	eraseDisplay();
-	for (int i = 0; i < 10; i++){
-		if (resPtrs[i] == &nothing){
-			displayTextLine(i, "nothing");
-		}
-		else if (resPtrs[i] == &white){
-			displayTextLine(i, "white");
-		}
-		else{
-			displayTextLine(i, "%d %d %d", resPtrs[i], &nothing, &white);
-		}
-	}
+	stopTask(PIDEngineMot);
+	stopBC();
 	sleep(1000);
-	flushButtonMessages();
-	waitForButtonPress();
+	displayExecutionTime();
 }

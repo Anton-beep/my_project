@@ -18,7 +18,8 @@ float getPIDErrMot(float ratioMotB, float ratioMotC, float startDegMotB, float s
     switch (ERR_MODE)
     {
     case 0:
-        return (nMotorEncoder[motC] - startDegMotC) - (nMotorEncoder[motB] - startDegMotB);
+        // return (nMotorEncoder[motC] - startDegMotC) - (nMotorEncoder[motB] - startDegMotB);
+        return 0;
         break;
 
     case 1:
@@ -49,31 +50,40 @@ task PIDEngineMot()
 {
     while (true)
     {
-        MOT_PID_SETTINGS.errNow = getPIDErrMot(RATIO_MOT_B, RATIO_MOT_C, START_DEG_MOT_B, START_DEG_MOT_C);
-        switch (ERR_MODE)
+        if (!(MOT_PID_SETTINGS.pauseAction))
         {
-        case 1:
-            outPID = PIDFunction(&MOT_PID_SETTINGS);
-            motor[motB] = POWER_MOT_B + outPID;
-            motor[motC] = POWER_MOT_C + outPID;
-            break;
+            MOT_PID_SETTINGS.errNow = getPIDErrMot(RATIO_MOT_B, RATIO_MOT_C, START_DEG_MOT_B, START_DEG_MOT_C);
+            switch (ERR_MODE)
+            {
+            case 1:
+                outPID = PIDFunction(&MOT_PID_SETTINGS);
+                motor[motB] = POWER_MOT_B + outPID;
+                motor[motC] = POWER_MOT_C + outPID;
+                break;
 
-        case 3:
-            motor[motB] = POWER_MOT_B;
-            motor[motC] = POWER_MOT_C;
-            break;
+            case 3:
+                if (POWER_MOT_B != 0)
+                {
+                    motor[motB] = POWER_MOT_B;
+                }
+                if (POWER_MOT_C != 0)
+                {
+                    motor[motC] = POWER_MOT_C;
+                }
+                break;
 
-        default:
-            outPID = PIDFunction(&MOT_PID_SETTINGS);
-            motor[motB] = POWER_MOT_B + outPID;
-            motor[motC] = POWER_MOT_C - outPID;
-            break;
+            default:
+                outPID = PIDFunction(&MOT_PID_SETTINGS);
+                motor[motB] = POWER_MOT_B + outPID;
+                motor[motC] = POWER_MOT_C - outPID;
+                break;
+            }
+            sleep(MOT_PID_SETTINGS.dt * 1000);
         }
-        sleep(MOT_PID_SETTINGS.dt * 1000);
     }
 }
 
-void setErrModeAndStartDeg(float powerMotB, float powerMotC)
+void setErrMode(float powerMotB, float powerMotC)
 {
     if (powerMotB == 0 && powerMotC == 0)
     {
@@ -93,36 +103,95 @@ void setErrModeAndStartDeg(float powerMotB, float powerMotC)
     {
         ERR_MODE = 3;
     }
-
-    START_DEG_MOT_B = nMotorEncoder[motB];
-    START_DEG_MOT_C = nMotorEncoder[motC];
 }
 
 void setNewMotBCPowersAndRatio(float powerMotB, float powerMotC)
 {
+    MOT_PID_SETTINGS.pauseAction = true;
+
     RATIO_MOT_B = powerMotB;
     RATIO_MOT_C = powerMotC;
     POWER_MOT_B = powerMotB;
     POWER_MOT_C = powerMotC;
 
-    // PIDReset(&)
-    setErrModeAndStartDeg(powerMotB, powerMotC);
+    // PIDReset(&MOT_PID_SETTINGS);
+    setErrMode(powerMotB, powerMotC);
+    if (powerMotB != 0 || powerMotC != 0)
+    {
+        MOT_PID_SETTINGS.pauseAction = false;
+    }
+    else if (powerMotB == 0 && powerMotC != 0)
+    {
+        motor[motB] = 0;
+    }
+    else if (powerMotB != 0 && powerMotC == 0)
+    {
+        motor[motC] = 0;
+    }
+    else
+    {
+        motor[motB] = 0;
+        motor[motC] = 0;
+    }
 }
 
 void setNewMotBCOnlyPowers(short powerMotB, short powerMotC)
 {
+    MOT_PID_SETTINGS.pauseAction = true;
     POWER_MOT_B = powerMotB;
     POWER_MOT_C = powerMotC;
 
-    setErrModeAndStartDeg(powerMotB, powerMotC);
+    setErrMode(powerMotB, powerMotC);
+    if (powerMotB != 0 || powerMotC != 0)
+    {
+        MOT_PID_SETTINGS.pauseAction = false;
+    }
+    else if (powerMotB == 0 && powerMotC != 0)
+    {
+        motor[motB] = 0;
+    }
+    else if (powerMotB != 0 && powerMotC == 0)
+    {
+        motor[motC] = 0;
+    }
+    else
+    {
+        motor[motB] = 0;
+        motor[motC] = 0;
+    }
 }
 
 void setNewMotBCOnlyRatio(float powerMotB, float powerMotC)
 {
+    MOT_PID_SETTINGS.pauseAction = true;
     RATIO_MOT_B = powerMotB;
     RATIO_MOT_C = powerMotC;
 
-    setErrModeAndStartDeg(powerMotB, powerMotC);
+    setErrMode(powerMotB, powerMotC);
+    if (powerMotB != 0 || powerMotC != 0)
+    {
+        MOT_PID_SETTINGS.pauseAction = false;
+    }
+    else if (powerMotB == 0 && powerMotC != 0)
+    {
+        motor[motB] = 0;
+    }
+    else if (powerMotB != 0 && powerMotC == 0)
+    {
+        motor[motC] = 0;
+    }
+    else
+    {
+        motor[motB] = 0;
+        motor[motC] = 0;
+    }
+}
+
+void setStartDegMotBCAndReset(int startB, int startC)
+{
+    START_DEG_MOT_B = startB;
+    START_DEG_MOT_C = startC;
+    PIDReset(&MOT_PID_SETTINGS);
 }
 
 void pausePIDMot()

@@ -53,3 +53,29 @@ void readCalibratedSenHSV(short sen, SenSettings *senParams, SenHSVVals *outPara
     readCalibratedSenRGB(sen, senParams, &buf);
     RGBtoHSV(&buf, outParams);
 }
+
+void debReadAndShowHSV(short sen, SenSettings *senSet)
+{
+    SenHSVVals buf;
+    while (true)
+    {
+        readCalibratedSenHSV(sen, senSet, &buf);
+        eraseDisplay();
+        displayCenteredBigTextLine(2, "H: %d", buf.H);
+        displayCenteredBigTextLine(4, "S: %d", buf.S);
+        displayCenteredBigTextLine(6, "V: %d", buf.V);
+    }
+}
+
+void debReadAndShowRGB(short sen, SenSettings *senSet)
+{
+    SenRGBVals buf;
+    while (true)
+    {
+        readCalibratedSenRGB(sen, senSet, &buf);
+        eraseDisplay();
+        displayCenteredBigTextLine(2, "R: %d", buf.R);
+        displayCenteredBigTextLine(4, "G: %d", buf.G);
+        displayCenteredBigTextLine(6, "B: %d", buf.B);
+    }
+}

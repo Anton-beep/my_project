@@ -33,6 +33,11 @@ float circleDegToCm(float cd)
     return BASE_LEN * PI * cd / 360;
 }
 
+float bigCircleDegToCm(float cd)
+{
+    return 2 * BASE_LEN * PI * cd / 360;
+}
+
 float getFractionalPart(float val)
 {
     return val - (int)val;

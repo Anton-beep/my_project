@@ -220,10 +220,10 @@ task keepBMoving()
             {
                 if (!(KEEP_MOVING_B_WORKING))
                 {
-                    startTimeKeepMovingB = nPgmTime;
+                    clearTimer(T1);
                     KEEP_MOVING_B_WORKING = true;
                 }
-                KEEP_MOVING_B_SETTINGS.errNow = nPgmTime - startTimeKeepMovingB;
+                KEEP_MOVING_B_SETTINGS.errNow = time1[T1];
                 if (POWER_MOT_B > 0)
                 {
                     motor[motB] += PIDFunction(&KEEP_MOVING_B_SETTINGS);
@@ -253,10 +253,10 @@ task keepCMoving()
             {
                 if (!(KEEP_MOVING_C_WORKING))
                 {
-                    startTimeKeepMovingC = nPgmTime;
+                    clearTimer(T2);
                     KEEP_MOVING_C_WORKING = true;
                 }
-                KEEP_MOVING_C_SETTINGS.errNow = nPgmTime - startTimeKeepMovingC;
+                KEEP_MOVING_C_SETTINGS.errNow = time1[T2];
                 if (POWER_MOT_C > 0)
                 {
                     motor[motC] += PIDFunction(&KEEP_MOVING_C_SETTINGS);

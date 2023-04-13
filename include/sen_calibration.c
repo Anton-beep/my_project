@@ -79,3 +79,22 @@ void debReadAndShowRGB(short sen, SenSettings *senSet)
         displayCenteredBigTextLine(6, "B: %d", buf.B);
     }
 }
+
+void displaySenRGB()
+{
+    int sens[4] = {S1, S2, S3, S4};
+    int r, g, b;
+    while (true)
+    {
+        eraseDisplay();
+        for (int i = 0; i < 4; i++)
+        {
+            if (SensorType[sens[i]] != 0)
+            {
+                getColorRawRGB(sens[i], r, g, b);
+                displayTextLine(5 + i * 2, "sen%d->R:%d\tG:%d\tB:%d", i + 1, r, g, b);
+            }
+        }
+        sleep(100);
+    }
+}

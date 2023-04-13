@@ -16,6 +16,9 @@
 
 task main (){
 	// define everything
+	setSoundVolume(100);
+	checkBat();
+	clearTimer(T3);
 	defStructures();
 	setMotorBrakeMode(motB, motorCoast);
 	setMotorBrakeMode(motC, motorCoast);
@@ -23,10 +26,8 @@ task main (){
 	//startTask(keepBMoving);
 	//startTask(keepCMoving);
 
-	//mainLogic();
+	mainLogic();
+	displaySenRGB();
 
-	stopTask(PIDEngineMot);
-	stopBC();
-	sleep(1000);
-	displayExecutionTime();
+	displayExecTime();
 }

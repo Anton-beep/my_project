@@ -6,5 +6,5 @@
 
 void mainLogic()
 {
-    tankTurnNS3Parts(30, 30, 30, 20, 20, 70, 70, 0, 0);
+    
 }

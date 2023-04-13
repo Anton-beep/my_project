@@ -78,3 +78,40 @@ bool *stratManipD(PIDSettings *PIDSetPtr, int deg, short allowedErr)
     startTask(manipMoveD);
     return &MANIP_D_WORKING;
 }
+
+unsigned long MSECONDS_A = 0;
+unsigned long MSECONDS_D = 0;
+short POWER_TIME_A = 0;
+short POWER_TIME_D = 0;
+short END_POWER_TIME_A = 0;
+short END_POWER_TIME_D = 0;
+
+task manipTimeA()
+{
+    motor[motA] = POWER_TIME_A;
+    sleep(MSECONDS_A);
+    motor[motA] = END_POWER_TIME_A;
+}
+
+task manipTimeD()
+{
+    motor[motD] = POWER_TIME_D;
+    sleep(MSECONDS_D);
+    motor[motD] = END_POWER_TIME_D;
+}
+
+void startTimeA(int time, int powStart, int powEnd)
+{
+    MSECONDS_A = time;
+    POWER_TIME_A = powStart;
+    END_POWER_TIME_A = powEnd;
+    startTask(manipTimeA);
+}
+
+void startTimeD(int time, int powStart, int powEnd)
+{
+    MSECONDS_D = time;
+    POWER_TIME_D = powStart;
+    END_POWER_TIME_D = powEnd;
+    startTask(manipTimeA);
+}

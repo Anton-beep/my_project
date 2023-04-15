@@ -303,19 +303,19 @@ void tankTurnSenCrawl(float powB1Part, float powC1Part, float powB2Part, float p
     if (powB1Part < 0)
     {
         setNewMotBCPowersAndRatio(powB1Part, powC1Part);
-        while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB1)
+        while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(powB2Part, powC2Part);
-        while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB2)
             ;
     }
     else
     {
         setNewMotBCPowersAndRatio(powB1Part, powC1Part);
-        while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB1)
+        while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(powB2Part, powC2Part);
-        while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB2)
             ;
     }
 }
@@ -325,42 +325,70 @@ void turnBSenCrawl(float powB1Part, float powB2Part, float blackLineSumRGB1, flo
     if (powB1Part < 0)
     {
         setNewMotBCPowersAndRatio(powB1Part, 0);
-        while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB1)
+        while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(powB2Part, 0);
-        while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB2)
             ;
     }
     else
     {
         setNewMotBCPowersAndRatio(powB1Part, 0);
-        while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB1)
+        while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(powB2Part, 0);
-        while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB2)
             ;
     }
 }
 
-// CLOCKWISE!!!!!!!!!!!!!!!!!!
 void turnCSenCrawl(float powC1Part, float powC2Part, float blackLineSumRGB1, float blackLineSumRGB2)
 {
     if (powC1Part > 0)
     {
         setNewMotBCPowersAndRatio(0, powC1Part);
-        while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB1)
+        while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(0, powC2Part);
-        while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB2)
             ;
     }
     else
     {
         setNewMotBCPowersAndRatio(0, powC1Part);
-        while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGB1)
+        while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB1)
             ;
         setNewMotBCPowersAndRatio(0, powC2Part);
-        while (readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGB2)
+        while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB2)
             ;
     }
+}
+
+void correctWithLine(float powB1, float powC1, float powB2, float powC2, float blackLineRGB1Sen1, float blackLineRGB1Sen2, float blackLineRGB2Sen1, float blackLineRGB2Sen2)
+{
+    bool flagSen1First = false, flagSen2First = false;
+    setNewMotBCPowersAndRatio(powB1, powC1);
+    while (!(flagSen1First) && !(flagSen2First))
+    {
+        if (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) <= blackLineRGB1Sen1)
+        {
+            flagSen1First = true;
+        }
+        else if (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) <= blackLineRGB1Sen2)
+        {
+            flagSen2First = true;
+        }
+    }
+    if (flagSen1First)
+    {
+        setNewMotBCPowersAndRatio(0, powC2);
+        while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineRGB2Sen2)
+            ;
+    }
+    else if (flagSen2First)
+    {
+        setNewMotBCPowersAndRatio(powB2, 0);
+        while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineRGB2Sen1)
+            ;
+    }   
 }

@@ -15,12 +15,15 @@
 
 task main (){
 	// define everything
+	setSoundVolume(0);
+	checkBat();
+	clearTimer(T3);
 	defStructures();
 	setMotorBrakeMode(motB, motorCoast);
 	setMotorBrakeMode(motC, motorCoast);
 	startTask(PIDEngineMot);
-	startTask(keepBMoving);
-	startTask(keepCMoving);
+	//startTask(keepBMoving);
+	//startTask(keepCMoving);
 
 	SenRGBVals nothing;
 	SenRGBVals white;

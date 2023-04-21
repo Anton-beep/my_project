@@ -103,7 +103,7 @@ void defStructures()
 
     // ----------------------------------
 
-    MANIP_A_PID_SETTINGS.Kp = 0.1;
+    MANIP_A_PID_SETTINGS.Kp = 1;
     MANIP_A_PID_SETTINGS.Ki = 0;
     MANIP_A_PID_SETTINGS.Kd = 0;
     MANIP_A_PID_SETTINGS.prevErr = 0;
@@ -115,9 +115,9 @@ void defStructures()
 
     // ----------------------------------
 
-    MANIP_D_PID_SETTINGS.Kp = 0.1;
-    MANIP_D_PID_SETTINGS.Ki = 0;
-    MANIP_D_PID_SETTINGS.Kd = 0;
+    MANIP_D_PID_SETTINGS.Kp = 0.3;
+    MANIP_D_PID_SETTINGS.Ki = 0.1;
+    MANIP_D_PID_SETTINGS.Kd = 0.01;
     MANIP_D_PID_SETTINGS.prevErr = 0;
     MANIP_D_PID_SETTINGS.integral = 0;
     MANIP_D_PID_SETTINGS.errNow = 0;

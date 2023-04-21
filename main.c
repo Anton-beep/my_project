@@ -16,7 +16,7 @@
 
 task main (){
 	// define everything
-	setSoundVolume(100);
+	setSoundVolume(0);
 	checkBat();
 	clearTimer(T3);
 	defStructures();
@@ -27,7 +27,6 @@ task main (){
 	//startTask(keepCMoving);
 
 	mainLogic();
-	displaySenRGB();
 
 	displayExecTime();
 }

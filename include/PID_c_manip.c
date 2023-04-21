@@ -2,6 +2,18 @@
 #include "PID_c.c"
 #include "../robot_cfg.c"
 
+void stopA()
+{
+    motor[motA] = 0;
+    setMotorBrakeMode(motA, motorBrake);
+}
+
+void stopD()
+{
+    motor[motD] = 0;
+    setMotorBrakeMode(motD, motorBrake);
+}
+
 int MANIP_A_DEG_TO_MOVE;
 int MANIP_D_DEG_TO_MOVE;
 short MANIP_A_ALLOWED_ERR = 2;
@@ -113,5 +125,5 @@ void startTimeD(int time, int powStart, int powEnd)
     MSECONDS_D = time;
     POWER_TIME_D = powStart;
     END_POWER_TIME_D = powEnd;
-    startTask(manipTimeA);
+    startTask(manipTimeD);
 }

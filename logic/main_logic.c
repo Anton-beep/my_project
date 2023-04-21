@@ -6,5 +6,10 @@
 
 void mainLogic()
 {
-    
+    startTimeD(800, -30, -19);
+    sleep(5000);
+    startTimeD(500, 20, 40);
+    sleep(1000);
+    startTimeD(2000, -30, -20);
+    sleep(5000);
 }

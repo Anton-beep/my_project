@@ -83,6 +83,13 @@ task PIDEngineMot()
     }
 }
 
+void setStartDegMotBCAndReset(int startB, int startC)
+{
+    START_DEG_MOT_B = startB;
+    START_DEG_MOT_C = startC;
+    PIDReset(&MOT_PID_SETTINGS);
+}
+
 void setErrMode(float powerMotB, float powerMotC)
 {
     if (powerMotB == 0 && powerMotC == 0)
@@ -92,11 +99,19 @@ void setErrMode(float powerMotB, float powerMotC)
     else if (difSignsFloat(powerMotB, powerMotC))
     {
         // dif signs
+        if (ERR_MODE != 1)
+        {
+            setStartDegMotBCAndReset(nMotorEncoder[motB], nMotorEncoder[motC]);
+        }
         ERR_MODE = 1;
     }
     else if (!(difSignsFloat(powerMotB, powerMotC)))
     {
         // same signs
+        if (ERR_MODE != 2)
+        {
+            setStartDegMotBCAndReset(nMotorEncoder[motB], nMotorEncoder[motC]);
+        }
         ERR_MODE = 2;
     }
     else if (powerMotB == 0 || powerMotC == 0)
@@ -185,13 +200,6 @@ void setNewMotBCOnlyRatio(float powerMotB, float powerMotC)
         motor[motB] = 0;
         motor[motC] = 0;
     }
-}
-
-void setStartDegMotBCAndReset(int startB, int startC)
-{
-    START_DEG_MOT_B = startB;
-    START_DEG_MOT_C = startC;
-    PIDReset(&MOT_PID_SETTINGS);
 }
 
 void pausePIDMot()

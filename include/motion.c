@@ -31,6 +31,7 @@ void coastBC()
 
 void moveBC(float dist, float powB, float powC)
 {
+    setStartDegMotBCAndReset(nMotorEncoder[motB], nMotorEncoder[motC]);
     int startDegB = nMotorEncoder[motB];
     float endDegB;
     if (powB > 0)
@@ -49,8 +50,30 @@ void moveBC(float dist, float powB, float powC)
     }
 }
 
+void moveBCMainC(float dist, float powB, float powC)
+{
+    setStartDegMotBCAndReset(nMotorEncoder[motB], nMotorEncoder[motC]);
+    int startDegC = nMotorEncoder[motC];
+    float endDegC;
+    if (powC > 0)
+    {
+        endDegC = startDegC + dist;
+        setNewMotBCPowersAndRatio(powB, powC);
+        while (nMotorEncoder[motC] < endDegC)
+            ;
+    }
+    else
+    {
+        endDegC = startDegC - dist;
+        setNewMotBCPowersAndRatio(powB, powC);
+        while (nMotorEncoder[motC] > endDegC)
+            ;
+    }
+}
+
 void moveB(float dist, float pow)
 {
+    setStartDegMotBCAndReset(nMotorEncoder[motB], nMotorEncoder[motC]);
     int startDegB = nMotorEncoder[motB];
     float endDegB;
     if (pow > 0)
@@ -71,6 +94,7 @@ void moveB(float dist, float pow)
 
 void moveC(float dist, float pow)
 {
+    setStartDegMotBCAndReset(nMotorEncoder[motB], nMotorEncoder[motC]);
     int startDegC = nMotorEncoder[motC];
     float endDegC;
     if (pow > 0)
@@ -140,6 +164,7 @@ bool applyNewAccels(short *powB, short *powC, float *newPowB, float *newPowC)
 
 void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, float accelC)
 {
+    setStartDegMotBCAndReset(nMotorEncoder[motB], nMotorEncoder[motC]);
     if (accelB == 0 && accelC == 0)
     {
         moveBC(dist, powB, powC);
@@ -200,6 +225,7 @@ void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, fl
 
 void moveBCCustomAccelMainC(float dist, float powB, float powC, float accelB, float accelC)
 {
+    setStartDegMotBCAndReset(nMotorEncoder[motB], nMotorEncoder[motC]);
     if (accelB == 0 && accelC == 0)
     {
         moveBC(dist, powB, powC);
@@ -297,7 +323,7 @@ void moveBCAceelPartMainBKeepRatio(float dist, float startPowB, float startPowC,
 // -------------------------------------------------------------------------------------------------------------------------
 void moveBCEqualAccelPart(float dist, float startPow, float endPow)
 {
-    moveBCAceelPartMainBKeepRatio(dist, startPow, startPow, endPow);
+    moveBCAceelPartMainBKeepRatio(dist, startPow * -1, startPow, endPow * -1);
 }
 
 void moveBPart(float dist, float startPow, float endPow)

@@ -1,7 +1,7 @@
 #include "structures.c"
 
 float PIDFunction (PIDSettings *params){
-    if (params->pauseAction){
+    if (params->pauseAction == true){
         return 0;
     }
 

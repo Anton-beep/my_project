@@ -76,7 +76,17 @@ int mode(int *a, int n)
     return maxValue;
 }
 
-const int WIN_ARR_LEN = 10;
+int mean(int *a, int n)
+{
+    int sum = 0;
+    for (int i = 0; i < n; i++)
+    {
+        sum += a[i];
+    }
+    return sum / n;
+}
+
+const int WIN_ARR_LEN = 5;
 int WIN_ARR[WIN_ARR_LEN];
 
 int readWindowHSV(short sen, SenSettings *senSet, int *samples, int lenArr)

@@ -12,9 +12,9 @@ void readCalibratedSenRGB(short sen, SenSettings *senParams, SenRGBVals *outPara
 
 float readCalibratedSenSumRGB(short sen, SenSettings *senParams)
 {
-    int r, g, b;
-    getColorRawRGB(sen, r, g, b);
-    return r + g + b;
+    SenRGBVals buf;
+    readCalibratedSenRGB(sen, senParams, &buf);
+    return buf.R + buf.G + buf.B;
 }
 
 void RGBtoHSV(SenRGBVals *inRGB, SenHSVVals *outHSV)
@@ -95,6 +95,123 @@ void displaySenRGB()
                 displayTextLine(5 + i * 2, "sen%d->R:%d\tG:%d\tB:%d", i + 1, r, g, b);
             }
         }
+        sleep(100);
+    }
+}
+
+void displayCalibratedRGB(short sen, SenSettings *senSet)
+{
+    SenRGBVals buf;
+    while (true)
+    {
+        readCalibratedSenRGB(sen, senSet, &buf);
+        eraseDisplay();
+        displayCenteredBigTextLine(2, "R: %d", buf.R);
+        displayCenteredBigTextLine(4, "G: %d", buf.G);
+        displayCenteredBigTextLine(6, "B: %d", buf.B);
+    }
+}
+
+void displayMeanCalibratedRGB(short sen, SenSettings *senSet)
+{
+    SenRGBVals buf;
+    float sumR = 0, sumG = 0, sumB = 0, i = 1;
+    while (true)
+    {
+        readCalibratedSenRGB(sen, senSet, &buf);
+        sumR += buf.R;
+        sumG += buf.G;
+        sumB += buf.B;
+        eraseDisplay();
+        displayCenteredBigTextLine(2, "R: %f", sumR / i);
+        displayCenteredBigTextLine(4, "G: %f", sumG / i);
+        displayCenteredBigTextLine(6, "B: %f", sumB / i);
+        i++;
+    }
+}
+
+void displayCalibrationValues()
+{
+    eraseDisplay();
+    displayCenteredTextLine(2, "Put on max and press any button");
+    flushButtonMessages();
+    waitForButtonPress();
+    SenRGBVals maxSen1;
+    SenRGBVals maxSen2;
+    SenRGBVals maxSen3;
+    maxSen1.R = 0;
+    maxSen1.G = 0;
+    maxSen1.B = 0;
+    maxSen2.R = 0;
+    maxSen2.G = 0;
+    maxSen2.B = 0;
+    maxSen3.R = 0;
+    maxSen3.G = 0;
+    maxSen3.B = 0;
+    int r, g, b;
+    sleep(200);
+    flushButtonMessages();
+    while (getButtonPress(buttonEnter) == false)
+    {
+        getColorRawRGB(sen1, r, g, b);
+        maxSen1.R = max(maxSen1.R, r);
+        maxSen1.G = max(maxSen1.G, g);
+        maxSen1.B = max(maxSen1.B, b);
+        getColorRawRGB(sen2, r, g, b);
+        maxSen2.R = max(maxSen2.R, r);
+        maxSen2.G = max(maxSen2.G, g);
+        maxSen2.B = max(maxSen2.B, b);
+        getColorRawRGB(sen3, r, g, b);
+        maxSen3.R = max(maxSen3.R, r);
+        maxSen3.G = max(maxSen3.G, g);
+        maxSen3.B = max(maxSen3.B, b);
+        eraseDisplay();
+        displayCenteredTextLine(2, "sen1: R:%d\tG:%d\tB:%d", maxSen1.R, maxSen1.G, maxSen1.B);
+        displayCenteredTextLine(4, "sen2: R:%d\tG:%d\tB:%d", maxSen2.R, maxSen2.G, maxSen2.B);
+        displayCenteredTextLine(6, "sen3: R:%d\tG:%d\tB:%d", maxSen3.R, maxSen3.G, maxSen3.B);
+        displayCenteredTextLine(8, "Press center button to stop");
+        sleep(100);
+    }
+    eraseDisplay();
+    displayCenteredTextLine(2, "Put on min and press any button");
+    flushButtonMessages();
+    waitForButtonPress();
+    SenRGBVals minSen1;
+    SenRGBVals minSen2;
+    SenRGBVals minSen3;
+    minSen1.R = 1000;
+    minSen1.G = 1000;
+    minSen1.B = 1000;
+    minSen2.R = 1000;
+    minSen2.G = 1000;
+    minSen2.B = 1000;
+    minSen3.R = 1000;
+    minSen3.G = 1000;
+    minSen3.B = 1000;
+    r = 1000;
+    g = 1000;
+    b = 1000;
+    sleep(200);
+    flushButtonMessages();
+    while (getButtonPress(buttonEnter) == false)
+    {
+        getColorRawRGB(sen1, r, g, b);
+        minSen1.R = min(minSen1.R, r);
+        minSen1.G = min(minSen1.G, g);
+        minSen1.B = min(minSen1.B, b);
+        getColorRawRGB(sen2, r, g, b);
+        minSen2.R = min(minSen2.R, r);
+        minSen2.G = min(minSen2.G, g);
+        minSen2.B = min(minSen2.B, b);
+        getColorRawRGB(sen3, r, g, b);
+        minSen3.R = min(minSen3.R, r);
+        minSen3.G = min(minSen3.G, g);
+        minSen3.B = min(minSen3.B, b);
+        eraseDisplay();
+        displayCenteredTextLine(2, "sen1: R:%d\tG:%d\tB:%d", minSen1.R, minSen1.G, minSen1.B);
+        displayCenteredTextLine(4, "sen2: R:%d\tG:%d\tB:%d", minSen2.R, minSen2.G, minSen2.B);
+        displayCenteredTextLine(6, "sen3: R:%d\tG:%d\tB:%d", minSen3.R, minSen3.G, minSen3.B);
+        displayCenteredTextLine(8, "Press center button to stop");
         sleep(100);
     }
 }

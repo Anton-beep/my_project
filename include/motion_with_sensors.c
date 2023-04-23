@@ -8,10 +8,12 @@ void line2SenDist(PIDSettings *PIDSet, float dist, float pow)
     float endDegB;
 
     endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
     while (nMotorEncoder[motB] > endDegB)
     {
         PID2SensWork(PIDSet, pow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 void lineSen1InDist(PIDSettings *PIDSet, float dist, float pow, float target)
@@ -19,10 +21,12 @@ void lineSen1InDist(PIDSettings *PIDSet, float dist, float pow, float target)
     int startDegB = nMotorEncoder[motB];
     float endDegB;
     endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
     while (nMotorEncoder[motB] > endDegB)
     {
         PIDSen1InWork(PIDSet, target, pow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 void lineSen2InDist(PIDSettings *PIDSet, float dist, float pow, float target)
@@ -30,10 +34,12 @@ void lineSen2InDist(PIDSettings *PIDSet, float dist, float pow, float target)
     int startDegB = nMotorEncoder[motB];
     float endDegB;
     endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
     while (nMotorEncoder[motB] > endDegB)
     {
         PIDSen2InWork(PIDSet, target, pow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 void lineSen1OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
@@ -41,10 +47,12 @@ void lineSen1OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
     int startDegB = nMotorEncoder[motB];
     float endDegB;
     endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
     while (nMotorEncoder[motB] > endDegB)
     {
         PIDSen1InWork(PIDSet, target, pow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 void lineSen2OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
@@ -52,10 +60,12 @@ void lineSen2OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
     int startDegB = nMotorEncoder[motB];
     float endDegB;
     endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
     while (nMotorEncoder[motB] > endDegB)
     {
         PIDSen2InWork(PIDSet, target, pow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 bool applyNewAccelsSen(short *powB, short *powC, float *newPowB, float *newPowC)
@@ -101,6 +111,7 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
     bool flagAccel = false;
     float endDegB;
     endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
     while (nMotorEncoder[motB] > endDegB)
     {
         if (!(flagAccel))
@@ -112,6 +123,7 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
         }
         PID2SensWork(PIDSet, newPow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 0)
@@ -124,6 +136,7 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
     bool flagAccel = false;
     float endDegB;
     endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
     while (nMotorEncoder[motB] > endDegB)
     {
         if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
@@ -135,6 +148,7 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
         }
         PIDSen1InWork(PIDSet, target, newPow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
@@ -147,6 +161,7 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
     bool flagAccel = false;
     float endDegB;
     endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
     while (nMotorEncoder[motB] > endDegB)
     {
         if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
@@ -158,6 +173,7 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
         }
         PIDSen2InWork(PIDSet, target, newPow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
@@ -171,6 +187,7 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
     float endDegB;
 
     endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
     while (nMotorEncoder[motB] > endDegB)
     {
         if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
@@ -182,6 +199,7 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
         }
         PIDSen1OutWork(PIDSet, target, newPow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
@@ -194,6 +212,7 @@ void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
     bool flagAccel = false;
     float endDegB;
     endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
     while (nMotorEncoder[motB] > endDegB)
     {
         if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
@@ -205,6 +224,7 @@ void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
         }
         PIDSen2OutWork(PIDSet, target, newPow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 void line2SenAccelPart(PIDSettings *PIDSet, float dist, float startPow, float endPow)
@@ -291,10 +311,12 @@ void line2Sen3PartsOneSet(PIDSettings *PIDSet, float dist1, float dist2, float d
 
 void line2SenCrawl(PIDSettings *PIDSet, float pow, float blackLineSumRGBSen1, float blackLineSumRGBSen2)
 {
-    while (readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) > blackLineSumRGBSen1 && readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION) > blackLineSumRGBSen2)
+    MOT_PID_SETTINGS.pauseAction = true;
+    while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGBSen1 || readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGBSen2)
     {
         PID2SensWork(PIDSet, pow);
     }
+    MOT_PID_SETTINGS.pauseAction = false;
 }
 
 // turns
@@ -390,5 +412,11 @@ void correctWithLine(float powB1, float powC1, float powB2, float powC2, float b
         setNewMotBCPowersAndRatio(powB2, 0);
         while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineRGB2Sen1)
             ;
-    }   
+    }
+}
+
+void waitForLine(float blackLineSumRGBSen1, float blackLineSumRGBSen2)
+{
+    while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGBSen1 || readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGBSen2)
+        ;
 }

@@ -5,7 +5,9 @@ float distHSVVals(int ptr1, int ptr2)
 {
     SenHSVVals *vals1 = (SenHSVVals *)ptr1;
     SenHSVVals *vals2 = (SenHSVVals *)ptr2;
-    return sqrt(pow(vals1->H - vals2->H, 2) + pow(vals1->S - vals2->S, 2) + pow(vals1->V - vals2->V, 2));
+
+    return fabs(vals1->H - vals2->H);
+    //return sqrt(pow(vals1->H - vals2->H, 2) + pow(vals1->S - vals2->S, 2) + pow(vals1->V - vals2->V, 2));
 }
 
 float distRGBVals(int ptr1, int ptr2)
@@ -86,7 +88,7 @@ int mean(int *a, int n)
     return sum / n;
 }
 
-const int WIN_ARR_LEN = 3;
+const int WIN_ARR_LEN = 5;
 int WIN_ARR[WIN_ARR_LEN];
 
 int readWindowHSV(short sen, SenSettings *senSet, int *samples, int lenArr)

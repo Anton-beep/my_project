@@ -99,19 +99,6 @@ void displaySenRGB()
     }
 }
 
-void displayCalibratedRGB(short sen, SenSettings *senSet)
-{
-    SenRGBVals buf;
-    while (true)
-    {
-        readCalibratedSenRGB(sen, senSet, &buf);
-        eraseDisplay();
-        displayCenteredBigTextLine(2, "R: %d", buf.R);
-        displayCenteredBigTextLine(4, "G: %d", buf.G);
-        displayCenteredBigTextLine(6, "B: %d", buf.B);
-    }
-}
-
 void displayMeanCalibratedRGB(short sen, SenSettings *senSet)
 {
     SenRGBVals buf;
@@ -130,6 +117,25 @@ void displayMeanCalibratedRGB(short sen, SenSettings *senSet)
         i++;
     }
 }
+
+void displayMeanCalibratedHSV(short sen, SenSettings *senSet)
+{
+    SenHSVVals buf;
+    float sumH = 0, sumS = 0, sumV = 0, i = 1;
+    while (true)
+    {
+        readCalibratedSenHSV(sen, senSet, &buf);
+        sumH += buf.H;
+        sumS += buf.S;
+        sumV += buf.V;
+        eraseDisplay();
+        displayCenteredBigTextLine(2, "H: %f", sumH / i);
+        displayCenteredBigTextLine(4, "S: %f", sumS / i);
+        displayCenteredBigTextLine(6, "V: %f", sumV / i);
+        i++;
+    }
+}
+
 
 void displayCalibrationValues()
 {

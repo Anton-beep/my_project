@@ -28,8 +28,8 @@ task main (){
 	//startTask(keepCMoving);
 
 	defineForLogic();
-	mainLogic();
-	//testFunc();
+	//mainLogic();
+	testFunc();
 
 
 	coastBC();

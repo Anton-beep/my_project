@@ -16,6 +16,8 @@ void stopD()
 
 int MANIP_A_DEG_TO_MOVE;
 int MANIP_D_DEG_TO_MOVE;
+short MANIP_A_POWER_MOVE;
+short MANIP_D_POWER_MOVE;
 short MANIP_A_END_POWER_MOVE;
 short MANIP_D_END_POWER_MOVE;
 short MANIP_A_ALLOWED_ERR = 2;
@@ -32,7 +34,7 @@ task manipMoveA()
     {
         MANIP_A_PID_PTR->errNow = endDegA - nMotorEncoder[motA];
         short outPID = PIDFunction(MANIP_A_PID_PTR);
-        motor[motA] = outPID;
+        motor[motA] = MANIP_A_POWER_MOVE + outPID;
         sleep(MANIP_A_PID_PTR->dt * 1000);
     }
     motor[motA] = MANIP_A_END_POWER_MOVE;
@@ -48,7 +50,7 @@ task manipMoveD()
     {
         MANIP_D_PID_PTR->errNow = endDegD - nMotorEncoder[motD];
         short outPID = PIDFunction(MANIP_D_PID_PTR);
-        motor[motD] = outPID;
+        motor[motD] = MANIP_D_POWER_MOVE + outPID;
         sleep(MANIP_D_PID_PTR->dt * 1000);
     }
     motor[motD] = MANIP_D_END_POWER_MOVE;
@@ -56,23 +58,25 @@ task manipMoveD()
 }
 
 // returns bool pointer to track when manipalutor stops working
-bool *stratManipA(PIDSettings *PIDSetPtr, int deg, short allowedErr, short endPow = 0)
+bool *stratManipA(PIDSettings *PIDSetPtr, int deg, short allowedErr, short startPow, short endPow = 0)
 {
     MANIP_A_PID_PTR = PIDSetPtr;
     MANIP_A_DEG_TO_MOVE = deg;
     MANIP_A_ALLOWED_ERR = allowedErr;
     MANIP_A_END_POWER_MOVE = endPow;
+    MANIP_A_POWER_MOVE = startPow;
     startTask(manipMoveA);
     return &MANIP_A_WORKING;
 }
 
 // returns bool pointer to track when manipalutor stops working
-bool *stratManipD(PIDSettings *PIDSetPtr, int deg, short allowedErr, short endPow = 0)
+bool *stratManipD(PIDSettings *PIDSetPtr, int deg, short allowedErr, short startPow, short endPow = 0)
 {
     MANIP_D_PID_PTR = PIDSetPtr;
     MANIP_D_DEG_TO_MOVE = deg;
     MANIP_D_ALLOWED_ERR = allowedErr;
     MANIP_D_END_POWER_MOVE = endPow;
+    MANIP_D_POWER_MOVE = startPow;
     startTask(manipMoveD);
     return &MANIP_D_WORKING;
 }

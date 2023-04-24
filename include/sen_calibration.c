@@ -126,6 +126,7 @@ void displayMeanCalibratedRGB(short sen, SenSettings *senSet)
         displayCenteredBigTextLine(2, "R: %f", sumR / i);
         displayCenteredBigTextLine(4, "G: %f", sumG / i);
         displayCenteredBigTextLine(6, "B: %f", sumB / i);
+        displayCenteredBigTextLine(8, "Sum: %f", sumR / i + sumG / i + sumB / i);
         i++;
     }
 }

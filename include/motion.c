@@ -357,6 +357,13 @@ void moveBC3Parts(float dist1, float dist2, float dist3, float startPowB, float 
     moveBCAccelPartMainB(dist3, maxPowB, maxPowC, endPowB, endPowC);
 }
 
+void moveBC3PartsMainC(float dist1, float dist2, float dist3, float startPowB, float startPowC, float maxPowB, float maxPowC, float endPowB, float endPowC)
+{
+    moveBCAccelPartMainC(dist1, startPowB, startPowC, maxPowB, maxPowC);
+    moveBCMainC(dist2, maxPowB, maxPowC);
+    moveBCAccelPartMainC(dist3, maxPowB, maxPowC, endPowB, endPowC);
+}
+
 // turns one wheel or tank
 // -------------------------------------------------------------------------------------------------------------------------
 

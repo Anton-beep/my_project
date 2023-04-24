@@ -22,7 +22,6 @@ task main (){
 	defStructures();
 	setMotorBrakeMode(motB, motorCoast);
 	setMotorBrakeMode(motC, motorCoast);
-	setMotorBrakeMode(motD, motorCoast);
 	startTask(PIDEngineMot);
 	//startTask(keepBMoving);
 	//startTask(keepCMoving);

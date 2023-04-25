@@ -420,3 +420,15 @@ void waitForLine(float blackLineSumRGBSen1, float blackLineSumRGBSen2)
     while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGBSen1 || readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGBSen2)
         ;
 }
+
+void waitForSen1(float blackLineSumRGB)
+{
+    while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB)
+        ;
+}
+
+void waitForSen2(float blackLineSumRGB)
+{
+    while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB)
+        ;
+}

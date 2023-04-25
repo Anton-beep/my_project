@@ -36,7 +36,7 @@ void defStructures()
 {
     MOT_PID_SETTINGS.Kp = 8.1;
     MOT_PID_SETTINGS.Ki = 3.1;
-    MOT_PID_SETTINGS.Kd = 0.0168;
+    MOT_PID_SETTINGS.Kd = 0.018;
     MOT_PID_SETTINGS.prevErr = 0;
     MOT_PID_SETTINGS.integral = 0;
     MOT_PID_SETTINGS.errNow = 0;

@@ -747,10 +747,8 @@ void mainLogic()
     // startReadPullShip();
     // conCrane();
     goToCubes();
-    takeCube4();
-    stopBC();
-    // readCubes();
-    // putCubes();
+    readCubes();
+    putCubes();
     // moveBigShipToWhite();
     // whiteCubeOnBig();
     // goToSmallShip();

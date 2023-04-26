@@ -31,8 +31,7 @@ task main (){
 	mainLogic();
 	//testFunc();
 
-
-	coastBC();
+	stopBC();
 	displayExecTime();
 	stopAllTasks();
 }

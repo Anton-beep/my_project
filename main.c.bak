@@ -29,10 +29,9 @@ task main (){
 
 	defineForLogic();
 	mainLogic();
-	// testFunc();
+	//testFunc();
 
-
-	coastBC();
+	stopBC();
 	displayExecTime();
 	stopAllTasks();
 }

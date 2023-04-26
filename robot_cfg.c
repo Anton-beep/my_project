@@ -34,9 +34,9 @@ PIDSettings *MANIP_D_PID_PTR;
 
 void defStructures()
 {
-    MOT_PID_SETTINGS.Kp = 8.1;
-    MOT_PID_SETTINGS.Ki = 3.1;
-    MOT_PID_SETTINGS.Kd = 0.018;
+    MOT_PID_SETTINGS.Kp = 8.5;
+    MOT_PID_SETTINGS.Ki = 3.5;
+    MOT_PID_SETTINGS.Kd = 0.04;
     MOT_PID_SETTINGS.prevErr = 0;
     MOT_PID_SETTINGS.integral = 0;
     MOT_PID_SETTINGS.errNow = 0;
@@ -67,23 +67,23 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN1_CALIBRATION.minR = 27;
-    SEN1_CALIBRATION.minG = 38;
-    SEN1_CALIBRATION.minB = 13;
+    SEN1_CALIBRATION.minR = 33;
+    SEN1_CALIBRATION.minG = 43;
+    SEN1_CALIBRATION.minB = 18;
 
-    SEN1_CALIBRATION.maxR = 350;
-    SEN1_CALIBRATION.maxG = 357;
-    SEN1_CALIBRATION.maxB = 188;
+    SEN1_CALIBRATION.maxR = 368;
+    SEN1_CALIBRATION.maxG = 374;
+    SEN1_CALIBRATION.maxB = 201;
 
     // ----------------------------------
 
-    SEN2_CALIBRATION.minR = 43;
-    SEN2_CALIBRATION.minG = 54;
+    SEN2_CALIBRATION.minR = 44;
+    SEN2_CALIBRATION.minG = 58;
     SEN2_CALIBRATION.minB = 32;
 
-    SEN2_CALIBRATION.maxR = 349;
-    SEN2_CALIBRATION.maxG = 473;
-    SEN2_CALIBRATION.maxB = 315;
+    SEN2_CALIBRATION.maxR = 343;
+    SEN2_CALIBRATION.maxG = 471;
+    SEN2_CALIBRATION.maxB = 316;
 
     // ----------------------------------
 
@@ -118,9 +118,9 @@ void defStructures()
     // ----------------------------------
 
     // power 85 - 100
-    DEFAULT_LINE_PID_SUPRA.Kp = 0.09;
-    DEFAULT_LINE_PID_SUPRA.Ki = 0.07;
-    DEFAULT_LINE_PID_SUPRA.Kd = 0.0011;
+    DEFAULT_LINE_PID_SUPRA.Kp = 0.29;
+    DEFAULT_LINE_PID_SUPRA.Ki = 0.045;
+    DEFAULT_LINE_PID_SUPRA.Kd = 0.00154;
     DEFAULT_LINE_PID_SUPRA.prevErr = 0;
     DEFAULT_LINE_PID_SUPRA.integral = 0;
     DEFAULT_LINE_PID_SUPRA.errNow = 0;
@@ -128,9 +128,9 @@ void defStructures()
     DEFAULT_LINE_PID_SUPRA.pauseAction = false;
 
     // power 60 - 85
-    DEFAULT_LINE_PID_FAST.Kp = 0.065;
-    DEFAULT_LINE_PID_FAST.Ki = 0.055;
-    DEFAULT_LINE_PID_FAST.Kd = 0.0004;
+    DEFAULT_LINE_PID_FAST.Kp = 0.27;
+    DEFAULT_LINE_PID_FAST.Ki = 0.042;
+    DEFAULT_LINE_PID_FAST.Kd = 0.00151;
     DEFAULT_LINE_PID_FAST.prevErr = 0;
     DEFAULT_LINE_PID_FAST.integral = 0;
     DEFAULT_LINE_PID_FAST.errNow = 0;
@@ -140,9 +140,9 @@ void defStructures()
     // ----------------------------------
 
     // power 30 - 60
-    DEFAULT_LINE_PID_MEDIUM.Kp = 0.06;
-    DEFAULT_LINE_PID_MEDIUM.Ki = 0.05;
-    DEFAULT_LINE_PID_MEDIUM.Kd = 0.0003;
+    DEFAULT_LINE_PID_MEDIUM.Kp = 0.25;
+    DEFAULT_LINE_PID_MEDIUM.Ki = 0.041;
+    DEFAULT_LINE_PID_MEDIUM.Kd = 0.00149;
     DEFAULT_LINE_PID_MEDIUM.prevErr = 0;
     DEFAULT_LINE_PID_MEDIUM.integral = 0;
     DEFAULT_LINE_PID_MEDIUM.errNow = 0;
@@ -152,9 +152,9 @@ void defStructures()
     // ----------------------------------
 
     // power 0 - 30
-    DEFAULT_LINE_PID_SLOW.Kp = 0.05;
-    DEFAULT_LINE_PID_SLOW.Ki = 0.015;
-    DEFAULT_LINE_PID_SLOW.Kd = 0.0001;
+    DEFAULT_LINE_PID_SLOW.Kp = 0.24;
+    DEFAULT_LINE_PID_SLOW.Ki = 0.04;
+    DEFAULT_LINE_PID_SLOW.Kd = 0.00145;
     DEFAULT_LINE_PID_SLOW.prevErr = 0;
     DEFAULT_LINE_PID_SLOW.integral = 0;
     DEFAULT_LINE_PID_SLOW.errNow = 0;

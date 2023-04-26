@@ -4,10 +4,10 @@ import numpy as np
 
 # speeds and accels
 SAFE_START_ACCEL = 20  # deg * s ** -2
-SAFE_END_ACCEL = 20  # deg * s ** -2
+SAFE_END_ACCEL = 1  # deg * s ** -2
 SAFE_START_SPEED = 20  # deg * s ** -1
 SAFE_MAX_SPEED = 95  # deg * s ** -1
-SAFE_END_SPEED = 17  # deg * s ** -1
+SAFE_END_SPEED = 10  # deg * s ** -1
 
 SAFE_INC_DEG = np.int64(SAFE_MAX_SPEED ** 2 -
                         SAFE_START_SPEED ** 2) / np.int64(2 * SAFE_START_ACCEL)

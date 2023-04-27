@@ -142,7 +142,6 @@ bool applyNewAccels(short *powB, short *powC, float *newPowB, float *newPowC)
         applyC = true;
     }
 
-    writeDebugStreamLine("%d %d", POWER_MOT_B, POWER_MOT_C);
     if (applyB && applyC)
     {
         setNewMotBCPowersAndRatio(*newPowB, *newPowC);

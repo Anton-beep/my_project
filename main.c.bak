@@ -13,10 +13,11 @@
 #include "include/motion_with_sensors.c"
 #include "include/PID_c_manip.c"
 #include "logic/main_logic.c"
+#include "logic/define_func.c"
 
 task main (){
 	// define everything
-	setSoundVolume(0);
+	setSoundVolume(30);
 	checkBat();
 	clearTimer(T3);
 	defStructures();
@@ -28,8 +29,14 @@ task main (){
 	//startTask(keepCMoving);
 
 	defineForLogic();
-	mainLogic();
-	//testFunc();
+
+	define_main();
+
+	#if RUN_ONLY_TEST_FUNCTION == 1
+		testFunc();
+	#else
+		mainLogic();
+	#endif
 
 	stopBC();
 	displayExecTime();

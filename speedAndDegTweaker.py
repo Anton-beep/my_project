@@ -2,10 +2,14 @@
 import click
 import numpy as np
 
+#
+# раскаидавть расстояния по отношению ускорений и считать макс скорость через полученное расстояние
+#
+
 # speeds and accels
-SAFE_START_ACCEL = 20  # deg * s ** -2
-SAFE_END_ACCEL = 1  # deg * s ** -2
-SAFE_START_SPEED = 20  # deg * s ** -1
+SAFE_START_ACCEL = 10  # deg * s ** -2
+SAFE_END_ACCEL = 5  # deg * s ** -2
+SAFE_START_SPEED = 10  # deg * s ** -1
 SAFE_MAX_SPEED = 95  # deg * s ** -1
 SAFE_END_SPEED = 10  # deg * s ** -1
 
@@ -65,12 +69,11 @@ def tweaker(safe, extreme):
             f'({np.int64(inc_deg)}, {np.int64(max_deg)}, {np.int64(dec_deg)}, -{start_speed}, {start_speed}, -{max_speed}, {max_speed}, -{end_speed}, {end_speed})')
     else:
         """only 2 parts"""
-        max_speed = np.sqrt((-2 * start_accel * end_accel * deg - end_accel *
-                            start_speed ** 2 - end_accel * end_speed ** 2) / (-start_accel - end_accel))
-        inc_deg = (max_speed ** 2 - start_speed ** 2) / (2 * start_accel)
-        dec_deg = (max_speed ** 2 - end_speed ** 2) / (2 * end_accel)
+        dec_deg = deg / (start_accel / end_accel + 1)
+        inc_deg = deg - dec_deg
         dec_deg = np.round(dec_deg + take_float_part(inc_deg))
         max_deg = 0
+        max_speed = np.sqrt(2 * end_accel * dec_deg + start_speed ** 2)
         click.echo(
             f'({np.int64(inc_deg)}, {np.int64(max_deg)}, {np.int64(dec_deg)}, -{start_speed}, {start_speed}, -{np.round(max_speed)}, {np.round(max_speed)}, -{end_speed}, {end_speed})')
 

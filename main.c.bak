@@ -29,7 +29,7 @@ task main (){
 
 	defineForLogic();
 	mainLogic();
-	// testFunc();
+	//testFunc();
 
 
 	coastBC();

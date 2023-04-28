@@ -6,6 +6,7 @@
 // it calculates using RATIO_MOT vars
 
 short ERR_MODE;
+
 /*
 0 - powers are zeros
 1 - different signs

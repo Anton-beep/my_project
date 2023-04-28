@@ -26,8 +26,8 @@ void startReadPullShip()
     moveBCMainC(1580, -22, 80);
     stopTask(manipMoveD);
     moveBC(100, -15, 15);
-    startTimeD(500, -57, -67);
-    moveBC(50, -15, 15);
+    startTimeD(500, -60, -67);
+    moveBC(50, -14, 14);
     stopBC();
     sleep(300);
 
@@ -73,7 +73,7 @@ void conCrane()
 
     moveBC3Parts(334, 0, 156, -60, -10, -90, -15, -60, -10);
 
-    line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 106, 291, 133, 20, 80, 20);
+    line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 106, 291, 133, 20, 70, 20);
     moveBC3Parts(106, 360, 133, 19, -19, 80, -80, 20, -20);
 
     tankTurnNS3Parts(18, 49.5, 22.5, -20, -20, -60, -60, -17, -17);
@@ -112,7 +112,7 @@ void goToCubes()
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_SLOW, 67, 380, 300, 17, 98, 8);
     setNewMotBCPowersAndRatio(-8, 8);
     waitForCubes();
-    moveBC(10, 18, -18);
+    moveBC(11, 18, -18);
 }
 
 void readCubes()
@@ -221,7 +221,7 @@ void takeCube1()
     sleep(450);
 
     moveBC3Parts(20, 55, 25, 20, -20, 40, -40, 15, -15);
-    moveBC(940, 70, 13);
+    moveBC3Parts(189, 274, 477, 70, 13, 98, 18.2, 70, 13);
 }
 
 void takeCube2()
@@ -238,7 +238,7 @@ void takeCube2()
     sleep(450);
 
     moveBC3Parts(20, 55, 25, 20, -20, 40, -40, 15, -15);
-    moveBC(685, 70, 45);
+    moveBC3Parts(189, 19, 477, 70, 45, 98, 63, 70, 45);
 }
 
 void takeCube3()
@@ -255,7 +255,7 @@ void takeCube3()
     sleep(450);
 
     moveBC3Parts(20, 55, 25, 20, -20, 40, -40, 15, -15);
-    moveBCMainC(685, -45, -70);
+    moveBC3PartsMainC(189, 19, 477, -45, -70, -63, -98, -45, -70);
 }
 
 void takeCube4()
@@ -272,13 +272,15 @@ void takeCube4()
     sleep(450);
 
     moveBC3Parts(20, 55, 25, 20, -20, 40, -40, 15, -15);
-    moveBCMainC(922, -13, -70);
+    moveBC3PartsMainC(189, 256, 477, -13, -70, -18.2, -98, -13, -70)
 }
 
 void putCubeOnShip()
 {
-    startTimeD(150, 52, 0);
-    sleep(200);
+    stratManipD(&MANIP_D_PID_SETTINGS, 80, 1, 20);
+    sleep(400);
+    // startTimeD(150, 52, 0);
+    // sleep(200);
     moveBCAccelPartMainB(100, 20, -20, 60, -60);
     startTimeD(500, -30, -5);
     moveBCAccelPartMainB(100, 60, -60, 19, -19);
@@ -372,7 +374,7 @@ void putCubes()
     putCubeOnShip();
 
     stopBC();
-    startTimeD(186, 40, 0);
+    startTimeD(190, 50, 0);
     moveBC(270, -70, -10);
     moveBCMainC(270, 10, 70);
 }

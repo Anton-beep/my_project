@@ -1,7 +1,7 @@
 #pragma config(Sensor, S1,     sen1,           sensorEV3_Color, modeEV3Color_RGB_Raw)
 #pragma config(Sensor, S2,     sen2,           sensorEV3_Color, modeEV3Color_RGB_Raw)
 #pragma config(Sensor, S3,     sen3,           sensorEV3_Color, modeEV3Color_RGB_Raw)
-#pragma config(Motor,  motorA,          motA,          tmotorEV3_Large, openLoop, encoder)
+#pragma config(Motor,  motorA,          motA,          tmotorEV3_Large, openLoop)
 #pragma config(Motor,  motorB,          motB,          tmotorEV3_Large, openLoop, encoder)
 #pragma config(Motor,  motorC,          motC,          tmotorEV3_Large, openLoop, encoder)
 #pragma config(Motor,  motorD,          motD,          tmotorEV3_Large, openLoop, encoder)
@@ -17,6 +17,20 @@
 
 task main (){
 	// define everything
+	motor[motB] = 0;
+	motor[motC] = 0;
+	motor[motD] = 0;
+
+	setSensorType(sen1, sensorEV3_Color);
+	setSensorType(sen2, sensorEV3_Color);
+	setSensorType(sen3, sensorEV3_Color);
+
+	setSensorMode(sen1, modeEV3Color_RGB_Raw);
+	setSensorMode(sen2, modeEV3Color_RGB_Raw);
+	setSensorMode(sen3, modeEV3Color_RGB_Raw);
+
+	sleep(200);
+
 	setSoundVolume(30);
 	checkBat();
 	clearTimer(T3);
@@ -32,11 +46,11 @@ task main (){
 
 	define_main();
 
-	#if RUN_ONLY_TEST_FUNCTION == 1
-		testFunc();
-	#else
-		mainLogic();
-	#endif
+#if RUN_ONLY_TEST_FUNCTION == 1
+	testFunc();
+#else
+	mainLogic();
+#endif
 
 	stopBC();
 	displayExecTime();

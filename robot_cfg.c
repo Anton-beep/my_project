@@ -34,7 +34,7 @@ PIDSettings *MANIP_D_PID_PTR;
 
 void defStructures()
 {
-    MOT_PID_SETTINGS.Kp = 9;
+    MOT_PID_SETTINGS.Kp = 9.1;
     MOT_PID_SETTINGS.Ki = 3.4;
     MOT_PID_SETTINGS.Kd = 0.037;
     MOT_PID_SETTINGS.prevErr = 0;
@@ -175,7 +175,7 @@ void defStructures()
 
     // ----------------------------------
 
-    MANIP_D_PID_SETTINGS.Kp = 0.2;
+    MANIP_D_PID_SETTINGS.Kp = 0.3;
     MANIP_D_PID_SETTINGS.Ki = 0.3;
     MANIP_D_PID_SETTINGS.Kd = 0;
     MANIP_D_PID_SETTINGS.prevErr = 0;

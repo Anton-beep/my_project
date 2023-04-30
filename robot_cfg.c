@@ -34,9 +34,9 @@ PIDSettings *MANIP_D_PID_PTR;
 
 void defStructures()
 {
-    MOT_PID_SETTINGS.Kp = 12;
-    MOT_PID_SETTINGS.Ki = 1;
-    MOT_PID_SETTINGS.Kd = 0.02;
+    MOT_PID_SETTINGS.Kp = 10;
+    MOT_PID_SETTINGS.Ki = 2;
+    MOT_PID_SETTINGS.Kd = 0.04;
     MOT_PID_SETTINGS.prevErr = 0;
     MOT_PID_SETTINGS.integral = 0;
     MOT_PID_SETTINGS.errNow = 0;
@@ -68,22 +68,22 @@ void defStructures()
     // ----------------------------------
 
     SEN1_CALIBRATION.minR = 36;
-    SEN1_CALIBRATION.minG = 48;
-    SEN1_CALIBRATION.minB = 20;
+    SEN1_CALIBRATION.minG = 46;
+    SEN1_CALIBRATION.minB = 19;
 
     SEN1_CALIBRATION.maxR = 334;
-    SEN1_CALIBRATION.maxG = 366;
-    SEN1_CALIBRATION.maxB = 198;
+    SEN1_CALIBRATION.maxG = 365;
+    SEN1_CALIBRATION.maxB = 199;
 
     // ----------------------------------
 
-    SEN2_CALIBRATION.minR = 36;
-    SEN2_CALIBRATION.minG = 45;
-    SEN2_CALIBRATION.minB = 30;
+    SEN2_CALIBRATION.minR = 37;
+    SEN2_CALIBRATION.minG = 47;
+    SEN2_CALIBRATION.minB = 31;
 
-    SEN2_CALIBRATION.maxR = 314;
-    SEN2_CALIBRATION.maxG = 403;
-    SEN2_CALIBRATION.maxB = 312;
+    SEN2_CALIBRATION.maxR = 310;
+    SEN2_CALIBRATION.maxG = 399;
+    SEN2_CALIBRATION.maxB = 309;
 
     // ----------------------------------
 

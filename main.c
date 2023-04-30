@@ -17,14 +17,13 @@
 
 task main (){
 	// define everything
-	setSensorType(sen1, sensorEV3_Color);
-	setSensorType(sen2, sensorEV3_Color);
-	setSensorType(sen3, sensorEV3_Color);
-
-	setSensorMode(sen1, modeEV3Color_RGB_Raw);
-	setSensorMode(sen2, modeEV3Color_RGB_Raw);
-	setSensorMode(sen3, modeEV3Color_RGB_Raw);
-
+	motor[motB] = 0;
+	motor[motC] = 0;
+	motor[motD] = 0;
+	int r, g, b;
+	getColorRawRGB(sen1, r, g, b);
+	getColorRawRGB(sen2, r, g, b);
+	getColorRawRGB(sen3, r, g, b);
 	sleep(200);
 
 	setSoundVolume(30);

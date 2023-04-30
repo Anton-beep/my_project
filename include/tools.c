@@ -50,7 +50,7 @@ float map(float x, float in_min, float in_max, float out_min, float out_max)
 
 void checkBat()
 {
-    if (getBatteryVoltage() < 7.8)
+    if (getBatteryVoltage() < 7.83)
     {
         playSound(soundBeepBeep);
     }

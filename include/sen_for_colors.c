@@ -6,8 +6,8 @@ float distHSVVals(int ptr1, int ptr2)
     SenHSVVals *vals1 = (SenHSVVals *)ptr1;
     SenHSVVals *vals2 = (SenHSVVals *)ptr2;
 
-    return fabs(vals1->H - vals2->H);
-    //return sqrt(pow(vals1->H - vals2->H, 2) + pow(vals1->S - vals2->S, 2) + pow(vals1->V - vals2->V, 2));
+    return sqrt(pow(vals1->H - vals2->H, 2) + pow(vals1->S - vals2->S, 2));
+    // return sqrt(pow(vals1->H - vals2->H, 2) + pow(vals1->S - vals2->S, 2) + pow(vals1->V - vals2->V, 2));
 }
 
 float distRGBVals(int ptr1, int ptr2)
@@ -88,16 +88,23 @@ int mean(int *a, int n)
     return sum / n;
 }
 
-const int WIN_ARR_LEN = 5;
+const int WIN_ARR_LEN = 6;
 int WIN_ARR[WIN_ARR_LEN];
 
-int readWindowHSV(short sen, SenSettings *senSet, int *samples, int lenArr)
+int readWindowHSV(short sen, SenSettings *senSet, SenHSVVals *nothingPtr, int *samples, int lenArr)
 {
     SenHSVVals buf;
     for (int i = 0; i < WIN_ARR_LEN; i++)
     {
         readCalibratedSenHSV(sen, senSet, &buf);
-        WIN_ARR[i] = (int)getNearestFromValsHSV((int)&buf, samples, lenArr);
+        if (buf.V < 13)
+        {
+            WIN_ARR[i] = (int)nothingPtr;
+        }
+        else
+        {
+            WIN_ARR[i] = (int)getNearestFromValsHSV((int)&buf, samples, lenArr);
+        }
     }
     int res = mode(WIN_ARR, WIN_ARR_LEN);
     return res;
@@ -123,6 +130,7 @@ int READ_ROW_OF_OBJECTS_IN_POINTERS[READ_ROW_MAX_OBJECTS];
 short READ_ROW_OF_OBJECTS_LEN_IN_POINTERS = 0;
 short READ_ROW_OF_OBJECTS_RES_LEN = 0;
 short READ_ROW_OF_OBJECTS_SEN = sen3;
+SenHSVVals *NOTHING_PTR;
 SenSettings *READ_ROW_OF_OBJECTS_SEN_CALIBRATION_PTR = &SEN3_CALIBRATION;
 bool *READ_ROW_OF_OBJECTS_PTR_WORK_FLAG;
 
@@ -134,7 +142,7 @@ task readRowOfObjectsHSV()
     short nowInd = 0;
     while (nowInd < READ_ROW_MAX_OBJECTS)
     {
-        int nowPtr = readWindowHSV(READ_ROW_OF_OBJECTS_SEN, READ_ROW_OF_OBJECTS_SEN_CALIBRATION_PTR, READ_ROW_OF_OBJECTS_IN_POINTERS, READ_ROW_OF_OBJECTS_LEN_IN_POINTERS);
+        int nowPtr = readWindowHSV(READ_ROW_OF_OBJECTS_SEN, READ_ROW_OF_OBJECTS_SEN_CALIBRATION_PTR, NOTHING_PTR, READ_ROW_OF_OBJECTS_IN_POINTERS, READ_ROW_OF_OBJECTS_LEN_IN_POINTERS);
         if (nowInd == 0)
         {
             READ_ROW_OF_OBJECTS_RES[nowInd] = nowPtr;
@@ -194,9 +202,10 @@ int *setReadRowOfObjects(int *inPtrsArr, int lenInPtrsArr, short sen, SenSetting
     return READ_ROW_OF_OBJECTS_RES;
 }
 
-int *startReadRowOfObjectsHSV(int *inPtrsArr, int lenInPtrsArr, short sen, SenSettings *senSet)
+int *startReadRowOfObjectsHSV(SenHSVVals *nothingPtr, int *inPtrsArr, int lenInPtrsArr, short sen, SenSettings *senSet)
 {
     int *buf = setReadRowOfObjects(inPtrsArr, lenInPtrsArr, sen, senSet);
+    NOTHING_PTR = nothingPtr;
     startTask(readRowOfObjectsHSV);
     return buf;
 }
@@ -207,4 +216,3 @@ int *startReadRowOfObjectsRGB(int *inPtrsArr, int lenInPtrsArr, short sen, SenSe
     startTask(readRowOfObjectsRGB);
     return buf;
 }
-

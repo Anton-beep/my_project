@@ -120,22 +120,24 @@ void displayMeanCalibratedRGB(short sen, SenSettings *senSet)
 
 void displayMeanCalibratedHSV(short sen, SenSettings *senSet)
 {
-    SenHSVVals buf;
-    float sumH = 0, sumS = 0, sumV = 0, i = 1;
     while (true)
     {
-        readCalibratedSenHSV(sen, senSet, &buf);
-        sumH += buf.H;
-        sumS += buf.S;
-        sumV += buf.V;
-        eraseDisplay();
-        displayCenteredBigTextLine(2, "H: %f", sumH / i);
-        displayCenteredBigTextLine(4, "S: %f", sumS / i);
-        displayCenteredBigTextLine(6, "V: %f", sumV / i);
-        i++;
+        SenHSVVals buf;
+        float sumH = 0, sumS = 0, sumV = 0, i = 1;
+        while (getButtonPress(buttonEnter) == false)
+        {
+            readCalibratedSenHSV(sen, senSet, &buf);
+            sumH += buf.H;
+            sumS += buf.S;
+            sumV += buf.V;
+            eraseDisplay();
+            displayCenteredBigTextLine(2, "H: %f", sumH / i);
+            displayCenteredBigTextLine(4, "S: %f", sumS / i);
+            displayCenteredBigTextLine(6, "V: %f", sumV / i);
+            i++;
+        }
     }
 }
-
 
 void displayCalibrationValues()
 {

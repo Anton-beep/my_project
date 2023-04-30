@@ -34,9 +34,9 @@ PIDSettings *MANIP_D_PID_PTR;
 
 void defStructures()
 {
-    MOT_PID_SETTINGS.Kp = 9.1;
-    MOT_PID_SETTINGS.Ki = 3.4;
-    MOT_PID_SETTINGS.Kd = 0.037;
+    MOT_PID_SETTINGS.Kp = 12;
+    MOT_PID_SETTINGS.Ki = 1;
+    MOT_PID_SETTINGS.Kd = 0.02;
     MOT_PID_SETTINGS.prevErr = 0;
     MOT_PID_SETTINGS.integral = 0;
     MOT_PID_SETTINGS.errNow = 0;
@@ -67,22 +67,22 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN1_CALIBRATION.minR = 37;
-    SEN1_CALIBRATION.minG = 45;
+    SEN1_CALIBRATION.minR = 36;
+    SEN1_CALIBRATION.minG = 48;
     SEN1_CALIBRATION.minB = 20;
 
-    SEN1_CALIBRATION.maxR = 365;
-    SEN1_CALIBRATION.maxG = 373;
-    SEN1_CALIBRATION.maxB = 203;
+    SEN1_CALIBRATION.maxR = 334;
+    SEN1_CALIBRATION.maxG = 366;
+    SEN1_CALIBRATION.maxB = 198;
 
     // ----------------------------------
 
-    SEN2_CALIBRATION.minR = 41;
-    SEN2_CALIBRATION.minG = 52;
-    SEN2_CALIBRATION.minB = 33;
+    SEN2_CALIBRATION.minR = 36;
+    SEN2_CALIBRATION.minG = 45;
+    SEN2_CALIBRATION.minB = 30;
 
-    SEN2_CALIBRATION.maxR = 343;
-    SEN2_CALIBRATION.maxG = 468;
+    SEN2_CALIBRATION.maxR = 314;
+    SEN2_CALIBRATION.maxG = 403;
     SEN2_CALIBRATION.maxB = 312;
 
     // ----------------------------------
@@ -97,23 +97,23 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN3_CALIBRATION_CUBES.minR = 0;
-    SEN3_CALIBRATION_CUBES.minG = 0;
-    SEN3_CALIBRATION_CUBES.minB = 0;
-
-    SEN3_CALIBRATION_CUBES.maxR = 320;
-    SEN3_CALIBRATION_CUBES.maxG = 230;
-    SEN3_CALIBRATION_CUBES.maxB = 230;
-
-    // ----------------------------------
-
     SEN3_CALIBRATION_1CUBE.minR = 0;
     SEN3_CALIBRATION_1CUBE.minG = 0;
     SEN3_CALIBRATION_1CUBE.minB = 0;
 
-    SEN3_CALIBRATION_1CUBE.maxR = 84;
-    SEN3_CALIBRATION_1CUBE.maxG = 73;
-    SEN3_CALIBRATION_1CUBE.maxB = 84;
+    SEN3_CALIBRATION_1CUBE.maxR = 62;
+    SEN3_CALIBRATION_1CUBE.maxG = 49;
+    SEN3_CALIBRATION_1CUBE.maxB = 68;
+
+    // ----------------------------------
+
+    SEN3_CALIBRATION_CUBES.minR = 0;
+    SEN3_CALIBRATION_CUBES.minG = 0;
+    SEN3_CALIBRATION_CUBES.minB = 0;
+
+    SEN3_CALIBRATION_CUBES.maxR = 430;
+    SEN3_CALIBRATION_CUBES.maxG = 350;
+    SEN3_CALIBRATION_CUBES.maxB = 346;
 
     // ----------------------------------
 

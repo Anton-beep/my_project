@@ -246,14 +246,14 @@ void readCubes()
 // left to right
 void takeCube1()
 {
-    moveBCMainC(530, -18, -54);
-    moveBC(515, 54, 18);
+    moveBCMainC(535, -18, -54);
+    moveBC(520, 54, 18);
 #if SLEEP_ON_CUBES == 1
     stopBC();
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -83, 1, -20);
+    stratManipD(&MANIP_D_PID_SETTINGS, -83, 0, -20);
     sleep(200);
     moveBC3Parts(40, 115, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
@@ -275,7 +275,7 @@ void takeCube2()
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -83, 1, -20);
+    stratManipD(&MANIP_D_PID_SETTINGS, -83, 0, -20);
     sleep(200);
     moveBC3Parts(40, 116, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
@@ -297,7 +297,7 @@ void takeCube3()
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -83, 1, -20);
+    stratManipD(&MANIP_D_PID_SETTINGS, -83, 0, -20);
     sleep(200);
     moveBC3Parts(40, 97, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
@@ -312,14 +312,14 @@ void takeCube3()
 
 void takeCube4()
 {
-    moveBC(513, 54, 18);
-    moveBCMainC(506, -18, -54);
+    moveBC(514, 54, 18);
+    moveBCMainC(507, -18, -54);
 #if SLEEP_ON_CUBES == 1
     stopBC();
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -81, 1, -20);
+    stratManipD(&MANIP_D_PID_SETTINGS, -82, 0, -20);
     sleep(200);
     moveBC3Parts(40, 110, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
@@ -334,7 +334,7 @@ void takeCube4()
 
 void putCubeOnShip()
 {
-    stratManipD(&MANIP_D_PID_SETTINGS, 79, 1, 30);
+    stratManipD(&MANIP_D_PID_SETTINGS, 79, 0, 30);
     sleep(400);
     // startTimeD(150, 52, 0);
     // sleep(200);
@@ -534,7 +534,7 @@ void whiteCubeOnBig()
     putCubeOnShip();
 
     moveBC(460, -35, -60);
-    
+
     stopBC();
 }
 
@@ -662,7 +662,7 @@ void putCubesOnSmallShip()
 
 void shipsAndFinish()
 {
-    line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 100, 350, 100, 25, 75, 21);
+    line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 100, 250, 100, 25, 75, 21);
     line2SenCrawl(&DEFAULT_LINE_PID_MEDIUM, 21, 150, 150);
     line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 100, 1100, 300, 40, 100, 30);
     line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 30, 150, 150);
@@ -705,8 +705,10 @@ void mainLogic()
 
 void testFunc()
 {
-    setNewMotBCPowersAndRatio(10, 100);
-    sleep(500000);
+    startTimeD(200, 100, 2);
+    sleep(500);
+    bool *flag = stratManipD(&MANIP_D_PID_SETTINGS, -83, 0, -20);
+    while (*flag);
 
     // displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION);
 

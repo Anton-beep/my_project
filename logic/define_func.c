@@ -20,6 +20,9 @@ void define_main()
         displayMeanCalibratedRGB(sen4, &SEN4_CALIBRATION);
     #elif DEB_DISPLAY_CALIBRATON_VALUES == 1
         displayCalibrationValues();
+    #elif TEST_MOTOR_CALIBRATION == 1
+        testMotCalibration(100, 10, 400);
+        stopAllTasks();
     #endif
 
 

@@ -283,3 +283,67 @@ task keepCMoving()
         }
     }
 }
+
+float TEST_CALIBRATION_POWB;
+float TEST_CALIBRATION_POWC;
+int TEST_CALIBRATION_MEASURE_GAP;
+float TEST_CALIBRATION_LAST_DEGB;
+float TEST_CALIBRATION_LAST_DEGC;
+float TEST_CALIBRATION_MEASUREDB;
+float TEST_CALIBRATION_MEASUREDC;
+
+task task_testMotCalibration()
+{
+    TEST_CALIBRATION_LAST_DEGB = 0;
+    TEST_CALIBRATION_LAST_DEGC = 0;
+    while (true)
+    {
+        sleep(TEST_CALIBRATION_MEASURE_GAP);
+        float nowDegB = nMotorEncoder[motB];
+        float nowDegC = nMotorEncoder[motC];
+        TEST_CALIBRATION_MEASUREDB = nowDegB - TEST_CALIBRATION_LAST_DEGB;
+        TEST_CALIBRATION_MEASUREDC = nowDegC - TEST_CALIBRATION_LAST_DEGC;
+    }
+}
+
+void testMotCalibration(short powB, short powC, int measureGap)
+{
+    TEST_CALIBRATION_POWB = powB;
+    TEST_CALIBRATION_POWC = powC;
+    TEST_CALIBRATION_MEASURE_GAP = measureGap;
+    resetMotorEncoder(motB);
+    resetMotorEncoder(motC);
+    setNewMotBCPowersAndRatio(TEST_CALIBRATION_POWB, TEST_CALIBRATION_POWC);
+    startTask(task_testMotCalibration);
+    sleep(200);
+    while (getButtonPress(buttonEnter) == false)
+    {
+        float nowDegB = nMotorEncoder[motB];
+        float nowDegC = nMotorEncoder[motC];
+        TEST_CALIBRATION_LAST_DEGB = nowDegB;
+        TEST_CALIBRATION_LAST_DEGC = nowDegC;
+        eraseDisplay();
+        displayCenteredTextLine(0, "Aim: %f", TEST_CALIBRATION_POWB / TEST_CALIBRATION_POWC);
+        if (TEST_CALIBRATION_MEASUREDC == 0)
+        {
+            displayCenteredTextLine(2, "Measured: wheel blocked!");
+        }
+        else
+        {
+            displayCenteredTextLine(2, "Measured: %f", TEST_CALIBRATION_MEASUREDB / TEST_CALIBRATION_MEASUREDC);
+        }
+        displayCenteredTextLine(4, "All measured: %f", (float)nowDegB / nowDegC);
+        if (TEST_CALIBRATION_MEASUREDC == 0)
+        {
+            displayCenteredTextLine(6, "dif: wheel blocked!");
+        }
+        else
+        {
+            displayCenteredTextLine(6, "dif: %f", fabs(TEST_CALIBRATION_POWB / TEST_CALIBRATION_POWC - TEST_CALIBRATION_MEASUREDB / TEST_CALIBRATION_MEASUREDC));
+        }
+        displayCenteredTextLine(8, "All dif: %f", fabs(TEST_CALIBRATION_POWB / TEST_CALIBRATION_POWC - (float)nowDegB / nowDegC));
+        displayCenteredTextLine(10, "realPowB: %d  realPowC: %d", motor[motB], motor[motC]);
+        sleep(150);
+    }
+    stopTask(task_testMotCalibration);
+}

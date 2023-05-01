@@ -63,7 +63,7 @@ void displayExecTime()
 {
     eraseDisplay();
     displayCenteredBigTextLine(5, "seconds");
-    displayCenteredBigTextLine(10, "%f", (float) time1[T3] / 1000);
+    displayCenteredBigTextLine(10, "%f", (float)time1[T3] / 1000);
     flushButtonMessages();
     waitForButtonPress();
 }

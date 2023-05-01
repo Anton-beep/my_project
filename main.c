@@ -33,7 +33,7 @@ task main (){
 	setMotorBrakeMode(motB, motorCoast);
 	setMotorBrakeMode(motC, motorCoast);
 	setMotorBrakeMode(motD, motorCoast);
-	startTask(PIDEngineMot);
+	startTask(PIDEngineMot, 7);
 	//startTask(keepBMoving);
 	//startTask(keepCMoving);
 

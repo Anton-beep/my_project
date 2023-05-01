@@ -26,7 +26,6 @@ void startReadPullShip()
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 70, 175, 130, 20, 60, 30);
     stratManipD(&MANIP_D_PID_SETTINGS, -57, 2, -30);
     moveBCMainC(1592, -21, 79);
-    stopTask(manipMoveD);
     moveBC(160, -13, 13);
     moveBC(5, 17, -17);
     stopBC();
@@ -100,7 +99,7 @@ void conCrane()
     line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 106, 260, 133, 20, 70, 20);
     moveBC3Parts(106, 352, 133, 19, -19, 80, -80, 20, -20);
 
-    tankTurnNS3Parts(18, 49.5, 22.5, -20, -20, -100, -100, -17, -17);
+    tankTurnNS3Parts(18, 49.5, 22.5, -20, -20, -70, -70, -17, -17);
     stopBC();
     sleep(300);
 
@@ -124,7 +123,7 @@ void goToCubes()
 {
     startTimeD(250, -50, -40);
     line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 20, 80, 80);
-    tankTurnNS3Parts(36, 69, 75, -30, -30, -100, -100, -17, -17);
+    tankTurnNS3Parts(36, 69, 75, -30, -30, -70, -70, -17, -17);
     stopBC();
     sleep(300);
 
@@ -132,7 +131,7 @@ void goToCubes()
     stopBC();
 
     startTimeD(250, 100, 2);
-    sleep(200);
+    sleep(250);
 
     moveBC3Parts(65, 90, 64, 20, -20, 35, -35, 17, 17);
     tankTurnNS3Parts(18, 49.5, 22.5, 19, 19, 65, 65, 17, 17);
@@ -163,8 +162,7 @@ void readCubes()
     stopBC();
     cubesScan[1] = readWindowHSV(sen3, &SEN3_CALIBRATION_1CUBE, &NOTHING_CUBES, IN_PTRS_1CUBE, 2);
 
-    moveBC(120, -45, 7);
-    stopBC();
+    moveBC(122, -45, 7);
     stopBC();
 #if DEB_CALIBRATE_CUBES_2PART == 1
     // POS TO CALIBRATE 3 AND 4 CUBES
@@ -246,19 +244,18 @@ void readCubes()
 // left to right
 void takeCube1()
 {
-    moveBCMainC(535, -18, -54);
-    moveBC(520, 54, 18);
+    moveBCMainC(537, -18, -54);
+    moveBC(522, 54, 18);
 #if SLEEP_ON_CUBES == 1
     stopBC();
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -83, 1, -20);
-    sleep(2000);
+    stratManipD(&MANIP_D_PID_SETTINGS, -103, 1, -20);
+    sleep(3000);
     moveBC3Parts(40, 115, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
-    stopTask(manipMoveD);
     startTimeD(400, -55, -50);
     sleep(450);
 
@@ -275,12 +272,11 @@ void takeCube2()
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -83, 1, -20);
-    sleep(2000);
+    stratManipD(&MANIP_D_PID_SETTINGS, -103, 1, -20);
+    sleep(3000);
     moveBC3Parts(40, 116, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
-    stopTask(manipMoveD);
     startTimeD(400, -55, -50);
     sleep(450);
 
@@ -297,12 +293,11 @@ void takeCube3()
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -83, 1, -20);
-    sleep(2000);
+    stratManipD(&MANIP_D_PID_SETTINGS, -103, 1, -20);
+    sleep(3000);
     moveBC3Parts(40, 97, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
-    stopTask(manipMoveD);
     startTimeD(400, -55, -50);
     sleep(450);
 
@@ -313,18 +308,17 @@ void takeCube3()
 void takeCube4()
 {
     moveBC(514, 54, 18);
-    moveBCMainC(507, -18, -54);
+    moveBCMainC(509, -18, -54);
 #if SLEEP_ON_CUBES == 1
     stopBC();
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -82, 1, -20);
-    sleep(2000);
+    stratManipD(&MANIP_D_PID_SETTINGS, -103, 1, -20);
+    sleep(3000);
     moveBC3Parts(40, 110, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
-    stopTask(manipMoveD);
     startTimeD(400, -50, -50);
     sleep(450);
 
@@ -334,7 +328,7 @@ void takeCube4()
 
 void putCubeOnShip()
 {
-    stratManipD(&MANIP_D_PID_SETTINGS, 79, 0, 30);
+    stratManipD(&MANIP_D_PID_SETTINGS, 78, 1, 30, -1);
     sleep(400);
     // startTimeD(150, 52, 0);
     // sleep(200);
@@ -416,7 +410,7 @@ void putCubes()
     moveBC(138, -20, 20);
     stopBC();
     putCubeOnShip();
-    startTimeD(350, 60, 2);
+    startTimeD(250, 100, 2);
     moveBC3Parts(88, 242, 110, 60, 20, 90, 30, 60, 20);
 
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_SLOW, 67, 310, 351, 17, 90, 9);
@@ -467,7 +461,7 @@ void putCubes()
     moveBC(100, 20, -20);
     stopBC();
     sleep(500);
-    stratManipD(&MANIP_D_PID_SETTINGS, 172, 1, 0, 0);
+    stratManipD(&MANIP_D_PID_SETTINGS, 174, 1, 10, 0);
     sleep(200);
     moveBC(270, -70, -10);
     moveBCMainC(270, 10, 70);
@@ -496,12 +490,11 @@ void moveBigShipToWhite()
 void take2WhiteCube()
 {
     moveBC(260, 80, 10);
-    stratManipD(&MANIP_D_PID_SETTINGS, -70, 1, -20);
+    stratManipD(&MANIP_D_PID_SETTINGS, -84, 1, -20);
     moveBCMainC(258, -10, -80);
     moveBC3Parts(40, 50, 80, -17, 17, -40, 40, -17, 17);
     moveBC(100, -17, 17);
     stopBC();
-    stopTask(manipMoveD);
     startTimeD(400, -58, -50);
     sleep(400);
 
@@ -564,7 +557,6 @@ void takeAnyLeftCube()
 
 void goToSmallShip()
 {
-    stopTask(manipTimeD);
     startTimeD(350, 100, 2);
 
     line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 60, 605, 75, 25, 75, 17);
@@ -580,7 +572,7 @@ void goToSmallShip()
     stopBC();
 
     startTimeD(350, -50, -40);
-    sleep(600);
+    sleep(500);
 
     moveBC3Parts(60, 365, 150, 20, -20, 60, -60, 17, -17);
     setNewMotBCPowersAndRatio(17, -17);
@@ -588,16 +580,16 @@ void goToSmallShip()
     moveBC3Parts(30, 30, 38, -20, 20, -40, 40, -20, 20);
     tankTurnNS3Parts(18, 49.5, 22.5, 20, 20, 45, 45, 17, 17);
 
-    line2SenDist(&DEFAULT_LINE_PID_MEDIUM, 240, 22);
+    line2SenDist(&DEFAULT_LINE_PID_MEDIUM, 245, 22);
     stopBC();
 
-    startTimeD(250, 100, 2);
-    sleep(200);
+    startTimeD(250, 100, 10);
+    sleep(400);
 }
 
 void putCubesOnSmallShip()
 {
-    moveBC3Parts(35, 125, 44, 20, -20, 50, -50, 17, 17);
+    moveBC3Parts(35, 130, 44, 20, -20, 50, -50, 17, 17);
 
     tankTurnNS3Parts(18, 49.5, 22.5, 19, 19, 90, 90, 17, 17);
 
@@ -622,13 +614,13 @@ void putCubesOnSmallShip()
 
     putCubeOnShip();
 
-    startTimeD(350, 100, 2);
+    startTimeD(250, 100, 2);
     moveBC3Parts(88, 242, 110, 60, 20, 90, 30, 60, 20);
 
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_SLOW, 67, 410, 301, 17, 90, 13);
     setNewMotBCPowersAndRatio(-13, 13);
     waitForCubes();
-    moveBC(55, 18, -18);
+    moveBC(50, 18, -18);
 
     takeAnyLeftCube();
 
@@ -672,7 +664,7 @@ void shipsAndFinish()
 
     stopB();
 
-    turnCDegr(18, 49.5, 22.5, -23, -55, -23);
+    turnCDegr(18, 49.5, 22.5, -23, -40, -23);
     moveBC3Parts(30, 152, 38, -20, 20, -60, 60, -17, 17);
     stopBC();
     startTimeD(300, 100, 20);

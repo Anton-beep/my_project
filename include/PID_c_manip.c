@@ -57,30 +57,6 @@ task manipMoveD()
     MANIP_D_WORKING = false;
 }
 
-// returns bool pointer to track when manipalutor stops working
-bool *stratManipA(PIDSettings *PIDSetPtr, int deg, short allowedErr, short startPow, short endPow = 0)
-{
-    MANIP_A_PID_PTR = PIDSetPtr;
-    MANIP_A_DEG_TO_MOVE = deg;
-    MANIP_A_ALLOWED_ERR = allowedErr;
-    MANIP_A_END_POWER_MOVE = endPow;
-    MANIP_A_POWER_MOVE = startPow;
-    startTask(manipMoveA);
-    return &MANIP_A_WORKING;
-}
-
-// returns bool pointer to track when manipalutor stops working
-bool *stratManipD(PIDSettings *PIDSetPtr, int deg, short allowedErr, short startPow, short endPow = 0)
-{
-    MANIP_D_PID_PTR = PIDSetPtr;
-    MANIP_D_DEG_TO_MOVE = deg;
-    MANIP_D_ALLOWED_ERR = allowedErr;
-    MANIP_D_END_POWER_MOVE = endPow;
-    MANIP_D_POWER_MOVE = startPow;
-    startTask(manipMoveD);
-    return &MANIP_D_WORKING;
-}
-
 unsigned long MSECONDS_A = 0;
 unsigned long MSECONDS_D = 0;
 short POWER_TIME_A = 0;
@@ -104,6 +80,8 @@ task manipTimeD()
 
 void startTimeA(int time, int powStart, int powEnd)
 {
+    stopTask(manipTimeA);
+    stopTask(manipMoveA);
     MSECONDS_A = time;
     POWER_TIME_A = powStart;
     END_POWER_TIME_A = powEnd;
@@ -112,8 +90,38 @@ void startTimeA(int time, int powStart, int powEnd)
 
 void startTimeD(int time, int powStart, int powEnd)
 {
+    stopTask(manipTimeD);
+    stopTask(manipMoveD);
     MSECONDS_D = time;
     POWER_TIME_D = powStart;
     END_POWER_TIME_D = powEnd;
     startTask(manipTimeD);
+}
+
+// returns bool pointer to track when manipalutor stops working
+bool *stratManipA(PIDSettings *PIDSetPtr, int deg, short allowedErr, short startPow, short endPow = 0)
+{
+    stopTask(manipTimeA);
+    stopTask(manipMoveA);
+    MANIP_A_PID_PTR = PIDSetPtr;
+    MANIP_A_DEG_TO_MOVE = deg;
+    MANIP_A_ALLOWED_ERR = allowedErr;
+    MANIP_A_END_POWER_MOVE = endPow;
+    MANIP_A_POWER_MOVE = startPow;
+    startTask(manipMoveA);
+    return &MANIP_A_WORKING;
+}
+
+// returns bool pointer to track when manipalutor stops working
+bool *stratManipD(PIDSettings *PIDSetPtr, int deg, short allowedErr, short startPow, short endPow = 0)
+{
+    stopTask(manipTimeD);
+    stopTask(manipMoveD);
+    MANIP_D_PID_PTR = PIDSetPtr;
+    MANIP_D_DEG_TO_MOVE = deg;
+    MANIP_D_ALLOWED_ERR = allowedErr;
+    MANIP_D_END_POWER_MOVE = endPow;
+    MANIP_D_POWER_MOVE = startPow;
+    startTask(manipMoveD);
+    return &MANIP_D_WORKING;
 }

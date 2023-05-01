@@ -34,9 +34,9 @@ PIDSettings *MANIP_D_PID_PTR;
 
 void defStructures()
 {
-    MOT_PID_SETTINGS.Kp = 15;
-    MOT_PID_SETTINGS.Ki = 4.5;
-    MOT_PID_SETTINGS.Kd = 0.005;
+    MOT_PID_SETTINGS.Kp = 16;
+    MOT_PID_SETTINGS.Ki = 4.7;
+    MOT_PID_SETTINGS.Kd = 0.009;
     MOT_PID_SETTINGS.prevErr = 0;
     MOT_PID_SETTINGS.integral = 0;
     MOT_PID_SETTINGS.errNow = 0;

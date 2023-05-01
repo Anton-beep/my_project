@@ -253,8 +253,8 @@ void takeCube1()
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -83, 0, -20);
-    sleep(200);
+    stratManipD(&MANIP_D_PID_SETTINGS, -83, 1, -20);
+    sleep(2000);
     moveBC3Parts(40, 115, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
@@ -275,8 +275,8 @@ void takeCube2()
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -83, 0, -20);
-    sleep(200);
+    stratManipD(&MANIP_D_PID_SETTINGS, -83, 1, -20);
+    sleep(2000);
     moveBC3Parts(40, 116, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
@@ -297,8 +297,8 @@ void takeCube3()
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -83, 0, -20);
-    sleep(200);
+    stratManipD(&MANIP_D_PID_SETTINGS, -83, 1, -20);
+    sleep(2000);
     moveBC3Parts(40, 97, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
@@ -319,8 +319,8 @@ void takeCube4()
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -82, 0, -20);
-    sleep(200);
+    stratManipD(&MANIP_D_PID_SETTINGS, -82, 1, -20);
+    sleep(2000);
     moveBC3Parts(40, 110, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
@@ -588,7 +588,7 @@ void goToSmallShip()
     moveBC3Parts(30, 30, 38, -20, 20, -40, 40, -20, 20);
     tankTurnNS3Parts(18, 49.5, 22.5, 20, 20, 45, 45, 17, 17);
 
-    line2SenDist(&DEFAULT_LINE_PID_MEDIUM, 230, 22);
+    line2SenDist(&DEFAULT_LINE_PID_MEDIUM, 240, 22);
     stopBC();
 
     startTimeD(250, 100, 2);

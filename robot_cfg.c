@@ -4,7 +4,7 @@
 // ALL DISTANCES IN CM
 
 float WHEEL_DIAMETER = 5.6;
-float BASE_LEN = 18.54;
+float BASE_LEN = 17.85;
 
 short MOTORS_MAX_POWER = 100;
 short MOTORS_MIN_POWER = 0;

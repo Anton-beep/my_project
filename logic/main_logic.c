@@ -11,7 +11,6 @@ void startReadPullShip()
     // set manip
     startTimeD(350, 100, 2);
     moveBCAccelPartMainB(150, -20, 20, -40, 40);
-    playSound(soundBeepBeep);
     int *firstScanOut = startReadRowOfObjectsHSV(&NOTHING_FIRST_SCAN, IN_PTRS_FIRST_SCAN, 2, sen3, &SEN3_CALIBRATION);
     line2SenAccelPart(&DEFAULT_LINE_PID_MEDIUM, 230, 40, 30);
     setNewMotBCPowersAndRatio(-30, 30);
@@ -25,8 +24,8 @@ void startReadPullShip()
     moveBCAccelPartMainB(215, 60, -60, -20, 20);
     tankTurnNS3Parts(30, 30, 30, -20, -20, -70, -70, -17, -17);
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 70, 175, 130, 20, 60, 30);
-    stratManipD(&MANIP_D_PID_SETTINGS, -45, 2, -30);
-    moveBCMainC(1585, -21, 79);
+    stratManipD(&MANIP_D_PID_SETTINGS, -41, 2, -30);
+    moveBCMainC(1580, -21, 79);
     moveBC(150, -14, 14);
 #if SLEEP_ON_FIRST_TAKE_BIG_SHIP == 1
     sleep(5000);
@@ -86,22 +85,22 @@ void startReadPullShip()
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 100, 40, 180, 23, 100, 21);
     line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 20, 50, 50);
 
-    moveBC3PartsMainC(234, 100, 156, 10, 60, 15, 90, 10, 60);
+    moveBC3PartsMainC(134, 200, 156, 10, 60, 15, 90, 10, 60);
 }
 
 void conCrane()
 {
-    line2Sen3Parts(&DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_FAST, 189, 1741, 450, 23, 100, 21);
-    line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 20, 50, 50);
+    line2Sen3Parts(&DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_FAST, 189, 1941, 250, 23, 100, 25);
+    line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 25, 50, 50);
 
-    moveBC3Parts(334, 0, 156, -60, -10, -90, -15, -60, -10);
+    moveBC3Parts(84, 310, 96, -60, -10, -90, -15, -60, -10);
 
-    line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 106, 260, 133, 20, 70, 20);
-    moveBC3Parts(106, 352, 133, 19, -19, 80, -80, 20, -20);
+    line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 246, 300, 70, 25, 80, 20);
+    moveBC3Parts(56, 452, 83, 19, -19, 80, -80, 20, -20);
 
-    tankTurnNS3Parts(18, 49.5, 22.5, -20, -20, -70, -70, -17, -17);
+    tankTurnNS3Parts(18, 49.5, 22.5, -20, -20, -60, -60, -17, -17);
     stopBC();
-    sleep(300);
+    sleep(250);
 
     line2Sen3Parts(&DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_FAST, 100, 2100, 270, 35, 95, 30);
 }
@@ -112,7 +111,7 @@ void waitForCubes()
     SenRGBVals buf2;
     readCalibratedSenRGB(sen1, &SEN1_CALIBRATION, &buf1);
     readCalibratedSenRGB(sen2, &SEN2_CALIBRATION, &buf2);
-    while ((buf1.B - buf1.R < 20 || buf1.B - buf1.G < 20) || (buf2.B - buf2.R < 20 || buf2.B - buf2.G < 20))
+    while ((buf1.B - buf1.R < 19 || buf1.B - buf1.G < 19) || (buf2.B - buf2.R < 19 || buf2.B - buf2.G < 19))
     {
         readCalibratedSenRGB(sen1, &SEN1_CALIBRATION, &buf1);
         readCalibratedSenRGB(sen2, &SEN2_CALIBRATION, &buf2);
@@ -123,9 +122,9 @@ void goToCubes()
 {
     startTimeD(250, -50, -40);
     line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 20, 80, 80);
-    tankTurnNS3Parts(36, 69, 75, -30, -30, -70, -70, -17, -17);
+    tankTurnNS3Parts(36, 69, 75, -30, -30, -55, -55, -17, -17);
     stopBC();
-    sleep(300);
+    sleep(5000);
 
     line2SenDist(&DEFAULT_LINE_PID_SLOW, 100, 20);
     stopBC();
@@ -134,6 +133,8 @@ void goToCubes()
     sleep(250);
 
     moveBC3Parts(65, 97, 64, 20, -20, 35, -35, 17, 17);
+    stopBC();
+    sleep(5000);
     tankTurnNS3Parts(18, 49.5, 22.5, 19, 19, 65, 65, 17, 17);
 
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_SLOW, 67, 380, 300, 17, 98, 9);
@@ -145,7 +146,8 @@ void goToCubes()
 void readCubes()
 {
     int cubesScan[4];
-    moveBC3PartsMainC(27, 96, 34, -6, -22, -12, -44, -6, -22);
+    moveBC3PartsMainC(27, 125, 34, -6, -22, -12, -44, -6, -22);
+
     cubesScan[0] = readWindowHSV(sen3, &SEN3_CALIBRATION_1CUBE, &NOTHING_CUBES, IN_PTRS_1CUBE, 2);
 
 // POS TO CALIBRATE 1 AND 2 CUBES
@@ -157,9 +159,10 @@ void readCubes()
 
     moveBC(30, 13, -13);
     moveBC3PartsMainC(36, 74, 45, -6, -13, -18, -39, -6, -13);
+
     cubesScan[1] = readWindowHSV(sen3, &SEN3_CALIBRATION_1CUBE, &NOTHING_CUBES, IN_PTRS_1CUBE, 2);
 
-    moveBC(122, -45, 7);
+    moveBC(122, -55, 7);
 #if DEB_CALIBRATE_CUBES_2PART == 1
     // POS TO CALIBRATE 3 AND 4 CUBES
     stopBC();
@@ -168,7 +171,7 @@ void readCubes()
 #endif
     cubesScan[2] = readWindowHSV(sen3, &SEN3_CALIBRATION_CUBES, &NOTHING_CUBES, IN_PTRS_CUBES, 2);
 
-    moveBC3Parts(27, 66, 34, -10, 6, -50, 30, -10, 6);
+    moveBC3Parts(27, 50, 34, -10, 10, -50, 50, -10, 10);
     stopBC();
 #if SLEEP_ON_READ_CUBE4 == 1
     sleep(5000);
@@ -220,9 +223,8 @@ void readCubes()
     fileClose(DEBUG_FILE_HND);
 #endif
 
-    moveC(29, 30);
-    moveBC(120, 20, -20);
-    moveBC3Parts(238, 0, 112, -30, -27, -60, -54, -30, -27);
+    moveBC(130, 20, -20);
+    tankTurnNS3Parts(30, 30, 30, -20, -20, -50, -50, -20, -20);
 
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 125, 5, 125, 20, 55, 17);
 
@@ -237,17 +239,17 @@ void readCubes()
 void takeCube1()
 {
     moveBC(220, -24, -60);
-    moveBC(550, 60, 24);
+    moveBC(545, 60, 24);
 #if SLEEP_ON_CUBES == 1
     stopBC();
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -64, 1, -20);
+    stratManipD(&MANIP_D_PID_SETTINGS, -65, 1, -20);
     moveBC3Parts(40, 115, 50, -20, 20, -40, 40, -13, 13);
     moveBC(40, -13, 13);
     stopBC();
-    startTimeD(400, -55, -50);
+    startTimeD(400, -65, -50);
     sleep(450);
 
     moveBC3Parts(20, 105, 25, 20, -20, 40, -40, 15, -15);
@@ -256,18 +258,18 @@ void takeCube1()
 
 void takeCube2()
 {
-    moveBC(203, -27, -44);
-    moveBC(323, 44, 27);
+    moveBC(203, -26, -44);
+    moveBC(326, 44, 26);
 #if SLEEP_ON_CUBES == 1
     stopBC();
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -68, 1, -20);
-    moveBC3Parts(40, 50, 50, -20, 20, -40, 40, -15, 15);
+    stratManipD(&MANIP_D_PID_SETTINGS, -65, 1, -20);
+    moveBC3Parts(40, 45, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
-    startTimeD(400, -55, -50);
+    startTimeD(400, -65, -50);
     sleep(450);
 
     moveBC3Parts(20, 55, 25, 20, -20, 40, -40, 15, -15);
@@ -276,18 +278,18 @@ void takeCube2()
 
 void takeCube3()
 {
-    moveBC(336, 44, 27);
-    moveBC(206, -27, -44);
+    moveBC(318, 44, 26);
+    moveBC(187, -26, -44);
 #if SLEEP_ON_CUBES == 1
     stopBC();
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -68, 1, -20);
+    stratManipD(&MANIP_D_PID_SETTINGS, -65, 1, -20);
     moveBC3Parts(40, 45, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
-    startTimeD(400, -55, -50);
+    startTimeD(400, -65, -50);
     sleep(450);
 
     moveBC3Parts(20, 55, 25, 20, -20, 40, -40, 15, -15);
@@ -296,18 +298,18 @@ void takeCube3()
 
 void takeCube4()
 {
-    moveBC(550, 60, 24);
-    moveBC(226, -24, -60);
+    moveBC(540, 60, 24);
+    moveBC(215, -24, -60);
 #if SLEEP_ON_CUBES == 1
     stopBC();
     sleep(5000);
 #endif
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -68, 1, -20);
-    moveBC3Parts(40, 85, 50, -20, 20, -40, 40, -15, 15);
+    stratManipD(&MANIP_D_PID_SETTINGS, -65, 1, -20);
+    moveBC3Parts(40, 86, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
-    startTimeD(400, -50, -50);
+    startTimeD(400, -65, -50);
     sleep(450);
 
     moveBC3Parts(20, 55, 25, 20, -20, 40, -40, 15, -15);
@@ -316,14 +318,15 @@ void takeCube4()
 
 void putCubeOnShip()
 {
-    stratManipD(&MANIP_D_PID_SETTINGS, 78, 1, 30, -1);
-    sleep(400);
+    bool *flag = stratManipD(&MANIP_D_PID_SETTINGS, 96, 1, 13, 0);
+    while (*flag)
+        ;
+    sleep(150);
     // startTimeD(150, 52, 0);
     // sleep(200);
-    moveBCAccelPartMainB(100, 20, -20, 60, -60);
-    startTimeD(500, -30, -5);
-    moveBCAccelPartMainB(100, 60, -60, 19, -19);
-    stopBC();
+    moveBCAccelPartMainB(30, 20, -20, 60, -60);
+    startTimeD(500, -70, -5);
+    moveBCAccelPartMainB(200, 60, -60, 19, -19);
 }
 
 void putCubes()
@@ -394,21 +397,17 @@ void putCubes()
     tankTurnNS3Parts(18, 49.5, 22.5, 20, 20, 50, 50, 13, 13);
 
     moveBCMainC(310, 30, 67);
-    moveBC(326, -67, -30);
-    moveBC(138, -20, 20);
+    moveBC(310, -67, -30);
+    moveBC(107, -20, 20);
     stopBC();
     putCubeOnShip();
     startTimeD(250, 100, 2);
-    moveBC3Parts(88, 242, 110, 60, 20, 90, 30, 60, 20);
+    tankTurnNS3Parts(30, 30, 30, 20, 20, 60, 60, 20, 20);
 
-    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_SLOW, 67, 310, 351, 17, 90, 9);
+    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_SLOW, 67, 200, 351, 17, 90, 9);
     setNewMotBCPowersAndRatio(-9, 9);
     waitForCubes();
-    stopBC();
-    sleep(300);
     moveBC(69, 18, -18);
-    stopBC();
-    sleep(300);
 
     if (secCube == CUBES_COLORS[0])
     {
@@ -441,36 +440,33 @@ void putCubes()
     tankTurnNS3Parts(18, 49.5, 22.5, 20, 20, 50, 50, 15, 15);
 
     moveBCMainC(310, 30, 67);
-    moveBC(330, -67, -30);
-    moveBC(138, -20, 20);
+    moveBC(310, -67, -30);
+    moveBC(107, -20, 20);
     stopBC();
     putCubeOnShip();
 
-    moveBC(100, 20, -20);
     stopBC();
-    sleep(500);
-    stratManipD(&MANIP_D_PID_SETTINGS, 174, 1, 10, 0);
-    sleep(200);
-    moveBC(270, -70, -10);
-    moveBCMainC(270, 10, 70);
+    stratManipD(&MANIP_D_PID_SETTINGS, 200, 1, 20, 0);
+    moveBC(300, -40, -30);
+    moveBCMainC(300, 30, 40);
 }
 
 void moveBigShipToWhite()
 {
     startTimeD(550, 0, -60);
     line2SenDist(&DEFAULT_LINE_PID_SLOW, 200, 17);
-    line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 70, 322, 88, 17, 75, 15);
-    line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 15, 150, 150);
+    line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 70, 502, 88, 17, 95, 24);
+    line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 24, 150, 150);
 
-    moveBC3Parts(43, 119, 56, -15, 15, -40, 40, -19, 19);
+    moveBC3Parts(43, 119, 56, -25, 25, -40, 40, -23, 23);
     stopC();
     moveB(40, -23);
     stopB();
     startTimeD(350, 100, 2);
-    sleep(350);
+    sleep(300);
     moveB(40, 23);
 
-    moveBC3Parts(20, 45, 25, 18, -18, 30, -30, 14, -14);
+    moveBC3Parts(20, 45, 25, 20, -20, 30, -30, 17, -17);
 
     tankTurnNS3Parts(18, 49.5, 22.5, 20, 20, 60, 60, 17, 17);
 }
@@ -478,7 +474,7 @@ void moveBigShipToWhite()
 void take2WhiteCube()
 {
     moveBC(260, 80, 10);
-    stratManipD(&MANIP_D_PID_SETTINGS, -84, 1, -20);
+    stratManipD(&MANIP_D_PID_SETTINGS, -60, 1, -20);
     moveBCMainC(258, -10, -80);
     moveBC3Parts(40, 50, 80, -17, 17, -40, 40, -17, 17);
     moveBC(100, -17, 17);
@@ -510,7 +506,6 @@ void whiteCubeOnBig()
 
     moveBCMainC(310, 30, 67);
     moveBC(315, -67, -30);
-    moveBC(28, -20, 20);
     stopBC();
     putCubeOnShip();
 
@@ -552,7 +547,7 @@ void goToSmallShip()
 
     moveBC3Parts(30, 50, 38, -20, 20, -40, 40, -20, 20);
     stopBC();
-    stratManipD(&MANIP_D_PID_SETTINGS, -72, 1, -30);
+    stratManipD(&MANIP_D_PID_SETTINGS, -52, 1, -30);
     tankTurnNS3Parts(18, 49.5, 22.5, 20, 20, 60, 60, 17, 17);
 
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_SLOW, 100, 205, 125, 20, 80, 17);
@@ -568,7 +563,7 @@ void goToSmallShip()
     moveBC3Parts(30, 30, 38, -20, 20, -40, 40, -20, 20);
     tankTurnNS3Parts(18, 49.5, 22.5, 20, 20, 45, 45, 17, 17);
 
-    line2SenDist(&DEFAULT_LINE_PID_MEDIUM, 245, 22);
+    line2SenDist(&DEFAULT_LINE_PID_MEDIUM, 245, 25);
     stopBC();
 
     startTimeD(250, 100, 10);
@@ -581,8 +576,8 @@ void putCubesOnSmallShip()
 
     tankTurnNS3Parts(18, 49.5, 22.5, 19, 19, 90, 90, 17, 17);
 
-    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_SLOW, 67, 390, 301, 17, 98, 15);
-    setNewMotBCPowersAndRatio(-13, 13);
+    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_SLOW, 67, 380, 301, 17, 98, 15);
+    setNewMotBCPowersAndRatio(-9, 9);
     waitForCubes();
     moveBC(69, 18, -18);
 
@@ -591,46 +586,46 @@ void putCubesOnSmallShip()
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_SLOW, 30, 410, 37, 20, 70, 17);
     line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 18, 50, 50);
 
-    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SLOW, 121, 0, 61, 17, 33, 16);
+    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SLOW, 110, 0, 50, 17, 33, 16);
 
     tankTurnNS3Parts(18, 49.5, 22.5, 20, 20, 50, 50, 15, 15);
 
     moveBCMainC(310, 30, 67);
-    moveBC(337, -67, -30);
-    moveBC(138, -20, 20);
+    moveBC(315, -67, -30);
+    moveBC(140, -20, 20);
     stopBC();
 
     putCubeOnShip();
+    moveBC(30, 20, -20);
 
     startTimeD(250, 100, 2);
-    moveBC3Parts(88, 242, 110, 60, 20, 90, 30, 60, 20);
+    tankTurnNS3Parts(30, 30, 30, 20, 20, 60, 60, 20, 20);
 
-    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_SLOW, 67, 410, 301, 17, 90, 13);
-    setNewMotBCPowersAndRatio(-13, 13);
+    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_SUPRA, &DEFAULT_LINE_PID_SLOW, 67, 380, 301, 17, 90, 13);
+    setNewMotBCPowersAndRatio(-9, 9);
     waitForCubes();
-    moveBC(50, 18, -18);
+    moveBC(69, 18, -18);
 
     takeAnyLeftCube();
 
     line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_SLOW, 30, 410, 37, 20, 60, 17);
     line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 18, 50, 50);
 
-    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 180, 0, 90, 17, 39, 16);
+    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 185, 0, 95, 17, 39, 16);
 
     tankTurnNS3Parts(18, 49.5, 22.5, 20, 20, 50, 50, 15, 15);
 
     moveBCMainC(310, 30, 67);
-    moveBC(330, -67, -30);
-    moveBC(149, -20, 20);
+    moveBC(315, -67, -30);
+    moveBC(140, -20, 20);
     stopBC();
 
     putCubeOnShip();
-    moveBC(60, 20, -20);
     stopBC();
 
     startTimeD(250, 100, 2);
     sleep(500);
-    stratManipD(&MANIP_D_PID_SETTINGS, -77, 1, -30);
+    stratManipD(&MANIP_D_PID_SETTINGS, -42, 1, -30);
     sleep(100);
     moveBCMainC(240, 5, 70);
     moveBC(240, -70, -5);
@@ -644,15 +639,15 @@ void shipsAndFinish()
 {
     line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 100, 250, 100, 25, 75, 21);
     line2SenCrawl(&DEFAULT_LINE_PID_MEDIUM, 21, 150, 150);
-    line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 100, 1100, 300, 40, 100, 30);
-    line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 30, 150, 150);
+    line2Sen3Parts(&DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_FAST, &DEFAULT_LINE_PID_MEDIUM, 100, 1100, 300, 40, 100, 37);
+    line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 37, 150, 150);
 
-    moveBC3Parts(50, 0, 35, -20, 20, -40, 40, -15, 15);
-    moveBC3Parts(50, 0, 35, 20, -20, 40, -40, 15, -15);
+    moveBC3Parts(20, 0, 65, -37, 37, -45, 45, -25, 25);
+    moveBC3Parts(50, 0, 35, 25, -25, 40, -40, 25, -25);
 
     stopB();
 
-    turnCDegr(18, 49.5, 22.5, -23, -40, -23);
+    turnCDegr(18, 49.5, 22.5, -25, -70, -25);
     moveBC3Parts(30, 152, 38, -20, 20, -60, 60, -17, 17);
     stopBC();
     startTimeD(300, 100, 20);
@@ -685,7 +680,7 @@ void mainLogic()
 
 void testFunc()
 {
-    tankTurnNS3Parts(36, 360 * 2 + 69, 75, -20, -20, -50, -50, -17, -17);
+    tankTurnNS3Parts(90, 360 * 2, 90, -20, -20, -50, -50, -17, -17);
 
     // displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION);
 

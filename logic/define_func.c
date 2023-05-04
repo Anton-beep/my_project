@@ -21,7 +21,12 @@ void define_main()
     #elif DEB_DISPLAY_CALIBRATON_VALUES == 1
         displayCalibrationValues();
     #elif TEST_MOTOR_CALIBRATION == 1
-        testMotCalibration(100, 10, 400);
+        testMotCalibration(10, 100, 100);
+        stopAllTasks();
+    #elif TEST_DEGB_CALIBRATION == 1
+        moveB(360 * 5, 20);
+        stopBC();
+        sleep(1000);
         stopAllTasks();
     #endif
 

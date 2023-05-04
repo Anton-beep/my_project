@@ -14,6 +14,24 @@ short ERR_MODE;
 3 - one is zero
 */
 
+/*
+Процесс калибровки: 
+Взять мотор, прокрутить (НА НИЗКОЙ СКОРОСТИ, ЧТОБЫ ИЗБЕЖАТЬ ТРОТЛИНГА) на много градусов (лучше кртаных 360, так нагляднее)
+Менять коэфициент до тех пор, пока отклонение будет не заметно
+
+По хорошему нужно придумать механическое устройство 
+*/
+
+float getEncoderB()
+{
+    return nMotorEncoder[motB] * KOEF_ENC_B;
+}
+
+float getEncoderC()
+{
+    return nMotorEncoder[motC] * KOEF_ENC_C;
+}
+
 float getPIDErrMot(float ratioMotB, float ratioMotC, float startDegMotB, float startDegMotC)
 {
     switch (ERR_MODE)
@@ -24,11 +42,11 @@ float getPIDErrMot(float ratioMotB, float ratioMotC, float startDegMotB, float s
         break;
 
     case 1:
-        return (ratioMotB * (nMotorEncoder[motC] - startDegMotC) - (nMotorEncoder[motB] - startDegMotB) * ratioMotC) / (ratioMotC - ratioMotB);
+        return (ratioMotB * (getEncoderC() - startDegMotC) - (getEncoderB() - startDegMotB) * ratioMotC) / (ratioMotC - ratioMotB);
         break;
 
     case 2:
-        return (ratioMotB * (nMotorEncoder[motC] - startDegMotC) - (nMotorEncoder[motB] - startDegMotB) * ratioMotC) / (ratioMotC + ratioMotB);
+        return (ratioMotB * (getEncoderC() - startDegMotC) - (getEncoderB() - startDegMotB) * ratioMotC) / (ratioMotC + ratioMotB);
         break;
 
     default:
@@ -102,7 +120,7 @@ void setErrMode(float powerMotB, float powerMotC)
         // dif signs
         if (ERR_MODE != 1)
         {
-            setStartDegMotBCAndReset(nMotorEncoder[motB], nMotorEncoder[motC]);
+            setStartDegMotBCAndReset(getEncoderB(), getEncoderC());
         }
         ERR_MODE = 1;
     }
@@ -111,7 +129,7 @@ void setErrMode(float powerMotB, float powerMotC)
         // same signs
         if (ERR_MODE != 2)
         {
-            setStartDegMotBCAndReset(nMotorEncoder[motB], nMotorEncoder[motC]);
+            setStartDegMotBCAndReset(getEncoderB(), getEncoderC());
         }
         ERR_MODE = 2;
     }
@@ -299,8 +317,8 @@ task task_testMotCalibration()
     while (true)
     {
         sleep(TEST_CALIBRATION_MEASURE_GAP);
-        float nowDegB = nMotorEncoder[motB];
-        float nowDegC = nMotorEncoder[motC];
+        float nowDegB = getEncoderB();
+        float nowDegC = getEncoderC();
         TEST_CALIBRATION_MEASUREDB = nowDegB - TEST_CALIBRATION_LAST_DEGB;
         TEST_CALIBRATION_MEASUREDC = nowDegC - TEST_CALIBRATION_LAST_DEGC;
     }
@@ -318,8 +336,8 @@ void testMotCalibration(short powB, short powC, int measureGap)
     sleep(200);
     while (getButtonPress(buttonEnter) == false)
     {
-        float nowDegB = nMotorEncoder[motB];
-        float nowDegC = nMotorEncoder[motC];
+        float nowDegB = getEncoderB();
+        float nowDegC = getEncoderC();
         TEST_CALIBRATION_LAST_DEGB = nowDegB;
         TEST_CALIBRATION_LAST_DEGC = nowDegC;
         eraseDisplay();

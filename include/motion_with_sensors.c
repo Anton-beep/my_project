@@ -4,12 +4,12 @@
 // Line forward
 void line2SenDist(PIDSettings *PIDSet, float dist, float pow)
 {
-    int startDegB = nMotorEncoder[motB];
+    int startDegB = getEncoderB();
     float endDegB;
 
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
-    while (nMotorEncoder[motB] > endDegB)
+    while (getEncoderB() > endDegB)
     {
         PID2SensWork(PIDSet, pow);
     }
@@ -18,11 +18,11 @@ void line2SenDist(PIDSettings *PIDSet, float dist, float pow)
 
 void lineSen1InDist(PIDSettings *PIDSet, float dist, float pow, float target)
 {
-    int startDegB = nMotorEncoder[motB];
+    int startDegB = getEncoderB();
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
-    while (nMotorEncoder[motB] > endDegB)
+    while (getEncoderB() > endDegB)
     {
         PIDSen1InWork(PIDSet, target, pow);
     }
@@ -31,11 +31,11 @@ void lineSen1InDist(PIDSettings *PIDSet, float dist, float pow, float target)
 
 void lineSen2InDist(PIDSettings *PIDSet, float dist, float pow, float target)
 {
-    int startDegB = nMotorEncoder[motB];
+    int startDegB = getEncoderB();
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
-    while (nMotorEncoder[motB] > endDegB)
+    while (getEncoderB() > endDegB)
     {
         PIDSen2InWork(PIDSet, target, pow);
     }
@@ -44,11 +44,11 @@ void lineSen2InDist(PIDSettings *PIDSet, float dist, float pow, float target)
 
 void lineSen1OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
 {
-    int startDegB = nMotorEncoder[motB];
+    int startDegB = getEncoderB();
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
-    while (nMotorEncoder[motB] > endDegB)
+    while (getEncoderB() > endDegB)
     {
         PIDSen1InWork(PIDSet, target, pow);
     }
@@ -57,11 +57,11 @@ void lineSen1OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
 
 void lineSen2OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
 {
-    int startDegB = nMotorEncoder[motB];
+    int startDegB = getEncoderB();
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
-    while (nMotorEncoder[motB] > endDegB)
+    while (getEncoderB() > endDegB)
     {
         PIDSen2InWork(PIDSet, target, pow);
     }
@@ -103,7 +103,7 @@ bool applyNewAccelsSen(short *powB, short *powC, float *newPowB, float *newPowC)
 
 void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel)
 {
-    int startDegB = nMotorEncoder[motB];
+    int startDegB = getEncoderB();
     int madeDist;
 
     float newPow, newPowB;
@@ -112,11 +112,11 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
-    while (nMotorEncoder[motB] > endDegB)
+    while (getEncoderB() > endDegB)
     {
         if (!(flagAccel))
         {
-            newPow = round(sqrt(fabs(nMotorEncoder[motB] - startDegB) * 2 * accel + pow(power, 2)));
+            newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
             newPowB = newPow * -1;
             flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
             startTime = nPgmTime;
@@ -128,7 +128,7 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
 
 void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 0)
 {
-    int startDegB = nMotorEncoder[motB];
+    int startDegB = getEncoderB();
     int madeDist;
 
     float newPow, newPowB;
@@ -137,11 +137,11 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
-    while (nMotorEncoder[motB] > endDegB)
+    while (getEncoderB() > endDegB)
     {
         if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
         {
-            newPow = round(sqrt(fabs(nMotorEncoder[motB] - startDegB) * 2 * accel + pow(power, 2)));
+            newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
             newPowB = newPow * -1;
             flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
             startTime = nPgmTime;
@@ -153,7 +153,7 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
 
 void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
 {
-    int startDegB = nMotorEncoder[motB];
+    int startDegB = getEncoderB();
     int madeDist;
 
     float newPow, newPowB;
@@ -162,11 +162,11 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
-    while (nMotorEncoder[motB] > endDegB)
+    while (getEncoderB() > endDegB)
     {
         if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
         {
-            newPow = round(sqrt(fabs(nMotorEncoder[motB] - startDegB) * 2 * accel + pow(power, 2)));
+            newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
             newPowB = -1 * newPow;
             flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
             startTime = nPgmTime;
@@ -178,7 +178,7 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
 
 void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
 {
-    int startDegB = nMotorEncoder[motB];
+    int startDegB = getEncoderB();
     int madeDist;
 
     float newPow, newPowB;
@@ -188,11 +188,11 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
 
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
-    while (nMotorEncoder[motB] > endDegB)
+    while (getEncoderB() > endDegB)
     {
         if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
         {
-            newPow = round(sqrt(fabs(nMotorEncoder[motB] - startDegB) * 2 * accel + pow(power, 2)));
+            newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
             newPowB = -1 * newPow;
             flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
             startTime = nPgmTime;
@@ -204,7 +204,7 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
 
 void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
 {
-    int startDegB = nMotorEncoder[motB];
+    int startDegB = getEncoderB();
     int madeDist;
 
     float newPow, newPowB;
@@ -213,11 +213,11 @@ void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
-    while (nMotorEncoder[motB] > endDegB)
+    while (getEncoderB() > endDegB)
     {
         if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
         {
-            newPow = round(sqrt(fabs(nMotorEncoder[motB] - startDegB) * 2 * accel + pow(power, 2)));
+            newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
             newPowB = -1 * newPow;
             flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
             startTime = nPgmTime;

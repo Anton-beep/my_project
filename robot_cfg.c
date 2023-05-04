@@ -3,11 +3,14 @@
 
 // ALL DISTANCES IN CM
 
-float WHEEL_DIAMETER = 5.6;
-float BASE_LEN = 17.85;
+const float WHEEL_DIAMETER = 5.6;
+const float BASE_LEN = 17.85;
 
-short MOTORS_MAX_POWER = 100;
-short MOTORS_MIN_POWER = 0;
+const short MOTORS_MAX_POWER = 100;
+const short MOTORS_MIN_POWER = 0;
+
+const float KOEF_ENC_B = 1;
+const float KOEF_ENC_C = 1;
 
 // MOTORS PID CONTROLLER
 
@@ -34,9 +37,9 @@ PIDSettings *MANIP_D_PID_PTR;
 
 void defStructures()
 {
-    MOT_PID_SETTINGS.Kp = 16;
-    MOT_PID_SETTINGS.Ki = 4.7;
-    MOT_PID_SETTINGS.Kd = 0.009;
+    MOT_PID_SETTINGS.Kp = 4;
+    MOT_PID_SETTINGS.Ki = 2;
+    MOT_PID_SETTINGS.Kd = 0.002;
     MOT_PID_SETTINGS.prevErr = 0;
     MOT_PID_SETTINGS.integral = 0;
     MOT_PID_SETTINGS.errNow = 0;
@@ -67,23 +70,23 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN1_CALIBRATION.minR = 39;
-    SEN1_CALIBRATION.minG = 48;
+    SEN1_CALIBRATION.minR = 38;
+    SEN1_CALIBRATION.minG = 47;
     SEN1_CALIBRATION.minB = 20;
 
-    SEN1_CALIBRATION.maxR = 345;
-    SEN1_CALIBRATION.maxG = 374;
-    SEN1_CALIBRATION.maxB = 202;
+    SEN1_CALIBRATION.maxR = 340;
+    SEN1_CALIBRATION.maxG = 364;
+    SEN1_CALIBRATION.maxB = 199;
 
     // ----------------------------------
 
-    SEN2_CALIBRATION.minR = 39;
-    SEN2_CALIBRATION.minG = 50;
-    SEN2_CALIBRATION.minB = 29;
+    SEN2_CALIBRATION.minR = 40;
+    SEN2_CALIBRATION.minG = 49;
+    SEN2_CALIBRATION.minB = 33;
 
-    SEN2_CALIBRATION.maxR = 317;
-    SEN2_CALIBRATION.maxG = 417;
-    SEN2_CALIBRATION.maxB = 311;
+    SEN2_CALIBRATION.maxR = 318;
+    SEN2_CALIBRATION.maxG = 410;
+    SEN2_CALIBRATION.maxB = 313;
 
     // ----------------------------------
 

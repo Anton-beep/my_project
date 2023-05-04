@@ -23,11 +23,6 @@ void define_main()
     #elif TEST_MOTOR_CALIBRATION == 1
         testMotCalibration(10, 100, 100);
         stopAllTasks();
-    #elif TEST_DEGB_CALIBRATION == 1
-        moveB(360 * 5, 20);
-        stopBC();
-        sleep(1000);
-        stopAllTasks();
     #endif
 
 

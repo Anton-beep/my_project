@@ -373,53 +373,72 @@ task task_testDependenceRPM()
 {
     while (motor[TEST_DEPENDENCE_MOTOR] < 100)
     {
-        motor[TEST_DEPENDENCE_MOTOR] += 1;
+        motor[TEST_DEPENDENCE_MOTOR] = motor[TEST_DEPENDENCE_MOTOR] + 1;
         sleep(SLEEP_TIME_DEPENDENCE_MOTOR);
     }
 }
 
 void testDependenceRPMToPower(short testMotor, int incSpeedTime)
 {
-    float minRatio, maxRatio;
-    TEST_DEPENDENCE_MOTOR = motor;
+    float minRatio = 1000, maxRatio, sumRatio = 0;
+    int countRatio = 0;
+    TEST_DEPENDENCE_MOTOR = testMotor;
     SLEEP_TIME_DEPENDENCE_MOTOR = incSpeedTime;
+    while (getMotorRPM(testMotor) == 0)
+    {
+        motor[testMotor] += 1;
+        sleep(500);
+    }
+    sleep(3000);
+    playImmediateTone(1000, 10);
     startTask(task_testDependenceRPM);
     while (motor[testMotor] < 100)
     {
         int rpmNow = getMotorRPM(testMotor);
         int powerNow = motor[testMotor];
-        float ratioNow = (float)powerNow / rpmNow;
-        if (ratioNow > maxRatio)
+        if (rpmNow != 0)
         {
-            maxRatio = ratioNow;
+            float ratioNow = (float)powerNow / rpmNow;
+            sumRatio += ratioNow;
+            countRatio++;
+            if (ratioNow > maxRatio)
+            {
+                maxRatio = ratioNow;
+            }
+            else if (ratioNow < minRatio)
+            {
+                minRatio = ratioNow;
+            }
+            eraseDisplay();
+            displayCenteredTextLine(1, "now RPM: %d", rpmNow);
+            displayCenteredTextLine(2, "now power: %d", powerNow);
+            displayCenteredTextLine(3, "min ratio: %f", minRatio);
+            displayCenteredTextLine(4, "max ratio: %f", maxRatio);
+            displayCenteredTextLine(5, "now ratio: %f", ratioNow);
+            displayCenteredTextLine(6, "mean ratio: %f", sumRatio / countRatio);
+            sleep(150);
         }
-        else if (ratioNow < minRatio)
-        {
-            minRatio = ratioNow;
-        }
-        eraseDisplay();
-        displayCenteredTextLine(1, "now RPM: %d", rpmNow);
-        displayCenteredTextLine(2, "now power: %d", powerNow);
-        displayCenteredTextLine(3, "min ratio: %f", minRatio);
-        displayCenteredTextLine(4, "max ratio: %f", maxRatio);
-        sleep(150);
     }
     stopTask(task_testDependenceRPM);
     motor[testMotor] = 0;
+    sleep(1000);
+    flushButtonMessages();
     waitForButtonPress();
 }
 
 void testRatioMaxRPMToBatteryVoltage(short testMotor)
 {
-    motor[testMotor] = 100;
-    float minRatio, maxRatio, sumRatio;
-    int nRatio;
+    int power = 70;
+    motor[testMotor] = power;
+    sleep(2000);
+    float minRatio = 1000, maxRatio, sumRatio = 0;
+    int nRatio = 0;
     while (getButtonPress(buttonEnter) == false)
     {
         nRatio++;
         int nowRPM = getMotorRPM(testMotor);
         float nowVoltage = getBatteryVoltage();
-        float nowRatio = (float) nowVoltage / nowRPM;
+        float nowRatio = (float)nowRPM / (nowVoltage * power);
         if (nowRatio < minRatio)
         {
             minRatio = nowRatio;
@@ -435,5 +454,74 @@ void testRatioMaxRPMToBatteryVoltage(short testMotor)
         displayCenteredTextLine(3, "meanRatio: %f", sumRatio / nRatio);
         displayCenteredTextLine(4, "RPM: %d", nowRPM);
         displayCenteredTextLine(5, "Voltage: %f", nowVoltage);
+        sleep(150);
+    }
+    motor[testMotor] = 0;
+    sleep(1000);
+    flushButtonMessages();
+    waitForButtonPress();
+}
+
+float predictRPM(short mot)
+{
+    return (float)PREDICT_KOEF * motor[mot] * getBatteryVoltage();
+}
+
+void testPrediction(short testMot)
+{
+    int power = 100;
+    motor[testMot] = power;
+    sleep(2000);
+    float maxDif = 0, sumDif = 0;
+    int countDif = 0;
+    while (getButtonPress(buttonEnter) == false)
+    {
+        float nowRPM = getMotorRPM(testMot);
+        float predictedRPM = predictRPM(testMot);
+        float nowDif = fabs(nowRPM - predictedRPM);
+        if (nowDif > maxDif)
+        {
+            maxDif = nowDif;
+        }
+        sumDif += nowDif;
+        countDif++;
+        eraseDisplay();
+        displayCenteredTextLine(1, "nowRPM: %f", nowRPM);
+        displayCenteredTextLine(2, "predictedRPM: %f", predictedRPM);
+        displayCenteredTextLine(3, "maxDif: %f", maxDif);
+        displayCenteredTextLine(4, "meanDif: %f", sumDif / countDif);
+        sleep(150);
+    }
+    motor[testMot] = 0;
+    sleep(1000);
+    flushButtonMessages();
+    waitForButtonPress();
+}
+
+task checkMotorProblems()
+{
+    int errCountB = 0, errCountC = 0;
+    while (true)
+    {
+        if (fabs(getMotorRPM(motB) - predictRPM(motB)) > 30)
+        {
+            errCountB++;
+        }
+        else
+        {
+            errCountB = 0;
+        }
+        if (fabs(getMotorRPM(motC) - predictRPM(motC)) > 30)
+        {
+            errCountC++;
+        }
+        else
+        {
+            errCountC = 0;
+        }
+        if (errCountB > 30 || errCountC > 30){
+            playImmediateTone(1000, 10);
+        }
+        sleep(100);
     }
 }

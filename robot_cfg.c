@@ -12,6 +12,8 @@ const short MOTORS_MIN_POWER = 0;
 const float KOEF_ENC_B = 1;
 const float KOEF_ENC_C = 1;
 
+const float PREDICT_KOEF = 0.2346;
+
 // MOTORS PID CONTROLLER
 
 PIDSettings MOT_PID_SETTINGS;

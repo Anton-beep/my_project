@@ -15,11 +15,11 @@ short ERR_MODE;
 */
 
 /*
-Процесс калибровки: 
+Процесс калибровки:
 Взять мотор, прокрутить (НА НИЗКОЙ СКОРОСТИ, ЧТОБЫ ИЗБЕЖАТЬ ТРОТЛИНГА) на много градусов (лучше кртаных 360, так нагляднее)
 Менять коэфициент до тех пор, пока отклонение будет не заметно
 
-По хорошему нужно придумать механическое устройство 
+По хорошему нужно придумать механическое устройство
 */
 
 float getEncoderB()
@@ -364,4 +364,76 @@ void testMotCalibration(short powB, short powC, int measureGap)
         sleep(150);
     }
     stopTask(task_testMotCalibration);
+}
+
+short TEST_DEPENDENCE_MOTOR;
+int SLEEP_TIME_DEPENDENCE_MOTOR;
+
+task task_testDependenceRPM()
+{
+    while (motor[TEST_DEPENDENCE_MOTOR] < 100)
+    {
+        motor[TEST_DEPENDENCE_MOTOR] += 1;
+        sleep(SLEEP_TIME_DEPENDENCE_MOTOR);
+    }
+}
+
+void testDependenceRPMToPower(short testMotor, int incSpeedTime)
+{
+    float minRatio, maxRatio;
+    TEST_DEPENDENCE_MOTOR = motor;
+    SLEEP_TIME_DEPENDENCE_MOTOR = incSpeedTime;
+    startTask(task_testDependenceRPM);
+    while (motor[testMotor] < 100)
+    {
+        int rpmNow = getMotorRPM(testMotor);
+        int powerNow = motor[testMotor];
+        float ratioNow = (float)powerNow / rpmNow;
+        if (ratioNow > maxRatio)
+        {
+            maxRatio = ratioNow;
+        }
+        else if (ratioNow < minRatio)
+        {
+            minRatio = ratioNow;
+        }
+        eraseDisplay();
+        displayCenteredTextLine(1, "now RPM: %d", rpmNow);
+        displayCenteredTextLine(2, "now power: %d", powerNow);
+        displayCenteredTextLine(3, "min ratio: %f", minRatio);
+        displayCenteredTextLine(4, "max ratio: %f", maxRatio);
+        sleep(150);
+    }
+    stopTask(task_testDependenceRPM);
+    motor[testMotor] = 0;
+    waitForButtonPress();
+}
+
+void testRatioMaxRPMToBatteryVoltage(short testMotor)
+{
+    motor[testMotor] = 100;
+    float minRatio, maxRatio, sumRatio;
+    int nRatio;
+    while (getButtonPress(buttonEnter) == false)
+    {
+        nRatio++;
+        int nowRPM = getMotorRPM(testMotor);
+        float nowVoltage = getBatteryVoltage();
+        float nowRatio = (float) nowVoltage / nowRPM;
+        if (nowRatio < minRatio)
+        {
+            minRatio = nowRatio;
+        }
+        else if (nowRatio > maxRatio)
+        {
+            maxRatio = nowRatio;
+        }
+        sumRatio += nowRatio;
+        eraseDisplay();
+        displayCenteredTextLine(1, "minRatio: %f", minRatio);
+        displayCenteredTextLine(2, "maxRatio: %f", maxRatio);
+        displayCenteredTextLine(3, "meanRatio: %f", sumRatio / nRatio);
+        displayCenteredTextLine(4, "RPM: %d", nowRPM);
+        displayCenteredTextLine(5, "Voltage: %f", nowVoltage);
+    }
 }

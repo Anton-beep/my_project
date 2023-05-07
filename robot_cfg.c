@@ -72,33 +72,33 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN1_CALIBRATION.minR = 38;
-    SEN1_CALIBRATION.minG = 47;
-    SEN1_CALIBRATION.minB = 20;
+    SEN1_CALIBRATION.minR = 41;
+    SEN1_CALIBRATION.minG = 52;
+    SEN1_CALIBRATION.minB = 34;
 
-    SEN1_CALIBRATION.maxR = 340;
-    SEN1_CALIBRATION.maxG = 364;
-    SEN1_CALIBRATION.maxB = 199;
-
-    // ----------------------------------
-
-    SEN2_CALIBRATION.minR = 40;
-    SEN2_CALIBRATION.minG = 49;
-    SEN2_CALIBRATION.minB = 33;
-
-    SEN2_CALIBRATION.maxR = 318;
-    SEN2_CALIBRATION.maxG = 410;
-    SEN2_CALIBRATION.maxB = 313;
+    SEN1_CALIBRATION.maxR = 336;
+    SEN1_CALIBRATION.maxG = 441;
+    SEN1_CALIBRATION.maxB = 322;
 
     // ----------------------------------
 
-    SEN3_CALIBRATION.minR = 0;
-    SEN3_CALIBRATION.minG = 0;
-    SEN3_CALIBRATION.minB = 0;
+    SEN2_CALIBRATION.minR = 41;
+    SEN2_CALIBRATION.minG = 51;
+    SEN2_CALIBRATION.minB = 23;
 
-    SEN3_CALIBRATION.maxR = 32;
-    SEN3_CALIBRATION.maxG = 28;
-    SEN3_CALIBRATION.maxB = 34;
+    SEN2_CALIBRATION.maxR = 369;
+    SEN2_CALIBRATION.maxG = 390;
+    SEN2_CALIBRATION.maxB = 209;
+
+    // ----------------------------------
+
+    SEN3_CALIBRATION.minR = 2;
+    SEN3_CALIBRATION.minG = 2;
+    SEN3_CALIBRATION.minB = 2;
+
+    SEN3_CALIBRATION.maxR = 27;
+    SEN3_CALIBRATION.maxG = 26;
+    SEN3_CALIBRATION.maxB = 30;
 
     // ----------------------------------
 

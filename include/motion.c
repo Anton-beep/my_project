@@ -283,7 +283,7 @@ void moveBCCustomAccelMainC(float dist, float powB, float powC, float accelB, fl
     }
 }
 
-void moveBCAccelPartMainB(float dist, float startPowB, float startPowC, float endPowB, float endPowC)
+void moveBCAccelPartMainB(float dist, float startPowB, float startPowC, float endPowB, float endPowC = 0)
 {
     float accelB, accelC;
     if (endPowB > startPowB)

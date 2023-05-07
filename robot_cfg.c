@@ -183,13 +183,13 @@ void defStructures()
 
     // ----------------------------------
 
-    MANIP_D_PID_SETTINGS.Kp = 0.3;
-    MANIP_D_PID_SETTINGS.Ki = 0.3;
-    MANIP_D_PID_SETTINGS.Kd = 0;
+    MANIP_D_PID_SETTINGS.Kp = 0.35;
+    MANIP_D_PID_SETTINGS.Ki = 4.65;
+    MANIP_D_PID_SETTINGS.Kd = 0.06;
     MANIP_D_PID_SETTINGS.prevErr = 0;
     MANIP_D_PID_SETTINGS.integral = 0;
     MANIP_D_PID_SETTINGS.errNow = 0;
-    MANIP_D_PID_SETTINGS.dt = 0.001;
+    MANIP_D_PID_SETTINGS.dt = 0.09;
     MANIP_D_PID_SETTINGS.pauseAction = false;
     MANIP_D_PID_PTR = &MANIP_D_PID_SETTINGS;
 }

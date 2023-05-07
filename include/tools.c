@@ -43,7 +43,7 @@ float map(float x, float in_min, float in_max, float out_min, float out_max)
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-void checkBat()
+task checkBat()
 {
     if (getBatteryVoltage() < 7.86)
     {
@@ -61,4 +61,16 @@ void displayExecTime()
     displayCenteredBigTextLine(10, "%f", (float)time1[T3] / 1000);
     flushButtonMessages();
     waitForButtonPress();
+}
+
+int getSignedRPM(short mot)
+{
+    if (motor[mot] > 0)
+    {
+        return getMotorRPM(mot);
+    }
+    else
+    {
+        return -getMotorRPM(mot);
+    }
 }

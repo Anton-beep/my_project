@@ -14,114 +14,83 @@ void stopD()
     setMotorBrakeMode(motD, motorBrake);
 }
 
-int MANIP_A_DEG_TO_MOVE;
-int MANIP_D_DEG_TO_MOVE;
-short MANIP_A_POWER_MOVE;
-short MANIP_D_POWER_MOVE;
-short MANIP_A_END_POWER_MOVE;
-short MANIP_D_END_POWER_MOVE;
-short MANIP_A_ALLOWED_ERR = 2;
-short MANIP_D_ALLOWED_ERR = 2;
-bool MANIP_A_WORKING = false;
-bool MANIP_D_WORKING = false;
-
-task manipMoveA()
+void setPowerAdjustBatteryManipA(short pow, float batVoltage)
 {
-    MANIP_A_WORKING = true;
-    PIDReset(MANIP_A_PID_PTR);
-    int endDegA = nMotorEncoder[motA] + MANIP_A_DEG_TO_MOVE;
-    while (fabs(nMotorEncoder[motA] - endDegA) > MANIP_A_ALLOWED_ERR)
+    motor[motA] = pow * batVoltage / getBatteryVoltage();
+}
+
+void setPowerAdjustBatteryManipD(short pow, float batVoltage)
+{
+    motor[motD] = pow * batVoltage / getBatteryVoltage();
+}
+
+void testAdjust()
+{
+    setPowerAdjustBatteryManipD(80, 7.6);
+    while (getButtonPress(buttonEnter) == false)
     {
-        MANIP_A_PID_PTR->errNow = endDegA - nMotorEncoder[motA];
-        short outPID = PIDFunction(MANIP_A_PID_PTR);
-        motor[motA] = MANIP_A_POWER_MOVE + outPID;
-        sleep(MANIP_A_PID_PTR->dt * 1000);
+        eraseDisplay();
+        displayCenteredTextLine(5, "%f", getBatteryVoltage());
+        displayCenteredTextLine(10, "%d", getSignedRPM(motD));
+        sleep(100);
     }
-    motor[motA] = MANIP_A_END_POWER_MOVE;
-    MANIP_A_WORKING = false;
 }
 
-task manipMoveD()
+void moveTimeManipA(int time, short powStart, short powAfter, float voltage)
 {
-    MANIP_D_WORKING = true;
-    PIDReset(MANIP_D_PID_PTR);
-    int endDegD = nMotorEncoder[motD] + MANIP_D_DEG_TO_MOVE;
-    while (fabs(nMotorEncoder[motD] - endDegD) > MANIP_D_ALLOWED_ERR)
+    setPowerAdjustBatteryManipA(powStart, voltage);
+    sleep(time);
+    setPowerAdjustBatteryManipA(powAfter, voltage);
+}
+
+void moveTimeManipD(int time, short powStart, short powAfter, float voltage)
+{
+    setPowerAdjustBatteryManipD(powStart, voltage);
+    sleep(time);
+    setPowerAdjustBatteryManipD(powAfter, voltage);
+}
+
+void moveDegManipA(int deg, short powStart, short powAfter, float voltage)
+{
+    setPowerAdjustBatteryManipA(powStart, voltage);
+    int endDeg;
+    if (powStart >= 0)
     {
-        MANIP_D_PID_PTR->errNow = endDegD - nMotorEncoder[motD];
-        short outPID = PIDFunction(MANIP_D_PID_PTR);
-        motor[motD] = MANIP_D_POWER_MOVE + outPID;
-        sleep(MANIP_D_PID_PTR->dt * 1000);
+        endDeg = nMotorEncoder[motA] + deg;
+        while (nMotorEncoder[motA] < endDeg)
+        {
+            sleep(1);
+        }
     }
-    motor[motD] = MANIP_D_END_POWER_MOVE;
-    MANIP_D_WORKING = false;
+    else
+    {
+        endDeg = nMotorEncoder[motA] - deg;
+        while (nMotorEncoder[motA] > endDeg)
+        {
+            sleep(1);
+        }
+    }
+    setPowerAdjustBatteryManipA(powAfter, voltage);
 }
 
-unsigned long MSECONDS_A = 0;
-unsigned long MSECONDS_D = 0;
-short POWER_TIME_A = 0;
-short POWER_TIME_D = 0;
-short END_POWER_TIME_A = 0;
-short END_POWER_TIME_D = 0;
-
-task manipTimeA()
+void moveDegManipD(int deg, short powStart, short powAfter, float voltage)
 {
-    motor[motA] = POWER_TIME_A;
-    sleep(MSECONDS_A);
-    motor[motA] = END_POWER_TIME_A;
-}
-
-task manipTimeD()
-{
-    motor[motD] = POWER_TIME_D;
-    sleep(MSECONDS_D);
-    motor[motD] = END_POWER_TIME_D;
-}
-
-void startTimeA(int time, int powStart, int powEnd)
-{
-    stopTask(manipTimeA);
-    stopTask(manipMoveA);
-    MSECONDS_A = time;
-    POWER_TIME_A = powStart;
-    END_POWER_TIME_A = powEnd;
-    startTask(manipTimeA);
-}
-
-void startTimeD(int time, int powStart, int powEnd)
-{
-    stopTask(manipTimeD);
-    stopTask(manipMoveD);
-    MSECONDS_D = time;
-    POWER_TIME_D = powStart;
-    END_POWER_TIME_D = powEnd;
-    startTask(manipTimeD);
-}
-
-// returns bool pointer to track when manipalutor stops working
-bool *stratManipA(PIDSettings *PIDSetPtr, int deg, short allowedErr, short startPow, short endPow = 0)
-{
-    stopTask(manipTimeA);
-    stopTask(manipMoveA);
-    MANIP_A_PID_PTR = PIDSetPtr;
-    MANIP_A_DEG_TO_MOVE = deg;
-    MANIP_A_ALLOWED_ERR = allowedErr;
-    MANIP_A_END_POWER_MOVE = endPow;
-    MANIP_A_POWER_MOVE = startPow;
-    startTask(manipMoveA);
-    return &MANIP_A_WORKING;
-}
-
-// returns bool pointer to track when manipalutor stops working
-bool *stratManipD(PIDSettings *PIDSetPtr, int deg, short allowedErr, short startPow, short endPow = 0)
-{
-    stopTask(manipTimeD);
-    stopTask(manipMoveD);
-    MANIP_D_PID_PTR = PIDSetPtr;
-    MANIP_D_DEG_TO_MOVE = deg;
-    MANIP_D_ALLOWED_ERR = allowedErr;
-    MANIP_D_END_POWER_MOVE = endPow;
-    MANIP_D_POWER_MOVE = startPow;
-    startTask(manipMoveD);
-    return &MANIP_D_WORKING;
+    setPowerAdjustBatteryManipD(powStart, voltage);
+    int endDeg;
+    if (powStart >= 0)
+    {
+        endDeg = nMotorEncoder[motD] + deg;
+        while (nMotorEncoder[motD] < endDeg)
+        {
+            sleep(1);
+        }
+    }
+    else
+    {
+        endDeg = nMotorEncoder[motD] - deg;
+        while (nMotorEncoder[motD] > endDeg)
+        {
+            sleep(1);
+        }
+    }
 }

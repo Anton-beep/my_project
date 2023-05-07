@@ -17,9 +17,9 @@
 
 task main (){
 	// define everything
-	//motor[motB] = 0;
-	//motor[motC] = 0;
-	//motor[motD] = 0;
+	motor[motB] = 0;
+	motor[motC] = 0;
+	motor[motD] = 0;
 	//int r, g, b;
 	//getColorRawRGB(sen1, r, g, b);
 	//getColorRawRGB(sen2, r, g, b);
@@ -27,7 +27,7 @@ task main (){
 	//sleep(200);
 
 	setSoundVolume(5);//	RETURN VOLUME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	checkBat();
+	startTask(checkBat);
 	clearTimer(T3);
 	defStructures();
 	//setMotorBrakeMode(motB, motorCoast);

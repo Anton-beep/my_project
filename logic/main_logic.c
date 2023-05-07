@@ -12,7 +12,7 @@ void mainLogic()
 
 void testFunc()
 {
-    testAdjust();
+    testMotorCalibrationDebStream(100, 100);
 
     // displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION);
 

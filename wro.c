@@ -30,10 +30,10 @@ task main (){
 	startTask(checkBat);
 	clearTimer(T3);
 	defStructures();
-	//setMotorBrakeMode(motB, motorCoast);
-	//setMotorBrakeMode(motC, motorCoast);
+	setMotorBrakeMode(motB, motorCoast);
+	setMotorBrakeMode(motC, motorCoast);
 	//setMotorBrakeMode(motD, motorCoast);
-	//startTask(PIDEngineMot, 7);
+	startTask(PIDEngineMot, 7);
 	//startTask(checkMotorProblems, 7);
 	//startTask(keepBMoving);
 	//startTask(keepCMoving);

@@ -17,23 +17,23 @@
 
 task main (){
 	// define everything
-	motor[motB] = 0;
-	motor[motC] = 0;
-	motor[motD] = 0;
-	int r, g, b;
-	getColorRawRGB(sen1, r, g, b);
-	getColorRawRGB(sen2, r, g, b);
-	getColorRawRGB(sen3, r, g, b);
-	sleep(200);
+	//motor[motB] = 0;
+	//motor[motC] = 0;
+	//motor[motD] = 0;
+	//int r, g, b;
+	//getColorRawRGB(sen1, r, g, b);
+	//getColorRawRGB(sen2, r, g, b);
+	//getColorRawRGB(sen3, r, g, b);
+	//sleep(200);
 
-	setSoundVolume(30);
+	setSoundVolume(5);//	RETURN VOLUME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	checkBat();
 	clearTimer(T3);
 	defStructures();
-	setMotorBrakeMode(motB, motorCoast);
-	setMotorBrakeMode(motC, motorCoast);
-	setMotorBrakeMode(motD, motorCoast);
-	startTask(PIDEngineMot, 7);
+	//setMotorBrakeMode(motB, motorCoast);
+	//setMotorBrakeMode(motC, motorCoast);
+	//setMotorBrakeMode(motD, motorCoast);
+	//startTask(PIDEngineMot, 7);
 	//startTask(checkMotorProblems, 7);
 	//startTask(keepBMoving);
 	//startTask(keepCMoving);

@@ -717,7 +717,9 @@ void mainLogic()
 
 void testFunc()
 {
-    displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION);
+    moveBCSmartAccel(1, 100, -100, 17, -17);
+
+    // displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION);
 
     // startTimeD(400, -65, -50);
     // sleep(3000);

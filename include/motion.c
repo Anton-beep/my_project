@@ -363,6 +363,143 @@ void moveBC3PartsMainC(float dist1, float dist2, float dist3, float startPowB, f
     moveBCAccelPartMainC(dist3, maxPowB, maxPowC, endPowB, endPowC);
 }
 
+// Adjust movement depending on SAFE_START_ACCEL and SAFE_END_ACCEL
+void moveBCSmartAccel(int dist, float startPowB, float startPowC, float endPowB, float endPowC, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
+{
+    int incDeg, decDeg, fromStartDecDeg;
+    float maxPowerB, maxPowerC;
+    incDeg = round((pow(MOTORS_MAX_POWER, 2) - pow(max(fabs(startPowB), fabs(startPowC)), 2)) / (2 * startAccel));
+    decDeg = round((pow(MOTORS_MAX_POWER, 2) - pow(max(fabs(endPowB), fabs(endPowC)), 2)) / (2 * endAccel));
+    fromStartDecDeg = round((pow(max(fabs(startPowB), fabs(startPowC)), 2) - pow(max(fabs(endPowB), fabs(endPowC)), 2)) / (2 * endAccel));
+
+    if (fromStartDecDeg >= dist){
+        playSound(soundException);
+
+        // eraseDisplay();
+        // displayCenteredTextLine(0, "fromStartDeg: %d", fromStartDecDeg);
+
+        moveBCAccelPartMainB(dist, startPowB, startPowC, endPowB, endPowC);
+    }
+    else if (dist > incDeg + decDeg)
+    {
+        if (startPowB > 0)
+        {
+            maxPowerB = MOTORS_MAX_POWER;
+        }
+        else
+        {
+            maxPowerB = -1 * MOTORS_MAX_POWER;
+        }
+        if (startPowC > 0)
+        {
+            maxPowerC = MOTORS_MAX_POWER;
+        }
+        else
+        {
+            maxPowerC = -1 * MOTORS_MAX_POWER;
+        }
+
+        // eraseDisplay();
+        // displayCenteredTextLine(0, "incDeg: %d", incDeg);
+        // displayCenteredTextLine(1, "max dist: %d", dist - incDeg - decDeg);
+        // displayCenteredTextLine(2, "decDeg: %d", decDeg);
+        // displayCenteredTextLine(3, "maxPowerB: %d", maxPowerB);
+        // displayCenteredTextLine(4, "maxPowerC: %d", maxPowerC);
+        // displayCenteredTextLine(5, "startPowB: %d", startPowB);
+        // displayCenteredTextLine(6, "startPowC: %d", startPowC);
+        // displayCenteredTextLine(7, "endPowB: %d", endPowB);
+        // displayCenteredTextLine(8, "endPowC: %d", endPowC);
+
+        moveBC3Parts(incDeg, dist - incDeg - decDeg, decDeg, startPowB, startPowC, maxPowerB, maxPowerC, endPowB, endPowC);
+    }
+    else
+    {
+        float maxStartPow = max(fabs(startPowB), fabs(startPowC));
+        float maxEndPow = max(fabs(endPowB), fabs(endPowC));
+        decDeg = round((dist * 2 * startAccel - pow(maxEndPow, 2) + pow(maxStartPow, 2)) / (2 * startAccel + 2 * endAccel));
+        incDeg = dist - decDeg;
+        float startAccelB, startAccelC, endAccelB, endAccelC;
+        if (fabs(startPowB) > fabs(startPowC))
+        {
+            if (startPowB > 0)
+            {
+                startAccelB = startAccel;
+                endAccelB = -1 * endAccel;
+            }
+            else
+            {
+                startAccelB = -1 * startAccel;
+                endAccelB = endAccel;
+            }
+            if (startPowC > 0)
+            {
+                startAccelC = startAccel * fabs(startPowC) / fabs(startPowB);
+                endAccelC = -1 * endAccel * fabs(endPowC) / fabs(endPowB);
+            }
+            else
+            {
+                startAccelC = -1 * startAccel * fabs(startPowC) / fabs(startPowB);
+                endAccelC = endAccel * fabs(endPowC) / fabs(endPowB);
+            }
+        }
+        else
+        {
+            if (startPowC > 0)
+            {
+                startAccelC = startAccel;
+                endAccelC = -1 * endAccel;
+            }
+            else
+            {
+                startAccelC = -1 * startAccel;
+                endAccelC = endAccel;
+            }
+            if (startPowB > 0)
+            {
+                startAccelB = startAccel * fabs(startPowB) / fabs(startPowC);
+                endAccelB = -1 * endAccel * fabs(endPowB) / fabs(endPowC);
+            }
+            else
+            {
+                startAccelB = -1 * startAccel * fabs(startPowB) / fabs(startPowC);
+                endAccelB = endAccel * fabs(endPowB) / fabs(endPowC);
+            }
+        }
+
+        float maxPowerB, maxPowerC;
+        if (startPowB > 0)
+        {
+            maxPowerB = sqrt(pow(startPowB, 2) + 2 * fabs(startAccelB) * incDeg);
+        }
+        else
+        {
+            maxPowerB = -1 * sqrt(pow(startPowB, 2) + 2 * fabs(startAccelB) * incDeg);
+        }
+
+        if (startPowC > 0)
+        {
+            maxPowerC = sqrt(pow(startPowC, 2) + 2 * fabs(startAccelC) * incDeg);
+        }
+        else
+        {
+            maxPowerC = -1 * sqrt(pow(startPowC, 2) + 2 * fabs(startAccelC) * incDeg);
+        }
+
+        // eraseDisplay();
+        // displayCenteredTextLine(0, "incDeg: %d", incDeg);
+        // displayCenteredTextLine(1, "decDeg: %d", decDeg);
+        // displayCenteredTextLine(2, "startAccelB: %f", startAccelB);
+        // displayCenteredTextLine(3, "startAccelC: %f", startAccelC);
+        // displayCenteredTextLine(4, "endAccelB: %f", endAccelB);
+        // displayCenteredTextLine(5, "endAccelC: %f", endAccelC);
+        // displayCenteredTextLine(6, "maxPowerB: %f", maxPowerB);
+        // displayCenteredTextLine(7, "maxPowerC: %f", maxPowerC);
+
+        moveBCCustomAccelMainB(incDeg, startPowB, startPowC, startAccelB, startAccelC);
+        moveBCCustomAccelMainB(decDeg, maxPowerB, maxPowerC, endAccelB, endAccelC);
+    }
+}
+
 // turns one wheel or tank
 // -------------------------------------------------------------------------------------------------------------------------
 
@@ -388,6 +525,20 @@ void turnCDegr(float circleDeg1, float circleDeg2, float circleDeg3, float start
     moveC3Parts(deg1, deg2, deg3, startPow, maxPow, endPow);
 }
 
+void turnBDegrSmartAccel(float circleDeg, float startPow, float endPow, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
+{
+    float dist = bigCircleDegToCm(circleDeg);
+    float deg = cmToDeg(dist);
+    moveBCSmartAccel(deg, startPow, 0, endPow, 0, startAccel, endAccel);
+}
+
+void turnCDegrSmartAccel(float circleDeg, float startPow, float endPow, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
+{
+    float dist = bigCircleDegToCm(circleDeg);
+    float deg = cmToDeg(dist);
+    moveBCSmartAccel(deg, 0, startPow, 0, endPow, startAccel, endAccel);
+}
+
 // NS - no sensors
 // clock turn -> +
 void tankTurnNS3Parts(float circleDeg1, float circleDeg2, float circleDeg3, float startPowB, float startPowC, float maxPowB, float maxPowC, float endPowB, float endPowC)
@@ -399,4 +550,11 @@ void tankTurnNS3Parts(float circleDeg1, float circleDeg2, float circleDeg3, floa
     float deg2 = cmToDeg(dist2);
     float deg3 = cmToDeg(dist3);
     moveBC3Parts(deg1, deg2, deg3, startPowB, startPowC, maxPowB, maxPowC, endPowB, endPowC);
+}
+
+void tankTurnNSSmartAccel(float circleDeg, float startPowB, float startPowC, float endPowB, float endPowC, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
+{
+    float dist = circleDegToCm(circleDeg);
+    float deg = cmToDeg(dist);
+    moveBCSmartAccel(deg, startPowB, startPowC, endPowB, endPowC, startAccel, endAccel);
 }

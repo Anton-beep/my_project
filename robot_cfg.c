@@ -9,6 +9,9 @@ const float BASE_LEN = 17.85;
 const short MOTORS_MAX_POWER = 100;
 const short MOTORS_MIN_POWER = 0;
 
+const float SAFE_START_ACCEL = 15;
+const float SAFE_END_ACCEL = 7;
+
 const float KOEF_ENC_B = 1;
 const float KOEF_ENC_C = 1;
 

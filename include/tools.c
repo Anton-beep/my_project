@@ -13,20 +13,15 @@ bool difSignsFloat(float val1, float val2)
     return (val1 < 0) ? (val2 >= 0) : (val2 < 0);
 }
 
+#define copySign(x) ((x) < 0 ? -1 : 1)
+
 float cmToDeg(float cm)
 {
     return 360 * cm / (PI * WHEEL_DIAMETER);
 }
 
-float min(float a, float b)
-{
-    return a < b ? a : b;
-}
-
-float max(float a, float b)
-{
-    return a > b ? a : b;
-}
+#define max(x, y) (((x) > (y)) ? (x) : (y))
+#define min(x, y) (((x) < (y)) ? (x) : (y))
 
 float circleDegToCm(float cd)
 {

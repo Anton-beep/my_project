@@ -38,14 +38,14 @@ void moveBC(float dist, float powB, float powC)
     {
         endDegB = startDegB + dist;
         setNewMotBCPowersAndRatio(powB, powC);
-        while (getEncoderB() < endDegB)
+        while (getEncoderB() < endDegB){sleep(1);}
             ;
     }
     else
     {
         endDegB = startDegB - dist;
         setNewMotBCPowersAndRatio(powB, powC);
-        while (getEncoderB() > endDegB)
+        while (getEncoderB() > endDegB){sleep(1);}
             ;
     }
 }
@@ -59,14 +59,14 @@ void moveBCMainC(float dist, float powB, float powC)
     {
         endDegC = startDegC + dist;
         setNewMotBCPowersAndRatio(powB, powC);
-        while (getEncoderC() < endDegC)
+        while (getEncoderC() < endDegC){sleep(1);}
             ;
     }
     else
     {
         endDegC = startDegC - dist;
         setNewMotBCPowersAndRatio(powB, powC);
-        while (getEncoderC() > endDegC)
+        while (getEncoderC() > endDegC){sleep(1);}
             ;
     }
 }
@@ -80,14 +80,14 @@ void moveB(float dist, float pow)
     {
         endDegB = startDegB + dist;
         setNewMotBCPowersAndRatio(pow, 0);
-        while (getEncoderB() < endDegB)
+        while (getEncoderB() < endDegB){sleep(1);}
             ;
     }
     else
     {
         endDegB = startDegB - dist;
         setNewMotBCPowersAndRatio(pow, 0);
-        while (getEncoderB() > endDegB)
+        while (getEncoderB() > endDegB){sleep(1);}
             ;
     }
 }
@@ -101,14 +101,14 @@ void moveC(float dist, float pow)
     {
         endDegC = startDegC + dist;
         setNewMotBCPowersAndRatio(0, pow);
-        while (getEncoderC() < endDegC)
+        while (getEncoderC() < endDegC){sleep(1);}
             ;
     }
     else
     {
         endDegC = startDegC - dist;
         setNewMotBCPowersAndRatio(0, pow);
-        while (getEncoderC() > endDegC)
+        while (getEncoderC() > endDegC){sleep(1);}
             ;
     }
 }
@@ -195,6 +195,7 @@ void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, fl
                     flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
                     startTime = nPgmTime;
                 }
+                sleep(1);
             }
         }
         else
@@ -217,6 +218,7 @@ void moveBCCustomAccelMainB(float dist, float powB, float powC, float accelB, fl
                     flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
                     startTime = nPgmTime;
                 }
+                sleep(1);
             }
         }
     }
@@ -256,6 +258,7 @@ void moveBCCustomAccelMainC(float dist, float powB, float powC, float accelB, fl
                     flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
                     startTime = nPgmTime;
                 }
+                sleep(1);
             }
         }
         else
@@ -278,6 +281,7 @@ void moveBCCustomAccelMainC(float dist, float powB, float powC, float accelB, fl
                     flagAccel = applyNewAccels(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPowC);
                     startTime = nPgmTime;
                 }
+                sleep(1);
             }
         }
     }

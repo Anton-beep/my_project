@@ -12,6 +12,7 @@ void line2SenDist(PIDSettings *PIDSet, float dist, float pow)
     while (getEncoderB() > endDegB)
     {
         PID2SensWork(PIDSet, pow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -25,6 +26,7 @@ void lineSen1InDist(PIDSettings *PIDSet, float dist, float pow, float target)
     while (getEncoderB() > endDegB)
     {
         PIDSen1InWork(PIDSet, target, pow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -38,6 +40,7 @@ void lineSen2InDist(PIDSettings *PIDSet, float dist, float pow, float target)
     while (getEncoderB() > endDegB)
     {
         PIDSen2InWork(PIDSet, target, pow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -51,6 +54,7 @@ void lineSen1OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
     while (getEncoderB() > endDegB)
     {
         PIDSen1InWork(PIDSet, target, pow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -64,6 +68,7 @@ void lineSen2OutDist(PIDSettings *PIDSet, float dist, float pow, float target)
     while (getEncoderB() > endDegB)
     {
         PIDSen2InWork(PIDSet, target, pow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -122,6 +127,7 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
             startTime = nPgmTime;
         }
         PID2SensWork(PIDSet, newPow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -147,6 +153,7 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
             startTime = nPgmTime;
         }
         PIDSen1InWork(PIDSet, target, newPow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -172,6 +179,7 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
             startTime = nPgmTime;
         }
         PIDSen2InWork(PIDSet, target, newPow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -198,6 +206,7 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
             startTime = nPgmTime;
         }
         PIDSen1OutWork(PIDSet, target, newPow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -223,6 +232,7 @@ void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
             startTime = nPgmTime;
         }
         PIDSen2OutWork(PIDSet, target, newPow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -315,6 +325,7 @@ void line2SenCrawl(PIDSettings *PIDSet, float pow, float blackLineSumRGBSen1, fl
     while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGBSen1 || readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGBSen2)
     {
         PID2SensWork(PIDSet, pow);
+        sleep(1);
     }
     MOT_PID_SETTINGS.pauseAction = false;
 }
@@ -326,19 +337,27 @@ void tankTurnSenCrawl(float powB1Part, float powC1Part, float powB2Part, float p
     {
         setNewMotBCPowersAndRatio(powB1Part, powC1Part);
         while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB1)
-            ;
+        {
+            sleep(1);
+        };
         setNewMotBCPowersAndRatio(powB2Part, powC2Part);
         while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB2)
-            ;
+        {
+            sleep(1);
+        };
     }
     else
     {
         setNewMotBCPowersAndRatio(powB1Part, powC1Part);
         while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB1)
-            ;
+        {
+            sleep(1);
+        };
         setNewMotBCPowersAndRatio(powB2Part, powC2Part);
         while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB2)
-            ;
+        {
+            sleep(1);
+        };
     }
 }
 
@@ -348,19 +367,27 @@ void turnBSenCrawl(float powB1Part, float powB2Part, float blackLineSumRGB1, flo
     {
         setNewMotBCPowersAndRatio(powB1Part, 0);
         while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB1)
-            ;
+        {
+            sleep(1);
+        };
         setNewMotBCPowersAndRatio(powB2Part, 0);
         while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB2)
-            ;
+        {
+            sleep(1);
+        };
     }
     else
     {
         setNewMotBCPowersAndRatio(powB1Part, 0);
         while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB1)
-            ;
+        {
+            sleep(1);
+        };
         setNewMotBCPowersAndRatio(powB2Part, 0);
         while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB2)
-            ;
+        {
+            sleep(1);
+        };
     }
 }
 
@@ -370,19 +397,27 @@ void turnCSenCrawl(float powC1Part, float powC2Part, float blackLineSumRGB1, flo
     {
         setNewMotBCPowersAndRatio(0, powC1Part);
         while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB1)
-            ;
+        {
+            sleep(1);
+        };
         setNewMotBCPowersAndRatio(0, powC2Part);
         while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB2)
-            ;
+        {
+            sleep(1);
+        };
     }
     else
     {
         setNewMotBCPowersAndRatio(0, powC1Part);
         while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB1)
-            ;
+        {
+            sleep(1);
+        };
         setNewMotBCPowersAndRatio(0, powC2Part);
         while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB2)
-            ;
+        {
+            sleep(1);
+        };
     }
 }
 
@@ -400,35 +435,46 @@ void correctWithLine(float powB1, float powC1, float powB2, float powC2, float b
         {
             flagSen2First = true;
         }
+        sleep(1);
     }
     if (flagSen1First)
     {
         setNewMotBCPowersAndRatio(0, powC2);
         while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineRGB2Sen2)
-            ;
+        {
+            sleep(1);
+        };
     }
     else if (flagSen2First)
     {
         setNewMotBCPowersAndRatio(powB2, 0);
         while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineRGB2Sen1)
-            ;
+        {
+            sleep(1);
+        };
     }
 }
 
 void waitForLine(float blackLineSumRGBSen1, float blackLineSumRGBSen2)
 {
     while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGBSen1 || readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGBSen2)
-        ;
+    {
+        sleep(1);
+    };
 }
 
 void waitForSen1(float blackLineSumRGB)
 {
     while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGB)
-        ;
+    {
+        sleep(1);
+    };
 }
 
 void waitForSen2(float blackLineSumRGB)
 {
     while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGB)
-        ;
+    {
+        sleep(1);
+    };
 }

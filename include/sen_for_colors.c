@@ -158,6 +158,7 @@ task readRowOfObjectsHSV()
                 READ_ROW_OF_OBJECTS_RES_LEN++;
             }
         }
+        sleep(1);
     }
 }
 
@@ -182,6 +183,7 @@ task readRowOfObjectsRGB()
                 READ_ROW_OF_OBJECTS_RES_LEN++;
             }
         }
+        sleep(1);
     }
 }
 

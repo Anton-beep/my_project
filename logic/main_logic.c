@@ -12,7 +12,15 @@ void mainLogic()
 
 void testFunc()
 {
-    testMotorCalibrationDebStream(100, 100);
+    SenRGBVals vals;
+    while (true)
+    {
+        readCalibratedSenRGB(sen1, &SEN1_CALIBRATION, &vals);
+        writeDebugStreamLine("%f; %f; %f", vals.R, vals.G, vals.B);
+        sleep(5);
+    }
+
+    // testMotorCalibrationDebStream(100, 100);
 
     // displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION);
 

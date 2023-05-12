@@ -15,6 +15,9 @@ const float SAFE_END_ACCEL = 7;
 const float KOEF_ENC_B = 1;
 const float KOEF_ENC_C = 1;
 
+// power of motors will be bigger than this number
+const short MIN_SEN_POWER = 7;
+
 const float PREDICT_KOEF = 0.2346;
 
 // MOTORS PID CONTROLLER
@@ -75,13 +78,13 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN1_CALIBRATION.minR = 41;
-    SEN1_CALIBRATION.minG = 52;
-    SEN1_CALIBRATION.minB = 34;
+    SEN1_CALIBRATION.minR = 20;
+    SEN1_CALIBRATION.minG = 20;
+    SEN1_CALIBRATION.minB = 21;
 
-    SEN1_CALIBRATION.maxR = 336;
-    SEN1_CALIBRATION.maxG = 441;
-    SEN1_CALIBRATION.maxB = 322;
+    SEN1_CALIBRATION.maxR = 185;
+    SEN1_CALIBRATION.maxG = 204;
+    SEN1_CALIBRATION.maxB = 217;
 
     // ----------------------------------
 

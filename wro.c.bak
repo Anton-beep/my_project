@@ -24,7 +24,7 @@ task main (){
 	getColorRawRGB(sen1, r, g, b);
 	//getColorRawRGB(sen2, r, g, b);
 	//getColorRawRGB(sen3, r, g, b);
-		sleep(200);
+	sleep(200);
 
 	setSoundVolume(5);//	RETURN VOLUME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	startTask(checkBat);

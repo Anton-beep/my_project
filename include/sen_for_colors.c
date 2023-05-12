@@ -91,13 +91,13 @@ int mean(int *a, int n)
 const int WIN_ARR_LEN = 6;
 int WIN_ARR[WIN_ARR_LEN];
 
-int readWindowHSV(short sen, SenSettings *senSet, SenHSVVals *nothingPtr, int *samples, int lenArr)
+int readWindowHSV(short sen, SenSettings *senSet, SenHSVVals *nothingPtr, int nothingMaxVal, int *samples, int lenArr)
 {
     SenHSVVals buf;
     for (int i = 0; i < WIN_ARR_LEN; i++)
     {
         readCalibratedSenHSV(sen, senSet, &buf);
-        if (buf.V < 13)
+        if (buf.V < nothingMaxVal)
         {
             WIN_ARR[i] = (int)nothingPtr;
         }
@@ -131,6 +131,7 @@ short READ_ROW_OF_OBJECTS_LEN_IN_POINTERS = 0;
 short READ_ROW_OF_OBJECTS_RES_LEN = 0;
 short READ_ROW_OF_OBJECTS_SEN = sen3;
 SenHSVVals *NOTHING_PTR;
+int NOTHING_MAX_VAL;
 SenSettings *READ_ROW_OF_OBJECTS_SEN_CALIBRATION_PTR = &SEN3_CALIBRATION;
 bool *READ_ROW_OF_OBJECTS_PTR_WORK_FLAG;
 
@@ -142,7 +143,7 @@ task readRowOfObjectsHSV()
     short nowInd = 0;
     while (nowInd < READ_ROW_MAX_OBJECTS)
     {
-        int nowPtr = readWindowHSV(READ_ROW_OF_OBJECTS_SEN, READ_ROW_OF_OBJECTS_SEN_CALIBRATION_PTR, NOTHING_PTR, READ_ROW_OF_OBJECTS_IN_POINTERS, READ_ROW_OF_OBJECTS_LEN_IN_POINTERS);
+        int nowPtr = readWindowHSV(READ_ROW_OF_OBJECTS_SEN, READ_ROW_OF_OBJECTS_SEN_CALIBRATION_PTR, NOTHING_PTR, NOTHING_MAX_VAL, READ_ROW_OF_OBJECTS_IN_POINTERS, READ_ROW_OF_OBJECTS_LEN_IN_POINTERS);
         if (nowInd == 0)
         {
             READ_ROW_OF_OBJECTS_RES[nowInd] = nowPtr;
@@ -204,10 +205,11 @@ int *setReadRowOfObjects(int *inPtrsArr, int lenInPtrsArr, short sen, SenSetting
     return READ_ROW_OF_OBJECTS_RES;
 }
 
-int *startReadRowOfObjectsHSV(SenHSVVals *nothingPtr, int *inPtrsArr, int lenInPtrsArr, short sen, SenSettings *senSet)
+int *startReadRowOfObjectsHSV(SenHSVVals *nothingPtr, int nothingMaxVal, int *inPtrsArr, int lenInPtrsArr, short sen, SenSettings *senSet)
 {
     int *buf = setReadRowOfObjects(inPtrsArr, lenInPtrsArr, sen, senSet);
     NOTHING_PTR = nothingPtr;
+    NOTHING_MAX_VAL = nothingMaxVal;
     startTask(readRowOfObjectsHSV);
     return buf;
 }

@@ -12,13 +12,7 @@ void mainLogic()
 
 void testFunc()
 {
-    SenRGBVals vals;
-    while (true)
-    {
-        readCalibratedSenRGB(sen1, &SEN1_CALIBRATION, &vals);
-        writeDebugStreamLine("%f; %f; %f", vals.R, vals.G, vals.B);
-        sleep(5);
-    }
+    runMot(motA);
 
     // testMotorCalibrationDebStream(100, 100);
 

@@ -16,23 +16,37 @@ void stopD()
 
 void setPowerAdjustBatteryManipA(short pow, float batVoltage)
 {
-    motor[motA] = pow * batVoltage / getBatteryVoltage();
+    float val = pow * batVoltage / getBatteryVoltage();
+    if (val < 0)
+    {
+        motor[motA] = min(-1, val);
+    }
+    else
+    {
+        motor[motA] = max(1, val);
+    }
 }
 
 void setPowerAdjustBatteryManipD(short pow, float batVoltage)
 {
-    motor[motD] = pow * batVoltage / getBatteryVoltage();
+    float val = pow * batVoltage / getBatteryVoltage();
+    if (val < 0)
+    {
+        motor[motD] = min(-1, val);
+    }
+    else
+    {
+        motor[motD] = max(1, val);
+    }
 }
 
 void testAdjust()
 {
-    setPowerAdjustBatteryManipD(80, 7.6);
-    while (getButtonPress(buttonEnter) == false)
+    setPowerAdjustBatteryManipA(80, 7.6);
+    while (true)
     {
-        eraseDisplay();
-        displayCenteredTextLine(5, "%f", getBatteryVoltage());
-        displayCenteredTextLine(10, "%d", getSignedRPM(motD));
-        sleep(100);
+        writeDebugStreamLine("%f; %d", getBatteryVoltage(), getSignedRPM(motA));
+        sleep(1);
     }
 }
 
@@ -92,5 +106,36 @@ void moveDegManipD(int deg, short powStart, short powAfter, float voltage)
         {
             sleep(1);
         }
+    }
+}
+
+void runMot(short mot){
+    int pow = 0;
+    bool pressedUp = false;
+    bool pressedDown = false;
+    while (getButtonPress(buttonEnter) == false){
+        if (getButtonPress(buttonLeft))
+            motor[mot] = -1 * pow;
+        else if (getButtonPress(buttonRight))
+            motor[mot] = pow;
+        else
+            motor[mot] = 0;
+        
+        if (getButtonPress(buttonUp))
+            pressedUp = true;
+        else if (getButtonPress(buttonDown))
+            pressedDown = true;
+        
+        if (getButtonPress(buttonUp) == false && pressedUp == true){
+            pressedUp = false;
+            pow++;
+        }
+        else if (getButtonPress(buttonDown) == false && pressedDown == true){
+            pressedDown = false;
+            pow--;
+        }
+        eraseDisplay();
+        displayTextLine(1, "Pow: %d", pow);
+        sleep(100);
     }
 }

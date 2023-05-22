@@ -21,7 +21,7 @@ task main (){
 	motor[motC] = 0;
 	motor[motD] = 0;
 	int r, g, b;
-	getColorRawRGB(sen1, r, g, b);
+	//getColorRawRGB(sen1, r, g, b);
 	//getColorRawRGB(sen2, r, g, b);
 	//getColorRawRGB(sen3, r, g, b);
 		sleep(200);

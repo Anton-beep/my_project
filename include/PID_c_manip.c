@@ -16,27 +16,41 @@ void stopD()
 
 void setPowerAdjustBatteryManipA(short pow, float batVoltage)
 {
-    float val = pow * batVoltage / getBatteryVoltage();
-    if (val < 0)
+    if (pow == 0)
     {
-        motor[motA] = min(-1, val);
+        motor[motA] = 0;
     }
     else
     {
-        motor[motA] = max(1, val);
+        float val = pow * batVoltage / getBatteryVoltage();
+        if (val < 0)
+        {
+            motor[motA] = min(-1, val);
+        }
+        else
+        {
+            motor[motA] = max(1, val);
+        }
     }
 }
 
 void setPowerAdjustBatteryManipD(short pow, float batVoltage)
 {
-    float val = pow * batVoltage / getBatteryVoltage();
-    if (val < 0)
+    if (pow == 0)
     {
-        motor[motD] = min(-1, val);
+        motor[motD] = 0;
     }
     else
     {
-        motor[motD] = max(1, val);
+        float val = pow * batVoltage / getBatteryVoltage();
+        if (val < 0)
+        {
+            motor[motD] = min(-1, val);
+        }
+        else
+        {
+            motor[motD] = max(1, val);
+        }
     }
 }
 
@@ -50,27 +64,60 @@ void testAdjust()
     }
 }
 
-void moveTimeManipA(int time, short powStart, short powAfter, float voltage)
+short TIME_MANIP_A_START_POW;
+short TIME_MANIP_A_AFTER_POW;
+float TIME_MANIP_A_VOLTAGE;
+int TIME_MANIP_A_TIME;
+
+task moveTimeManipA()
 {
-    setPowerAdjustBatteryManipA(powStart, voltage);
-    sleep(time);
-    setPowerAdjustBatteryManipA(powAfter, voltage);
+    setPowerAdjustBatteryManipA(TIME_MANIP_A_START_POW, TIME_MANIP_A_VOLTAGE);
+    sleep(TIME_MANIP_A_TIME);
+    setPowerAdjustBatteryManipA(TIME_MANIP_A_AFTER_POW, TIME_MANIP_A_VOLTAGE);
 }
 
-void moveTimeManipD(int time, short powStart, short powAfter, float voltage)
+short TIME_MANIP_D_START_POW;
+short TIME_MANIP_D_AFTER_POW;
+float TIME_MANIP_D_VOLTAGE;
+int TIME_MANIP_D_TIME;
+
+task moveTimeManipD()
 {
-    setPowerAdjustBatteryManipD(powStart, voltage);
-    sleep(time);
-    setPowerAdjustBatteryManipD(powAfter, voltage);
+    setPowerAdjustBatteryManipD(TIME_MANIP_D_START_POW, TIME_MANIP_D_VOLTAGE);
+    sleep(TIME_MANIP_D_TIME);
+    setPowerAdjustBatteryManipD(TIME_MANIP_D_AFTER_POW, TIME_MANIP_D_VOLTAGE);
 }
 
-void moveDegManipA(int deg, short powStart, short powAfter, float voltage)
+void setTimeManipA(int time, short powStart, short powAfter, float voltage = 7.9)
 {
-    setPowerAdjustBatteryManipA(powStart, voltage);
+    TIME_MANIP_A_START_POW = powStart;
+    TIME_MANIP_A_AFTER_POW = powAfter;
+    TIME_MANIP_A_VOLTAGE = voltage;
+    TIME_MANIP_A_TIME = time;
+    startTask(moveTimeManipA);
+}
+
+void setTimeManipD(int time, short powStart, short powAfter, float voltage = 7.9)
+{
+    TIME_MANIP_D_START_POW = powStart;
+    TIME_MANIP_D_AFTER_POW = powAfter;
+    TIME_MANIP_D_VOLTAGE = voltage;
+    TIME_MANIP_D_TIME = time;
+    startTask(moveTimeManipD);
+}
+
+int DEG_MANIP_A_DEG;
+short DEG_MANIP_A_START_POW;
+short DEG_MANIP_A_AFTER_POW;
+float DEG_MANIP_A_VOLTAGE;
+
+task moveDegManipA()
+{
+    setPowerAdjustBatteryManipA(DEG_MANIP_A_START_POW, DEG_MANIP_A_VOLTAGE);
     int endDeg;
-    if (powStart >= 0)
+    if (DEG_MANIP_A_START_POW >= 0)
     {
-        endDeg = nMotorEncoder[motA] + deg;
+        endDeg = nMotorEncoder[motA] + DEG_MANIP_A_DEG;
         while (nMotorEncoder[motA] < endDeg)
         {
             sleep(1);
@@ -78,22 +125,27 @@ void moveDegManipA(int deg, short powStart, short powAfter, float voltage)
     }
     else
     {
-        endDeg = nMotorEncoder[motA] - deg;
+        endDeg = nMotorEncoder[motA] - DEG_MANIP_A_DEG;
         while (nMotorEncoder[motA] > endDeg)
         {
             sleep(1);
         }
     }
-    setPowerAdjustBatteryManipA(powAfter, voltage);
+    setPowerAdjustBatteryManipA(DEG_MANIP_A_AFTER_POW, DEG_MANIP_A_VOLTAGE);
 }
 
-void moveDegManipD(int deg, short powStart, short powAfter, float voltage)
+int DEG_MANIP_D_DEG;
+short DEG_MANIP_D_START_POW;
+short DEG_MANIP_D_AFTER_POW;
+float DEG_MANIP_D_VOLTAGE;
+
+task moveDegManipD()
 {
-    setPowerAdjustBatteryManipD(powStart, voltage);
+    setPowerAdjustBatteryManipD(DEG_MANIP_D_START_POW, DEG_MANIP_D_VOLTAGE);
     int endDeg;
-    if (powStart >= 0)
+    if (DEG_MANIP_D_START_POW >= 0)
     {
-        endDeg = nMotorEncoder[motD] + deg;
+        endDeg = nMotorEncoder[motD] + DEG_MANIP_D_DEG;
         while (nMotorEncoder[motD] < endDeg)
         {
             sleep(1);
@@ -101,36 +153,59 @@ void moveDegManipD(int deg, short powStart, short powAfter, float voltage)
     }
     else
     {
-        endDeg = nMotorEncoder[motD] - deg;
+        endDeg = nMotorEncoder[motD] - DEG_MANIP_D_DEG;
         while (nMotorEncoder[motD] > endDeg)
         {
             sleep(1);
         }
     }
+    setPowerAdjustBatteryManipD(DEG_MANIP_D_AFTER_POW, DEG_MANIP_D_VOLTAGE);
 }
 
-void runMot(short mot){
+void setDegManipA(int deg, short powStart, short powAfter, float voltage = 8)
+{
+    DEG_MANIP_A_DEG = deg;
+    DEG_MANIP_A_START_POW = powStart;
+    DEG_MANIP_A_AFTER_POW = powAfter;
+    DEG_MANIP_A_VOLTAGE = voltage;
+    startTask(moveDegManipA);
+}
+
+void setDegManipD(int deg, short powStart, short powAfter, float voltage = 8)
+{
+    DEG_MANIP_D_DEG = deg;
+    DEG_MANIP_D_START_POW = powStart;
+    DEG_MANIP_D_AFTER_POW = powAfter;
+    DEG_MANIP_D_VOLTAGE = voltage;
+    startTask(moveDegManipD);
+}
+
+void runMot(short mot)
+{
     int pow = 0;
     bool pressedUp = false;
     bool pressedDown = false;
-    while (getButtonPress(buttonEnter) == false){
+    while (getButtonPress(buttonEnter) == false)
+    {
         if (getButtonPress(buttonLeft))
             motor[mot] = -1 * pow;
         else if (getButtonPress(buttonRight))
             motor[mot] = pow;
         else
             motor[mot] = 0;
-        
+
         if (getButtonPress(buttonUp))
             pressedUp = true;
         else if (getButtonPress(buttonDown))
             pressedDown = true;
-        
-        if (getButtonPress(buttonUp) == false && pressedUp == true){
+
+        if (getButtonPress(buttonUp) == false && pressedUp == true)
+        {
             pressedUp = false;
             pow++;
         }
-        else if (getButtonPress(buttonDown) == false && pressedDown == true){
+        else if (getButtonPress(buttonDown) == false && pressedDown == true)
+        {
             pressedDown = false;
             pow--;
         }

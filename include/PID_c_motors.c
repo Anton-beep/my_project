@@ -380,3 +380,22 @@ void testMotorCalibrationDebStream(short powB, short powC)
     } 
 }
 
+void testRPM(short mot){
+    eraseDisplay();
+    motor[mot] = 0;
+    while(getButtonPress(buttonEnter) == false)
+    {
+        if (getButtonPress(buttonUp)){
+            motor[mot] += 1;
+            sleep(300);
+        }
+        if (getButtonPress(buttonDown)){
+            motor[mot] -= 1;
+            sleep(300);
+        }
+        displayCenteredTextLine(0, "RPM: %d", getMotorRPM(mot));
+        displayCenteredTextLine(2, "voltage: %f", getBatteryVoltage());
+        displayCenteredTextLine(4, "power: %d", motor[mot]);
+        sleep(100);
+    }
+}

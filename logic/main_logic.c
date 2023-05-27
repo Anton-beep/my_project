@@ -6,17 +6,70 @@
 #include "logic_vars.c"
 #include "define_vals.c"
 
+task setManips()
+{
+    setTimeManipA(300, 100, 1);
+    setTimeManipD(300, -100, -1);
+    sleep(400);
+    resetMotorEncoder(motA);
+    resetMotorEncoder(motD);
+    MANIPS_READY = true;
+}
+
+void takeCubes()
+{
+    line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 25, 200, 200);
+    setDegManipA(77, -10, 0, 8);
+    setDegManipD(80, 10, 0, 8);
+    moveBC(50, -20, 20);
+    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 200, 0, 538, 30, 80, 3);
+    stopBC();
+}
+
+task takeLeftCubeFromPos()
+{
+    setDegManipA(40, -20, -70, 8);
+    setDegManipA(60, -70, -10, 8);
+    LEFT_CUBE_READY = true;
+}
+
+task takeRightCubeFromPos()
+{
+    setDegManipD(40, 20, 70, 8);
+    setDegManipD(60, 70, 10, 8);
+    RIGHT_CUBE_READY = true;
+}
+
+void takeFromPosCubes()
+{
+    startTask(takeLeftCubeFromPos);
+    startTask(takeRightCubeFromPos);
+    while (!LEFT_CUBE_READY || !RIGHT_CUBE_READY)
+    {
+        sleep(1);
+    }
+    moveBC(125, -25, 25);
+    stopBC();
+    setTimeManipA(500, -90, -10);
+    setTimeManipD(500, 90, 10);
+    sleep(500)
+}
+
 void mainLogic()
 {
+    sleep(5000);
+    startTask(setManips);
+    sleep(500);
+    takeCubes();
+    takeFromPosCubes();
+    moveBC(400, 50, -50);
 }
 
 void testFunc()
 {
-    runMot(motA);
+    testRPM(motA);
 
     // testMotorCalibrationDebStream(100, 100);
-
-    // displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION);
 
     // startTimeD(400, -65, -50);
     // sleep(3000);

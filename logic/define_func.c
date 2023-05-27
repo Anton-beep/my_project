@@ -23,6 +23,10 @@ void define_main()
     #elif TEST_MOTOR_CALIBRATION == 1
         testMotCalibration(10, 100, 100);
         stopAllTasks();
+    #elif ONLY_SHOW_VOLTAGE == 1
+        startTask(checkBat);
+        waitForButtonPress();
+        stopAllTasks();
     #endif
 
 

@@ -2,6 +2,7 @@
 #include "motion.c"
 
 // Line forward
+// TODO: smart accels
 void line2SenDist(PIDSettings *PIDSet, float dist, float pow)
 {
     int startDegB = getEncoderB();

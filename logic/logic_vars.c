@@ -1,3 +1,8 @@
+// ONLY bool _______________________________________________________________
+bool MANIPS_READY = false;
+bool LEFT_CUBE_READY = false;
+bool RIGHT_CUBE_READY = false;
+
 // ONLY int *______________________________________________________________
 int IN_PTRS_FIRST_SCAN[3];
 int IN_PTRS_CUBES[3];

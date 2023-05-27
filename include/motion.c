@@ -368,6 +368,7 @@ void moveBC3PartsMainC(float dist1, float dist2, float dist3, float startPowB, f
 }
 
 // Adjust movement depending on SAFE_START_ACCEL and SAFE_END_ACCEL
+// problem: moveBCSmartAccel(50, -20, 20, -30, 30);
 void moveBCSmartAccel(int dist, float startPowB, float startPowC, float endPowB, float endPowC, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
 {
     int incDeg, decDeg, fromStartDecDeg;

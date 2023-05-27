@@ -78,23 +78,23 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN1_CALIBRATION.minR = 20;
-    SEN1_CALIBRATION.minG = 20;
-    SEN1_CALIBRATION.minB = 21;
+    SEN1_CALIBRATION.minR = 23;
+    SEN1_CALIBRATION.minG = 33;
+    SEN1_CALIBRATION.minB = 14;
 
-    SEN1_CALIBRATION.maxR = 185;
-    SEN1_CALIBRATION.maxG = 204;
-    SEN1_CALIBRATION.maxB = 217;
+    SEN1_CALIBRATION.maxR = 246;
+    SEN1_CALIBRATION.maxG = 282;
+    SEN1_CALIBRATION.maxB = 159;
 
     // ----------------------------------
 
-    SEN2_CALIBRATION.minR = 41;
-    SEN2_CALIBRATION.minG = 51;
-    SEN2_CALIBRATION.minB = 23;
+    SEN2_CALIBRATION.minR = 21;
+    SEN2_CALIBRATION.minG = 27;
+    SEN2_CALIBRATION.minB = 18;
 
-    SEN2_CALIBRATION.maxR = 369;
-    SEN2_CALIBRATION.maxG = 390;
-    SEN2_CALIBRATION.maxB = 209;
+    SEN2_CALIBRATION.maxR = 234;
+    SEN2_CALIBRATION.maxG = 239;
+    SEN2_CALIBRATION.maxB = 221;
 
     // ----------------------------------
 
@@ -131,7 +131,7 @@ void defStructures()
     // power 85 - 100
     DEFAULT_LINE_PID_SUPRA.Kp = 0.29;
     DEFAULT_LINE_PID_SUPRA.Ki = 0.045;
-    DEFAULT_LINE_PID_SUPRA.Kd = 0.00154;
+    DEFAULT_LINE_PID_SUPRA.Kd = 0.0016;
     DEFAULT_LINE_PID_SUPRA.prevErr = 0;
     DEFAULT_LINE_PID_SUPRA.integral = 0;
     DEFAULT_LINE_PID_SUPRA.errNow = 0;
@@ -141,7 +141,7 @@ void defStructures()
     // power 60 - 85
     DEFAULT_LINE_PID_FAST.Kp = 0.27;
     DEFAULT_LINE_PID_FAST.Ki = 0.042;
-    DEFAULT_LINE_PID_FAST.Kd = 0.00151;
+    DEFAULT_LINE_PID_FAST.Kd = 0.0016;
     DEFAULT_LINE_PID_FAST.prevErr = 0;
     DEFAULT_LINE_PID_FAST.integral = 0;
     DEFAULT_LINE_PID_FAST.errNow = 0;
@@ -153,7 +153,7 @@ void defStructures()
     // power 30 - 60
     DEFAULT_LINE_PID_MEDIUM.Kp = 0.25;
     DEFAULT_LINE_PID_MEDIUM.Ki = 0.041;
-    DEFAULT_LINE_PID_MEDIUM.Kd = 0.00149;
+    DEFAULT_LINE_PID_MEDIUM.Kd = 0.00155;
     DEFAULT_LINE_PID_MEDIUM.prevErr = 0;
     DEFAULT_LINE_PID_MEDIUM.integral = 0;
     DEFAULT_LINE_PID_MEDIUM.errNow = 0;
@@ -165,7 +165,7 @@ void defStructures()
     // power 0 - 30
     DEFAULT_LINE_PID_SLOW.Kp = 0.24;
     DEFAULT_LINE_PID_SLOW.Ki = 0.04;
-    DEFAULT_LINE_PID_SLOW.Kd = 0.00145;
+    DEFAULT_LINE_PID_SLOW.Kd = 0.0015;
     DEFAULT_LINE_PID_SLOW.prevErr = 0;
     DEFAULT_LINE_PID_SLOW.integral = 0;
     DEFAULT_LINE_PID_SLOW.errNow = 0;

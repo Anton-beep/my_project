@@ -64,6 +64,25 @@ void testAdjust()
     }
 }
 
+bool MANIP_A_READY = true;
+bool MANIP_D_READY = true;
+
+void waitForManipA()
+{
+    while (!MANIP_A_READY)
+    {
+        sleep(1);
+    }
+}
+
+void waitForManipD()
+{
+    while (!MANIP_D_READY)
+    {
+        sleep(1);
+    }
+}
+
 short TIME_MANIP_A_START_POW;
 short TIME_MANIP_A_AFTER_POW;
 float TIME_MANIP_A_VOLTAGE;
@@ -71,9 +90,11 @@ int TIME_MANIP_A_TIME;
 
 task moveTimeManipA()
 {
+    MANIP_A_READY = false;
     setPowerAdjustBatteryManipA(TIME_MANIP_A_START_POW, TIME_MANIP_A_VOLTAGE);
     sleep(TIME_MANIP_A_TIME);
     setPowerAdjustBatteryManipA(TIME_MANIP_A_AFTER_POW, TIME_MANIP_A_VOLTAGE);
+    MANIP_A_READY = true;
 }
 
 short TIME_MANIP_D_START_POW;
@@ -83,27 +104,11 @@ int TIME_MANIP_D_TIME;
 
 task moveTimeManipD()
 {
+    MANIP_D_READY = false;
     setPowerAdjustBatteryManipD(TIME_MANIP_D_START_POW, TIME_MANIP_D_VOLTAGE);
     sleep(TIME_MANIP_D_TIME);
     setPowerAdjustBatteryManipD(TIME_MANIP_D_AFTER_POW, TIME_MANIP_D_VOLTAGE);
-}
-
-void setTimeManipA(int time, short powStart, short powAfter, float voltage = 7.9)
-{
-    TIME_MANIP_A_START_POW = powStart;
-    TIME_MANIP_A_AFTER_POW = powAfter;
-    TIME_MANIP_A_VOLTAGE = voltage;
-    TIME_MANIP_A_TIME = time;
-    startTask(moveTimeManipA);
-}
-
-void setTimeManipD(int time, short powStart, short powAfter, float voltage = 7.9)
-{
-    TIME_MANIP_D_START_POW = powStart;
-    TIME_MANIP_D_AFTER_POW = powAfter;
-    TIME_MANIP_D_VOLTAGE = voltage;
-    TIME_MANIP_D_TIME = time;
-    startTask(moveTimeManipD);
+    MANIP_D_READY = true;
 }
 
 int DEG_MANIP_A_DEG;
@@ -113,25 +118,27 @@ float DEG_MANIP_A_VOLTAGE;
 
 task moveDegManipA()
 {
+    MANIP_A_READY = false;
     setPowerAdjustBatteryManipA(DEG_MANIP_A_START_POW, DEG_MANIP_A_VOLTAGE);
     int endDeg;
     if (DEG_MANIP_A_START_POW >= 0)
     {
-        endDeg = nMotorEncoder[motA] + DEG_MANIP_A_DEG;
-        while (nMotorEncoder[motA] < endDeg)
+        endDeg = getEncoderA() + DEG_MANIP_A_DEG;
+        while (getEncoderA() < endDeg)
         {
             sleep(1);
         }
     }
     else
     {
-        endDeg = nMotorEncoder[motA] - DEG_MANIP_A_DEG;
-        while (nMotorEncoder[motA] > endDeg)
+        endDeg = getEncoderA() - DEG_MANIP_A_DEG;
+        while (getEncoderA() > endDeg)
         {
             sleep(1);
         }
     }
     setPowerAdjustBatteryManipA(DEG_MANIP_A_AFTER_POW, DEG_MANIP_A_VOLTAGE);
+    MANIP_A_READY = true;
 }
 
 int DEG_MANIP_D_DEG;
@@ -141,43 +148,75 @@ float DEG_MANIP_D_VOLTAGE;
 
 task moveDegManipD()
 {
+    MANIP_D_READY = false;
     setPowerAdjustBatteryManipD(DEG_MANIP_D_START_POW, DEG_MANIP_D_VOLTAGE);
     int endDeg;
     if (DEG_MANIP_D_START_POW >= 0)
     {
-        endDeg = nMotorEncoder[motD] + DEG_MANIP_D_DEG;
-        while (nMotorEncoder[motD] < endDeg)
+        endDeg = getEncoderD() + DEG_MANIP_D_DEG;
+        while (getEncoderD() < endDeg)
         {
             sleep(1);
         }
     }
     else
     {
-        endDeg = nMotorEncoder[motD] - DEG_MANIP_D_DEG;
-        while (nMotorEncoder[motD] > endDeg)
+        endDeg = getEncoderD() - DEG_MANIP_D_DEG;
+        while (getEncoderD() > endDeg)
         {
             sleep(1);
         }
     }
     setPowerAdjustBatteryManipD(DEG_MANIP_D_AFTER_POW, DEG_MANIP_D_VOLTAGE);
+    MANIP_D_READY = true;
 }
 
-void setDegManipA(int deg, short powStart, short powAfter, float voltage = 8)
+bool *setTimeManipA(int time, short powStart, short powAfter, float voltage = 7.9)
 {
+    stopTask(moveTimeManipA);
+    stopTask(moveDegManipA);
+    TIME_MANIP_A_START_POW = powStart;
+    TIME_MANIP_A_AFTER_POW = powAfter;
+    TIME_MANIP_A_VOLTAGE = voltage;
+    TIME_MANIP_A_TIME = time;
+    startTask(moveTimeManipA);
+    return &MANIP_A_READY;
+}
+
+bool *setTimeManipD(int time, short powStart, short powAfter, float voltage = 7.9)
+{
+    stopTask(moveTimeManipD);
+    stopTask(moveDegManipD);
+    TIME_MANIP_D_START_POW = powStart;
+    TIME_MANIP_D_AFTER_POW = powAfter;
+    TIME_MANIP_D_VOLTAGE = voltage;
+    TIME_MANIP_D_TIME = time;
+    startTask(moveTimeManipD);
+    return &MANIP_D_READY;
+}
+
+bool *setDegManipA(int deg, short powStart, short powAfter, float voltage = 8)
+{
+    stopTask(moveDegManipA);
+    stopTask(moveTimeManipA);
     DEG_MANIP_A_DEG = deg;
     DEG_MANIP_A_START_POW = powStart;
     DEG_MANIP_A_AFTER_POW = powAfter;
     DEG_MANIP_A_VOLTAGE = voltage;
     startTask(moveDegManipA);
+    return &MANIP_A_READY;
 }
 
-void setDegManipD(int deg, short powStart, short powAfter, float voltage = 8)
+bool *setDegManipD(int deg, short powStart, short powAfter, float voltage = 8)
 {
+    stopTask(moveDegManipD);
+    stopTask(moveTimeManipD);
     DEG_MANIP_D_DEG = deg;
     DEG_MANIP_D_START_POW = powStart;
     DEG_MANIP_D_AFTER_POW = powAfter;
     DEG_MANIP_D_VOLTAGE = voltage;
     startTask(moveDegManipD);
+    return &MANIP_D_READY;
 }
 
 void runMot(short mot)

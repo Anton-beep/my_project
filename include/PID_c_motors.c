@@ -22,6 +22,11 @@ short ERR_MODE;
 По хорошему нужно придумать механическое устройство
 */
 
+float getEncoderA()
+{
+    return nMotorEncoder[motA] * KOEF_ENC_A;
+}
+
 float getEncoderB()
 {
     return nMotorEncoder[motB] * KOEF_ENC_B;
@@ -30,6 +35,11 @@ float getEncoderB()
 float getEncoderC()
 {
     return nMotorEncoder[motC] * KOEF_ENC_C;
+}
+
+float getEncoderD()
+{
+    return nMotorEncoder[motD] * KOEF_ENC_D;
 }
 
 float getPIDErrMot(float ratioMotB, float ratioMotC, float startDegMotB, float startDegMotC)
@@ -374,7 +384,7 @@ void testMotorCalibrationDebStream(short powB, short powC)
     {
         nowDegB = getEncoderB();
         nowDegC = getEncoderC();
-        // degB, degC, aim
+        // degB, degC, aim, powB, powC
         writeDebugStreamLine("%d; %d; %f; %d; %d", nowDegB, nowDegC, aim, motor[motB], motor[motC]);
         sleep(5);
     } 

@@ -3,17 +3,19 @@
 
 // ALL DISTANCES IN CM
 
-const float WHEEL_DIAMETER = 5.6;
-const float BASE_LEN = 17.85;
+const float WHEEL_DIAMETER = 6.24;
+const float BASE_LEN = 16.35; // больше значение - больше поворот
 
 const short MOTORS_MAX_POWER = 100;
 const short MOTORS_MIN_POWER = 0;
 
-const float SAFE_START_ACCEL = 15;
-const float SAFE_END_ACCEL = 7;
+const float SAFE_START_ACCEL = 13;
+const float SAFE_END_ACCEL = 5;
 
+const float KOEF_ENC_A = 1;
 const float KOEF_ENC_B = 1;
 const float KOEF_ENC_C = 1;
+const float KOEF_ENC_D = 1;
 
 // power of motors will be bigger than this number
 const short MIN_SEN_POWER = 7;
@@ -29,7 +31,7 @@ PIDSettings KEEP_MOVING_C_SETTINGS;
 
 SenSettings SEN1_CALIBRATION;
 SenSettings SEN2_CALIBRATION;
-SenSettings SEN3_CALIBRATION;
+SenSettings SEN3_CALIBRATION_INDICATORS;
 SenSettings SEN3_CALIBRATION_CUBES;
 SenSettings SEN3_CALIBRATION_1CUBE;
 
@@ -37,6 +39,18 @@ PIDSettings DEFAULT_LINE_PID_SUPRA;
 PIDSettings DEFAULT_LINE_PID_FAST;
 PIDSettings DEFAULT_LINE_PID_MEDIUM;
 PIDSettings DEFAULT_LINE_PID_SLOW;
+
+const short DEFAULT_LINE_PID_SUPRA_MAX_POWER = 100;
+const short DEFAULT_LINE_PID_SUPRA_MIN_POWER = 85;
+
+const short DEFAULT_LINE_PID_FAST_MAX_POWER = 85;
+const short DEFAULT_LINE_PID_FAST_MIN_POWER = 60;
+
+const short DEFAULT_LINE_PID_MEDIUM_MAX_POWER = 60;
+const short DEFAULT_LINE_PID_MEDIUM_MIN_POWER = 30;
+
+const short DEFAULT_LINE_PID_SLOW_MAX_POWER = 30;
+const short DEFAULT_LINE_PID_SLOW_MIN_POWER = 0;
 
 PIDSettings MANIP_A_PID_SETTINGS;
 PIDSettings MANIP_D_PID_SETTINGS;
@@ -78,43 +92,33 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN1_CALIBRATION.minR = 23;
-    SEN1_CALIBRATION.minG = 33;
+    SEN1_CALIBRATION.minR = 22;
+    SEN1_CALIBRATION.minG = 30;
     SEN1_CALIBRATION.minB = 14;
 
-    SEN1_CALIBRATION.maxR = 246;
-    SEN1_CALIBRATION.maxG = 282;
-    SEN1_CALIBRATION.maxB = 159;
+    SEN1_CALIBRATION.maxR = 229;
+    SEN1_CALIBRATION.maxG = 261;
+    SEN1_CALIBRATION.maxB = 150;
 
     // ----------------------------------
 
     SEN2_CALIBRATION.minR = 21;
-    SEN2_CALIBRATION.minG = 27;
+    SEN2_CALIBRATION.minG = 23;
     SEN2_CALIBRATION.minB = 18;
 
-    SEN2_CALIBRATION.maxR = 234;
-    SEN2_CALIBRATION.maxG = 239;
-    SEN2_CALIBRATION.maxB = 221;
+    SEN2_CALIBRATION.maxR = 228;
+    SEN2_CALIBRATION.maxG = 232;
+    SEN2_CALIBRATION.maxB = 216;
 
     // ----------------------------------
 
-    SEN3_CALIBRATION.minR = 2;
-    SEN3_CALIBRATION.minG = 2;
-    SEN3_CALIBRATION.minB = 2;
+    SEN3_CALIBRATION_INDICATORS.minR = 3;
+    SEN3_CALIBRATION_INDICATORS.minG = 0;
+    SEN3_CALIBRATION_INDICATORS.minB = 1;
 
-    SEN3_CALIBRATION.maxR = 27;
-    SEN3_CALIBRATION.maxG = 26;
-    SEN3_CALIBRATION.maxB = 30;
-
-    // ----------------------------------
-
-    SEN3_CALIBRATION_1CUBE.minR = 0;
-    SEN3_CALIBRATION_1CUBE.minG = 0;
-    SEN3_CALIBRATION_1CUBE.minB = 0;
-
-    SEN3_CALIBRATION_1CUBE.maxR = 62;
-    SEN3_CALIBRATION_1CUBE.maxG = 49;
-    SEN3_CALIBRATION_1CUBE.maxB = 68;
+    SEN3_CALIBRATION_INDICATORS.maxR = 120;
+    SEN3_CALIBRATION_INDICATORS.maxG = 108;
+    SEN3_CALIBRATION_INDICATORS.maxB = 139;
 
     // ----------------------------------
 
@@ -122,16 +126,16 @@ void defStructures()
     SEN3_CALIBRATION_CUBES.minG = 0;
     SEN3_CALIBRATION_CUBES.minB = 0;
 
-    SEN3_CALIBRATION_CUBES.maxR = 430;
-    SEN3_CALIBRATION_CUBES.maxG = 350;
-    SEN3_CALIBRATION_CUBES.maxB = 346;
+    SEN3_CALIBRATION_CUBES.maxR = 352;
+    SEN3_CALIBRATION_CUBES.maxG = 449;
+    SEN3_CALIBRATION_CUBES.maxB = 220;
 
     // ----------------------------------
 
     // power 85 - 100
-    DEFAULT_LINE_PID_SUPRA.Kp = 0.29;
-    DEFAULT_LINE_PID_SUPRA.Ki = 0.045;
-    DEFAULT_LINE_PID_SUPRA.Kd = 0.0016;
+    DEFAULT_LINE_PID_SUPRA.Kp = 0.3;
+    DEFAULT_LINE_PID_SUPRA.Ki = 0.040;
+    DEFAULT_LINE_PID_SUPRA.Kd = 0.0031;
     DEFAULT_LINE_PID_SUPRA.prevErr = 0;
     DEFAULT_LINE_PID_SUPRA.integral = 0;
     DEFAULT_LINE_PID_SUPRA.errNow = 0;
@@ -139,9 +143,10 @@ void defStructures()
     DEFAULT_LINE_PID_SUPRA.pauseAction = false;
 
     // power 60 - 85
-    DEFAULT_LINE_PID_FAST.Kp = 0.27;
-    DEFAULT_LINE_PID_FAST.Ki = 0.042;
-    DEFAULT_LINE_PID_FAST.Kd = 0.0016;
+
+    DEFAULT_LINE_PID_FAST.Kp = 0.26;
+    DEFAULT_LINE_PID_FAST.Ki = 0.038;
+    DEFAULT_LINE_PID_FAST.Kd = 0.0025;
     DEFAULT_LINE_PID_FAST.prevErr = 0;
     DEFAULT_LINE_PID_FAST.integral = 0;
     DEFAULT_LINE_PID_FAST.errNow = 0;
@@ -151,9 +156,9 @@ void defStructures()
     // ----------------------------------
 
     // power 30 - 60
-    DEFAULT_LINE_PID_MEDIUM.Kp = 0.25;
-    DEFAULT_LINE_PID_MEDIUM.Ki = 0.041;
-    DEFAULT_LINE_PID_MEDIUM.Kd = 0.00155;
+    DEFAULT_LINE_PID_MEDIUM.Kp = 0.23;
+    DEFAULT_LINE_PID_MEDIUM.Ki = 0.037;
+    DEFAULT_LINE_PID_MEDIUM.Kd = 0.0019;
     DEFAULT_LINE_PID_MEDIUM.prevErr = 0;
     DEFAULT_LINE_PID_MEDIUM.integral = 0;
     DEFAULT_LINE_PID_MEDIUM.errNow = 0;
@@ -163,9 +168,9 @@ void defStructures()
     // ----------------------------------
 
     // power 0 - 30
-    DEFAULT_LINE_PID_SLOW.Kp = 0.24;
-    DEFAULT_LINE_PID_SLOW.Ki = 0.04;
-    DEFAULT_LINE_PID_SLOW.Kd = 0.0015;
+    DEFAULT_LINE_PID_SLOW.Kp = 0.2;
+    DEFAULT_LINE_PID_SLOW.Ki = 0.034;
+    DEFAULT_LINE_PID_SLOW.Kd = 0.0017;
     DEFAULT_LINE_PID_SLOW.prevErr = 0;
     DEFAULT_LINE_PID_SLOW.integral = 0;
     DEFAULT_LINE_PID_SLOW.errNow = 0;

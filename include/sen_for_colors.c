@@ -132,7 +132,7 @@ short READ_ROW_OF_OBJECTS_RES_LEN = 0;
 short READ_ROW_OF_OBJECTS_SEN = sen3;
 SenHSVVals *NOTHING_PTR;
 int NOTHING_MAX_VAL;
-SenSettings *READ_ROW_OF_OBJECTS_SEN_CALIBRATION_PTR = &SEN3_CALIBRATION;
+SenSettings *READ_ROW_OF_OBJECTS_SEN_CALIBRATION_PTR;
 bool *READ_ROW_OF_OBJECTS_PTR_WORK_FLAG;
 
 // you can moving and start this task to "scan" row with color sensor

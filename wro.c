@@ -41,7 +41,7 @@ task main (){
 
 	defineForLogic();
 
-	define_main();
+	defineMain();
 
 #if RUN_ONLY_TEST_FUNCTION == 1
 	testFunc();

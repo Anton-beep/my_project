@@ -368,9 +368,27 @@ void moveBC3PartsMainC(float dist1, float dist2, float dist3, float startPowB, f
 }
 
 // Adjust movement depending on SAFE_START_ACCEL and SAFE_END_ACCEL
-// problem: moveBCSmartAccel(50, -20, 20, -30, 30);
 void moveBCSmartAccel(int dist, float startPowB, float startPowC, float endPowB, float endPowC, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
 {
+    // TODO: fix problem with endPowB and endPowC when they are 0
+    if (endPowB == 0){
+        if (startPowB > 0){
+            endPowB = 0.01;
+        }
+        else {
+            endPowB = -0.01;
+        }
+    }
+
+    if (endPowC == 0){
+        if (startPowC > 0){
+            endPowC = 0.01;
+        }
+        else {
+            endPowC = -0.01;
+        }
+    }
+
     int incDeg, decDeg, fromStartDecDeg;
     float maxPowerB, maxPowerC;
     incDeg = round((pow(MOTORS_MAX_POWER, 2) - pow(max(fabs(startPowB), fabs(startPowC)), 2)) / (2 * startAccel));
@@ -505,6 +523,10 @@ void moveBCSmartAccel(int dist, float startPowB, float startPowC, float endPowB,
     }
 }
 
+void moveBCSmartAccelSamePowers(int dist, float powB, float powC, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL){
+    moveBCSmartAccel(dist, powB, powC, powB, powC, startAccel, endAccel);
+}
+
 // turns one wheel or tank
 // -------------------------------------------------------------------------------------------------------------------------
 
@@ -557,9 +579,10 @@ void tankTurnNS3Parts(float circleDeg1, float circleDeg2, float circleDeg3, floa
     moveBC3Parts(deg1, deg2, deg3, startPowB, startPowC, maxPowB, maxPowC, endPowB, endPowC);
 }
 
-void tankTurnNSSmartAccel(float circleDeg, float startPowB, float startPowC, float endPowB, float endPowC, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
+// + means clockwise
+void tankTurnNSSmartAccel(float circleDeg, float startPow, float endPow, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
 {
     float dist = circleDegToCm(circleDeg);
     float deg = cmToDeg(dist);
-    moveBCSmartAccel(deg, startPowB, startPowC, endPowB, endPowC, startAccel, endAccel);
+    moveBCSmartAccel(deg, startPow * -1, startPow * -1, endPow * -1, endPow * -1, startAccel, endAccel);
 }

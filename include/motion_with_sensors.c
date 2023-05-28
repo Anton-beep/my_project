@@ -110,10 +110,8 @@ bool applyNewAccelsSen(short *powB, short *powC, float *newPowB, float *newPowC)
 void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel)
 {
     int startDegB = getEncoderB();
-    int madeDist;
 
     float newPow, newPowB;
-    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
     endDegB = startDegB - dist;
@@ -125,7 +123,6 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
             newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
             newPowB = newPow * -1;
             flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
-            startTime = nPgmTime;
         }
         PID2SensWork(PIDSet, newPow);
         sleep(1);
@@ -133,25 +130,65 @@ void line2SenCustomAccel(PIDSettings *PIDSet, float dist, float power, float acc
     MOT_PID_SETTINGS.pauseAction = false;
 }
 
-void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 0)
+PIDSettings *PIDSetFromPower(int power)
+{
+    if ((DEFAULT_LINE_PID_SUPRA_MAX_POWER > power) && (DEFAULT_LINE_PID_SUPRA_MIN_POWER) < power)
+    {
+        return &DEFAULT_LINE_PID_SUPRA;
+    }
+    else if ((DEFAULT_LINE_PID_FAST_MAX_POWER > power) && (DEFAULT_LINE_PID_FAST_MIN_POWER) < power)
+    {
+        return &DEFAULT_LINE_PID_FAST;
+    }
+    else if ((DEFAULT_LINE_PID_MEDIUM_MAX_POWER > power) && (DEFAULT_LINE_PID_MEDIUM_MIN_POWER) < power)
+    {
+        return &DEFAULT_LINE_PID_MEDIUM;
+    }
+    else
+    {
+        return &DEFAULT_LINE_PID_SLOW;
+    }
+}
+
+void line2SenCustomAccelAutoSet(float dist, float power, float accel)
 {
     int startDegB = getEncoderB();
-    int madeDist;
 
     float newPow, newPowB;
-    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
     while (getEncoderB() > endDegB)
     {
-        if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
+        if (!(flagAccel))
         {
             newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
             newPowB = newPow * -1;
             flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
-            startTime = nPgmTime;
+        }
+        PID2SensWork(PIDSetFromPower(newPow), newPow);
+        sleep(1);
+    }
+    MOT_PID_SETTINGS.pauseAction = false;
+}
+
+void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target)
+{
+    int startDegB = getEncoderB();
+
+    float newPow, newPowB;
+    bool flagAccel = false;
+    float endDegB;
+    endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
+    while (getEncoderB() > endDegB)
+    {
+        if (!(flagAccel))
+        {
+            newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
+            newPowB = newPow * -1;
+            flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
         }
         PIDSen1InWork(PIDSet, target, newPow);
         sleep(1);
@@ -162,22 +199,19 @@ void lineSen1InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
 void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
 {
     int startDegB = getEncoderB();
-    int madeDist;
 
     float newPow, newPowB;
-    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
     while (getEncoderB() > endDegB)
     {
-        if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
+        if (!(flagAccel))
         {
             newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
             newPowB = -1 * newPow;
             flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
-            startTime = nPgmTime;
         }
         PIDSen2InWork(PIDSet, target, newPow);
         sleep(1);
@@ -188,10 +222,8 @@ void lineSen2InCustomAccel(PIDSettings *PIDSet, float dist, float power, float a
 void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
 {
     int startDegB = getEncoderB();
-    int madeDist;
 
     float newPow, newPowB;
-    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
 
@@ -199,12 +231,11 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
     MOT_PID_SETTINGS.pauseAction = true;
     while (getEncoderB() > endDegB)
     {
-        if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
+        if (!(flagAccel))
         {
             newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
             newPowB = -1 * newPow;
             flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
-            startTime = nPgmTime;
         }
         PIDSen1OutWork(PIDSet, target, newPow);
         sleep(1);
@@ -215,22 +246,19 @@ void lineSen1OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float 
 void lineSen2OutCustomAccel(PIDSettings *PIDSet, float dist, float power, float accel, float target, float updateTime = 100)
 {
     int startDegB = getEncoderB();
-    int madeDist;
 
     float newPow, newPowB;
-    float startTime = nPgmTime;
     bool flagAccel = false;
     float endDegB;
     endDegB = startDegB - dist;
     MOT_PID_SETTINGS.pauseAction = true;
     while (getEncoderB() > endDegB)
     {
-        if (!(flagAccel) && (nPgmTime - startTime) > updateTime)
+        if (!(flagAccel))
         {
             newPow = round(sqrt(fabs(getEncoderB() - startDegB) * 2 * accel + pow(power, 2)));
             newPowB = -1 * newPow;
             flagAccel = applyNewAccelsSen(&POWER_MOT_B, &POWER_MOT_C, &newPowB, &newPow);
-            startTime = nPgmTime;
         }
         PIDSen2OutWork(PIDSet, target, newPow);
         sleep(1);
@@ -250,6 +278,20 @@ void line2SenAccelPart(PIDSettings *PIDSet, float dist, float startPow, float en
         accel = -1 * fabs((pow(endPow, 2) - pow(startPow, 2)) / (dist * 2));
     }
     line2SenCustomAccel(PIDSet, dist, startPow, accel);
+}
+
+void line2SenAccelPartAutoSet(float dist, float startPow, float endPow)
+{
+    float accel;
+    if (endPow > startPow)
+    {
+        accel = fabs((pow(endPow, 2) - pow(startPow, 2)) / (dist * 2));
+    }
+    else
+    {
+        accel = -1 * fabs((pow(endPow, 2) - pow(startPow, 2)) / (dist * 2));
+    }
+    line2SenCustomAccelAutoSet(dist, startPow, accel);
 }
 
 void lineSen1InAccelPart(PIDSettings *PIDSet, float dist, float startPow, float endPow, float target)
@@ -315,9 +357,64 @@ void line2Sen3Parts(PIDSettings *PIDSet1, PIDSettings *PIDSet2, PIDSettings *PID
     line2SenAccelPart(PIDSet3, dist3, maxPow, endPow);
 }
 
-void line2Sen3PartsOneSet(PIDSettings *PIDSet, float dist1, float dist2, float dist3, float startPow, float maxPow, float endPow)
+void line2Sen3PartsAutoSet(float dist1, float dist2, float dist3, float startPow, float maxPow, float endPow)
 {
-    line2Sen3Parts(PIDSet, PIDSet, PIDSet, dist1, dist2, dist3, startPow, maxPow, endPow);
+    line2SenAccelPartAutoSet(dist1, startPow, maxPow);
+    line2SenDist(PIDSetFromPower(maxPow), dist2, maxPow);
+    line2SenAccelPartAutoSet(dist3, maxPow, endPow);
+}
+
+// Adjust movement depending on SAFE_START_ACCEL and SAFE_END_ACCEL
+// problem: moveBCSmartAccel(50, -20, 20, -30, 30);
+void line2SenSmartAccel(int dist, float startPow, float endPow, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
+{
+    // TODO: fix problem with endPow when it is 0
+    if (endPow == 0)
+    {
+        if (startPow > 0)
+        {
+            endPow = -0.01;
+        }
+        else
+        {
+            endPow = 0.01;
+        }
+    }
+
+    int incDeg, decDeg, fromStartDecDeg;
+    float maxPower;
+    incDeg = round((pow(MOTORS_MAX_POWER, 2) - pow(startPow, 2)) / (2 * startAccel));
+    decDeg = round((pow(MOTORS_MAX_POWER, 2) - pow(endPow, 2)) / (2 * endAccel));
+    fromStartDecDeg = round((pow(startPow, 2) - pow(endPow, 2)) / (2 * endAccel));
+
+    if (fromStartDecDeg >= dist)
+    {
+        playSound(soundException);
+
+        line2SenAccelPartAutoSet(dist, startPow, endPow);
+    }
+    else if (dist > incDeg + decDeg)
+    {
+        if (startPow > 0)
+        {
+            maxPower = MOTORS_MAX_POWER;
+        }
+        else
+        {
+            maxPower = -1 * MOTORS_MAX_POWER;
+        }
+
+        line2Sen3PartsAutoSet(incDeg, dist - incDeg - decDeg, decDeg, startPow, maxPower, endPow);
+    }
+    else
+    {
+        decDeg = round((dist * 2 * startAccel - pow(endPow, 2) + pow(startPow, 2)) / (2 * startAccel + 2 * endAccel));
+        incDeg = dist - decDeg;
+        float maxPower = sqrt(pow(startPow, 2) + 2 * fabs(startAccel) * incDeg);
+
+        line2SenCustomAccelAutoSet(incDeg, startPow, startAccel);
+        line2SenCustomAccelAutoSet(decDeg, maxPower, endAccel * -1);
+    }
 }
 
 void line2SenCrawl(PIDSettings *PIDSet, float pow, float blackLineSumRGBSen1, float blackLineSumRGBSen2)
@@ -456,7 +553,7 @@ void correctWithLine(float powB1, float powC1, float powB2, float powC2, float b
     }
 }
 
-void waitForLine(float blackLineSumRGBSen1, float blackLineSumRGBSen2)
+void waitFor2Sen(float blackLineSumRGBSen1 = 400, float blackLineSumRGBSen2 = 400)
 {
     while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) > blackLineSumRGBSen1 || readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) > blackLineSumRGBSen2)
     {

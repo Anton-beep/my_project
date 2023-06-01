@@ -4,7 +4,7 @@
 // ALL DISTANCES IN CM
 
 const float WHEEL_DIAMETER = 6.24;
-const float BASE_LEN = 16.35; // больше значение - больше поворот
+const float BASE_LEN = 16.45; // больше значение - больше поворот
 
 const short MOTORS_MAX_POWER = 100;
 const short MOTORS_MIN_POWER = 0;
@@ -59,9 +59,9 @@ PIDSettings *MANIP_D_PID_PTR;
 
 void defStructures()
 {
-    MOT_PID_SETTINGS.Kp = 4.01;
-    MOT_PID_SETTINGS.Ki = 2.21;
-    MOT_PID_SETTINGS.Kd = 0.0046;
+    MOT_PID_SETTINGS.Kp = 4.1;
+    MOT_PID_SETTINGS.Ki = 2.215;
+    MOT_PID_SETTINGS.Kd = 0.00462;
     MOT_PID_SETTINGS.prevErr = 0;
     MOT_PID_SETTINGS.integral = 0;
     MOT_PID_SETTINGS.errNow = 0;
@@ -156,7 +156,7 @@ void defStructures()
     // ----------------------------------
 
     // power 30 - 60
-    DEFAULT_LINE_PID_MEDIUM.Kp = 0.23;
+    DEFAULT_LINE_PID_MEDIUM.Kp = 0.22;
     DEFAULT_LINE_PID_MEDIUM.Ki = 0.037;
     DEFAULT_LINE_PID_MEDIUM.Kd = 0.0019;
     DEFAULT_LINE_PID_MEDIUM.prevErr = 0;
@@ -168,7 +168,7 @@ void defStructures()
     // ----------------------------------
 
     // power 0 - 30
-    DEFAULT_LINE_PID_SLOW.Kp = 0.2;
+    DEFAULT_LINE_PID_SLOW.Kp = 0.19;
     DEFAULT_LINE_PID_SLOW.Ki = 0.034;
     DEFAULT_LINE_PID_SLOW.Kd = 0.0017;
     DEFAULT_LINE_PID_SLOW.prevErr = 0;

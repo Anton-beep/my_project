@@ -19,7 +19,7 @@ void stopB()
 void stopC()
 {
     setNewMotBCPowersAndRatio(POWER_MOT_B, 0);
-    setMotorBrakeMode(motB, motorBrake);
+    setMotorBrakeMode(motC, motorBrake);
 }
 
 void coastBC()

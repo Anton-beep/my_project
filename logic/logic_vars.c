@@ -24,13 +24,13 @@ int IN_PTRS_CUBES[2];
 
 // 0 - completed, 1 - no cube, 2 - any, 3 - green, 4 - blue, 5 - white, 6 - red
 int FIRST_CUBE_TO_TAKE = 3;
-int SECOND_CUBE_TO_TAKE = 4;
+int SECOND_CUBE_TO_TAKE = 3;
 
 // ONLY char *_____________________________________________________________
 char *FILENAME = "deb.txt";
 
 // 0 - *DO NOT USE*, 1 - no cube, 2 - *DO NOT USE*, 3 - green, 4 - blue, 5 - white, 6 - red (left to right on field)
-int CUBES_COLORS[4] = {3, 4, 3, 4};
+int CUBES_COLORS[4] = {4, 3, 3, 4};
 
 // ONLY int________________________________________________________________
 int RGB_SUM_SEN1_BEFORE_SEN_CUBES = 510;

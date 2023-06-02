@@ -171,17 +171,9 @@ void readCubes()
 
     moveBC(210, -20, 20);
     tankTurnNSSmartAccel(30.5, -20, -20);
-    moveBCSmartAccelSamePowers(255, 30, -30);
-    moveB(315, 40);
+    moveBCSmartAccelSamePowers(235, 30, -30);
+    moveB(315, 65);
     stopBC();
-}
-
-void setManipsForTake()
-{
-    setTimeManipA(600, 100, 1);
-    setTimeManipD(600, -100, -1);
-    waitForManipA();
-    waitForManipD();
 }
 
 task takeLeftCubeFromPos()
@@ -213,20 +205,19 @@ void takeFromPosCubes()
     {
         sleep(1);
     }
-    moveBC(60, -21, 21);
+    moveBC(91, -21, 21);
     coastBC();
-    setTimeManipA(300, -50, -35);
-    setTimeManipD(300, 50, 35);
+    setTimeManipA(800, -40, -55);
+    setTimeManipD(800, 40, 55);
     waitForManipA();
     waitForManipD();
-    sleep(500);
 }
 
 // START ONLY WHEN ROBOT IS GOING FORWARD
 task correctCubesInStorage()
 {
-    setDegManipA(50, 60, 0);
-    setDegManipD(50, -60, 0);
+    setDegManipA(50, 40, 0);
+    setDegManipD(50, -40, 0);
     waitForManipA();
     waitForManipD();
     sleep(500);
@@ -236,27 +227,32 @@ task correctCubesInStorage()
 
 void takeCubes()
 {
-    setManipsForTake();
+    setTimeManipA(400, 100, 1);
+    setTimeManipD(400, -100, -1);
     sleep(300);
-    line2SenSmartAccel(321, 30, 14);
+    line2SenSmartAccel(340, 30, 14);
     coastBC();
     takeFromPosCubes();
 }
 
+
+// TODO: версия без кубиков в отсеках 
 task releaseLeftCubeOnShip()
 {
     MANIP_A_RELEASED = false;
-    setTimeManipA(700, 25, 0);
+    setTimeManipA(800, 28, 0);
+    sleep(300);
     waitForManipA();
     sleep(300);
     setDegManipA(10, -20, 0);
     waitForManipA();
-    moveBC(37, 20, -20);
+    moveBC(50, 20, -20);
     stopBC();
-    setDegManipA(150, -80, 0);
+    setDegManipA(220, -80, 0);
+    sleep(300);
     waitForManipA();
-    moveBC(37, -20, 20);
-    stopBC();
+    moveBC(50, -20, 20);
+    stopBC()
     setTimeManipA(400, -50, -20);
     waitForManipA();
     LEFT_MANIP_CUBE = 1;
@@ -266,17 +262,18 @@ task releaseLeftCubeOnShip()
 task releaseRightCubeOnShip()
 {
     MANIP_D_RELEASED = false;
-    setTimeManipD(700, -25, 0);
-    stopBC();
+    setTimeManipD(800, -28, 0);
+    sleep(300);
     waitForManipD();
     sleep(300);
     setDegManipD(10, 20, 0);
     waitForManipD();
-    moveBC(37, 21, -21);
+    moveBC(50, 21, -21);
     stopBC();
-    setDegManipD(150, 80, 0);
+    setDegManipD(220, 80, 0);
+    sleep(300);
     waitForManipD();
-    moveBC(37, -21, 21);
+    moveBC(50, -21, 21);
     stopBC();
     setTimeManipD(400, 50, 40);
     waitForManipD();
@@ -287,8 +284,7 @@ task releaseRightCubeOnShip()
 void releaseLeftOnSmallShip()
 {
     moveBC(372, -40, -10);
-    moveBC(94, 10, 40);
-    stopBC();
+    moveBC(93, 10, 40);
 
     moveBC(40, -20, 20);
 
@@ -302,17 +298,15 @@ void releaseLeftOnSmallShip()
 
     moveBC(40, 20, -20);
 
-    moveBC(94, -10, -40);
+    moveBC(93, -10, -40);
     moveBC(372, 40, 10);
     stopBC();
 }
 
 void releaseRightOnSmallShip()
 {
-    moveBC(113, 10, 40);
-    moveBC(432, -40, -10);
-    stopBC();
-    sleep(5000);
+    moveBC(110, 10, 40);
+    moveBC(430, -40, -10);
 
     moveBC(45, -20, 20);
 
@@ -326,8 +320,8 @@ void releaseRightOnSmallShip()
 
     moveBC(40, 20, -20);
 
-    moveBC(432, 40, 10);
-    moveBC(113, -10, -40);
+    moveBC(430, 40, 10);
+    moveBC(110, -10, -40);
     stopBC();
 }
 
@@ -395,72 +389,158 @@ void releaseOverlappedRightOnSmallShip()
     sleep(5000);
 }
 
+void releaseLeftOnBigShip()
+{
+    moveBC(252, -40, -10);
+    moveBC(65, 10, 40);
+
+    moveBC(49, -20, 20);
+
+    stopBC();
+    startTask(releaseLeftCubeOnShip, 8);
+    sleep(300);
+    while (!MANIP_A_RELEASED)
+    {
+        sleep(1);
+    }
+
+    moveBC(49, 20, -20);
+
+    moveBC(65, -10, -40);
+    moveBC(252, 40, 10);
+    stopBC();
+}
+
+void releaseRightOnBigShip()
+{
+    moveBC(65, 10, 40);
+    moveBC(227, -40, -10);
+
+    moveBC(72, -20, 20);
+
+    stopBC();
+    startTask(releaseRightCubeOnShip, 8);
+    sleep(300);
+    while (!MANIP_D_RELEASED)
+    {
+        sleep(1);
+    }
+
+    moveBC(72, 20, -20);
+
+    moveBC(227, 40, 10);
+    moveBC(65, -10, -40);
+    stopBC();
+}
+
+void releaseOverlappedLeftOnBigShip()
+{
+    moveBC(400, -40, -10);
+    moveBC(100, 10, 40);
+
+    moveBC(40, -20, 20);
+
+    stopBC();
+    startTask(releaseLeftCubeOnShip, 8);
+    sleep(300);
+    while (!MANIP_A_RELEASED)
+    {
+        sleep(1);
+    }
+
+    moveBC(40, 20, -20);
+
+    moveBC(100, -10, -40);
+    moveBC(400, 40, 10);
+    stopBC();
+}
+
+void releaseOverlappedRightOnBigShip()
+{
+    moveBC(100, 10, 40);
+    moveBC(400, -40, -10);
+
+    moveBC(45, -20, 20);
+
+    stopBC();
+    startTask(releaseRightCubeOnShip, 8);
+    sleep(300);
+    while (!MANIP_D_RELEASED)
+    {
+        sleep(1);
+    }
+
+    moveBC(40, 20, -20);
+
+    moveBC(400, 40, 10);
+    moveBC(100, -10, -40);
+    stopBC();
+}
+
 void manipLeftCubeFromStorage(int newCube = CUBES_COLORS[1])
 {
-    setDegManipA(150, -25, -35, 8.09);
+    setDegManipA(150, -35, -35, 8.09);
     sleep(300);
     waitForManipA();
-    setTimeManipA(500, -35, -5);
+    setTimeManipA(1000, -35, -5);
     LEFT_MANIP_CUBE = newCube;
 }
 
 void manipRightCubeFromStorage(int newCube = CUBES_COLORS[2])
 {
-    setDegManipD(150, 25, 35, 8.09);
+    setDegManipD(150, 35, 35, 8.09);
     sleep(300);
     waitForManipD();
-    setTimeManipD(500, 35, 5);
+    setTimeManipD(1000, 35, 5);
     RIGHT_MANIP_CUBE = newCube;
 }
 
 void takeLeftFromStorage()
 {
-    setTimeManipA(300, 100, 1);
+    setTimeManipA(500, 60, 1);
     waitForManipA();
 
-    moveBC(302, 20, -20);
-    stopBC();
-    sleep(2000);
-    moveBC(270, -30, -5);
-    moveBC(38, 5, 30);
+    moveB(250, 40);
     stopB();
-    moveC(29, 20);
+    moveC(250, -40);
     stopC();
-    sleep(2000);
+    sleep(200);
+    moveBC(110, -20, 20);
+    stopBC();
 
     manipLeftCubeFromStorage();
 
-    moveC(29, -20);
-    moveBC(38, -5, -30);
-    moveBC(270, 30, 5);
+    moveC(250, 40);
+    stopC();
+    moveB(250, -40);
+    stopB();
 }
 
 void takeRightFromStorage()
 {
-    setTimeManipD(300, -100, -1);
+    setTimeManipD(500, -60, -1);
     waitForManipD();
 
-    moveBC(304, 20, -20);
-    stopBC();
-    sleep(2000);
-    moveBC(45, 5, 30);
-    moveBC(244, -30, -5);
+    moveC(250, -40);
     stopC();
-    moveB(10, -20);
+    moveB(250, 40);
     stopB();
-    sleep(2000);
+    sleep(200);
+    moveBC(110, -20, 20);
+    stopBC();
 
     manipRightCubeFromStorage();
 
-    moveB(10, 20);
-    moveBC(244, 30, 5);
-    moveBC(45, -5, -30);
+    moveB(250, -40);
+    stopB();
+    moveC(250, 40);
+    stopC();
 }
 
 void take2CubesFromStorage()
 {
     takeLeftFromStorage();
-    line2SenSmartAccel(302, 20, 19);
+    line2SenSmartAccel(70, 20, 19);
     stopBC();
     takeRightFromStorage();
 }
@@ -483,45 +563,23 @@ void fillInManips()
 
 void firstTimeBigShipAndRelease(bool releaseLeft, bool releaseRight)
 {
-    moveBCSmartAccel(300, -21, 21, -21, 21);
-    moveBC(50, -20, 20);
-    stopBC();
-
-    sleep(5000);
+    lineSen2InDist(&DEFAULT_LINE_PID_SLOW, 220, 21, 361);
+    setNewMotBCPowersAndRatio(-23, 23);
+    waitForSen1(200);
+    moveBC(200, -25, 25);
 
     if (releaseLeft && releaseRight)
     {
-        startTask(releaseLeftCubeOnShip);
-        startTask(releaseRightCubeOnShip);
-        sleep(300);
-        while (!MANIP_A_RELEASED || !MANIP_D_RELEASED)
-        {
-            sleep(1);
-        }
-
-        sleep(5000);
+        releaseLeftOnBigShip();
+        releaseRightOnBigShip();
     }
     else if (releaseLeft)
     {
-        startTask(releaseLeftCubeOnShip);
-        sleep(300);
-        while (!MANIP_A_RELEASED)
-        {
-            sleep(1);
-        }
-
-        sleep(5000);
+        releaseLeftOnBigShip();
     }
     else if (releaseRight)
     {
-        startTask(releaseRightCubeOnShip);
-        sleep(300);
-        while (!MANIP_D_RELEASED)
-        {
-            sleep(1);
-        }
-
-        sleep(5000);
+        releaseRightOnBigShip();
     }
 }
 
@@ -579,10 +637,8 @@ void fromSmallToBigShipAndTake()
 
 void workWithCubes()
 {
-    moveBCSmartAccel(300, 30, -30, 30, -30);
+    moveBC(267, 21, -21);
     stopBC();
-
-    sleep(5000);
 
     /* In total 6 possible variants, depending on postions of cubes and which cubes robot should put on big ship
     fast : put two cubes on the big or small ship instantly, changing both together after first ship, small or big ship could be first
@@ -607,18 +663,17 @@ void workWithCubes()
         startTask(correctCubesInStorage);
         line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 25, 400, 400);
         moveBCSmartAccel(DEG_AFTER_LINE_FOR_LINE_MOVE, -21, 21, -21, 21);
-        line2SenSmartAccel(50, 21, 21);
+        line2SenSmartAccel(130, 21, 21);
         stopBC();
+        sleep(5000);
         waitForManipA();
         waitForManipD();
         fillInManips();
         stopBC();
+        line2SenSmartAccel(100, 21, 21);
         sleep(5000);
 
         // go to big ship, put both cubes
-        line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 25, 400, 400);
-        moveBCSmartAccel(DEG_AFTER_LINE_FOR_LINE_MOVE, -21, 21, -21, 21);
-        line2SenSmartAccel(240, 21, 21);
 
         // должен остановиться на линии на большой корабль
 
@@ -649,20 +704,20 @@ void workWithCubes()
     else if ((FIRST_CUBE_TO_TAKE == CUBES_COLORS[0] && SECOND_CUBE_TO_TAKE == CUBES_COLORS[3]) || (FIRST_CUBE_TO_TAKE == CUBES_COLORS[3] && SECOND_CUBE_TO_TAKE == CUBES_COLORS[0]))
     {
         // cubes on the big ship are in the manips, therefore the big ship is the first
+        tankTurnNSSmartAccel(90, -21, -21);
+        stopBC();
         startTask(correctCubesInStorage);
         firstTimeBigShipAndRelease(true, true);
-        moveBCSmartAccel(350, 21, -21, 21, -21);
-        tankTurnNSSmartAccel(90, -21, 21);
+        moveBCSmartAccel(495, 22, -22, 22, -22);
+        tankTurnNSSmartAccel(90, -23, -23);
         stopBC();
 
         // change
         fillInManips();
 
+        stopBC();
         // go to small ship, put both cubes
-        line2SenSmartAccel(300, 21, 21);
-        setNewMotBCPowersAndRatio(-21, 21);
-        waitFor2Sen();
-        moveBCSmartAccel(DEG_AFTER_LINE_FOR_LINE_MOVE, -21, 21, -21, 21);
+        line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 25, 400, 400);
 
         smallShipAndRelease(true, true);
 
@@ -827,8 +882,7 @@ void testFunc()
     // setCompactManips();
     // workWithCubes();
 
-    setDegManipA(30, 60, 0);
-    setDegManipD(30, -60, 0);
+    lineSen2InDist(&DEFAULT_LINE_PID_SLOW, 200, 21, 361);
 
     // to debug small ship
     // setCompactManips();

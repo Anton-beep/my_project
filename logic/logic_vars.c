@@ -13,6 +13,7 @@ bool MANIP_A_RELEASED = false;
 bool MANIP_D_RELEASED = false;
 bool TAKE_FROM_STORAGE_LEFT = false;
 bool TAKE_FROM_STORAGE_RIGHT = false;
+bool CORRECT_WORKING = false;
 // TODO: chnage numbers for colors to defines (#define GREEN 3, etc.)
 // 0 - *DO NOT USE*, 1 - no cube, 2 - *DO NOT USE*, 3 - green, 4 - blue, 5 - white, 6 - red (left to right on field)
 int LEFT_MANIP_CUBE = 1;
@@ -30,7 +31,7 @@ int SECOND_CUBE_TO_TAKE = 3;
 char *FILENAME = "deb.txt";
 
 // 0 - *DO NOT USE*, 1 - no cube, 2 - *DO NOT USE*, 3 - green, 4 - blue, 5 - white, 6 - red (left to right on field)
-int CUBES_COLORS[4] = {4, 3, 3, 4};
+int CUBES_COLORS[4] = {3, 4, 4, 3};
 
 // ONLY int________________________________________________________________
 int RGB_SUM_SEN1_BEFORE_SEN_CUBES = 510;

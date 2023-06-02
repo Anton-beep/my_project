@@ -9,8 +9,8 @@ const float BASE_LEN = 16.45; // больше значение - больше п
 const short MOTORS_MAX_POWER = 100;
 const short MOTORS_MIN_POWER = 0;
 
-const float SAFE_START_ACCEL = 13;
-const float SAFE_END_ACCEL = 5;
+const float SAFE_START_ACCEL = 3;
+const float SAFE_END_ACCEL = 3;
 
 const float KOEF_ENC_A = 1;
 const float KOEF_ENC_B = 1;
@@ -156,9 +156,9 @@ void defStructures()
     // ----------------------------------
 
     // power 30 - 60
-    DEFAULT_LINE_PID_MEDIUM.Kp = 0.22;
+    DEFAULT_LINE_PID_MEDIUM.Kp = 0.215;
     DEFAULT_LINE_PID_MEDIUM.Ki = 0.037;
-    DEFAULT_LINE_PID_MEDIUM.Kd = 0.0019;
+    DEFAULT_LINE_PID_MEDIUM.Kd = 0.00185;
     DEFAULT_LINE_PID_MEDIUM.prevErr = 0;
     DEFAULT_LINE_PID_MEDIUM.integral = 0;
     DEFAULT_LINE_PID_MEDIUM.errNow = 0;
@@ -168,9 +168,9 @@ void defStructures()
     // ----------------------------------
 
     // power 0 - 30
-    DEFAULT_LINE_PID_SLOW.Kp = 0.19;
-    DEFAULT_LINE_PID_SLOW.Ki = 0.034;
-    DEFAULT_LINE_PID_SLOW.Kd = 0.0017;
+    DEFAULT_LINE_PID_SLOW.Kp = 0.18;
+    DEFAULT_LINE_PID_SLOW.Ki = 0.033;
+    DEFAULT_LINE_PID_SLOW.Kd = 0.00165;
     DEFAULT_LINE_PID_SLOW.prevErr = 0;
     DEFAULT_LINE_PID_SLOW.integral = 0;
     DEFAULT_LINE_PID_SLOW.errNow = 0;

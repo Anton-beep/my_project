@@ -38,15 +38,19 @@ void moveBC(float dist, float powB, float powC)
     {
         endDegB = startDegB + dist;
         setNewMotBCPowersAndRatio(powB, powC);
-        while (getEncoderB() < endDegB){sleep(1);}
-            ;
+        while (getEncoderB() < endDegB)
+        {
+            sleep(1);
+        };
     }
     else
     {
         endDegB = startDegB - dist;
         setNewMotBCPowersAndRatio(powB, powC);
-        while (getEncoderB() > endDegB){sleep(1);}
-            ;
+        while (getEncoderB() > endDegB)
+        {
+            sleep(1);
+        };
     }
 }
 
@@ -59,15 +63,19 @@ void moveBCMainC(float dist, float powB, float powC)
     {
         endDegC = startDegC + dist;
         setNewMotBCPowersAndRatio(powB, powC);
-        while (getEncoderC() < endDegC){sleep(1);}
-            ;
+        while (getEncoderC() < endDegC)
+        {
+            sleep(1);
+        };
     }
     else
     {
         endDegC = startDegC - dist;
         setNewMotBCPowersAndRatio(powB, powC);
-        while (getEncoderC() > endDegC){sleep(1);}
-            ;
+        while (getEncoderC() > endDegC)
+        {
+            sleep(1);
+        };
     }
 }
 
@@ -80,15 +88,19 @@ void moveB(float dist, float pow)
     {
         endDegB = startDegB + dist;
         setNewMotBCPowersAndRatio(pow, 0);
-        while (getEncoderB() < endDegB){sleep(1);}
-            ;
+        while (getEncoderB() < endDegB)
+        {
+            sleep(1);
+        };
     }
     else
     {
         endDegB = startDegB - dist;
         setNewMotBCPowersAndRatio(pow, 0);
-        while (getEncoderB() > endDegB){sleep(1);}
-            ;
+        while (getEncoderB() > endDegB)
+        {
+            sleep(1);
+        };
     }
 }
 
@@ -101,15 +113,19 @@ void moveC(float dist, float pow)
     {
         endDegC = startDegC + dist;
         setNewMotBCPowersAndRatio(0, pow);
-        while (getEncoderC() < endDegC){sleep(1);}
-            ;
+        while (getEncoderC() < endDegC)
+        {
+            sleep(1);
+        };
     }
     else
     {
         endDegC = startDegC - dist;
         setNewMotBCPowersAndRatio(0, pow);
-        while (getEncoderC() > endDegC){sleep(1);}
-            ;
+        while (getEncoderC() > endDegC)
+        {
+            sleep(1);
+        };
     }
 }
 
@@ -371,20 +387,26 @@ void moveBC3PartsMainC(float dist1, float dist2, float dist3, float startPowB, f
 void moveBCSmartAccel(int dist, float startPowB, float startPowC, float endPowB, float endPowC, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
 {
     // TODO: fix problem with endPowB and endPowC when they are 0
-    if (endPowB == 0){
-        if (startPowB > 0){
+    if (endPowB == 0)
+    {
+        if (startPowB > 0)
+        {
             endPowB = 0.01;
         }
-        else {
+        else
+        {
             endPowB = -0.01;
         }
     }
 
-    if (endPowC == 0){
-        if (startPowC > 0){
+    if (endPowC == 0)
+    {
+        if (startPowC > 0)
+        {
             endPowC = 0.01;
         }
-        else {
+        else
+        {
             endPowC = -0.01;
         }
     }
@@ -395,7 +417,8 @@ void moveBCSmartAccel(int dist, float startPowB, float startPowC, float endPowB,
     decDeg = round((pow(MOTORS_MAX_POWER, 2) - pow(max(fabs(endPowB), fabs(endPowC)), 2)) / (2 * endAccel));
     fromStartDecDeg = round((pow(max(fabs(startPowB), fabs(startPowC)), 2) - pow(max(fabs(endPowB), fabs(endPowC)), 2)) / (2 * endAccel));
 
-    if (fromStartDecDeg >= dist){
+    if (fromStartDecDeg >= dist)
+    {
         playSound(soundException);
 
         // eraseDisplay();
@@ -523,7 +546,8 @@ void moveBCSmartAccel(int dist, float startPowB, float startPowC, float endPowB,
     }
 }
 
-void moveBCSmartAccelSamePowers(int dist, float powB, float powC, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL){
+void moveBCSmartAccelSamePowers(int dist, float powB, float powC, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
+{
     moveBCSmartAccel(dist, powB, powC, powB, powC, startAccel, endAccel);
 }
 

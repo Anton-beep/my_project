@@ -1,3 +1,6 @@
+#define DEG_AFTER_LINE_FOR_MOVE 100
+#define DEG_AFTER_LINE_FOR_TURN 130
+
 // ONLY int *______________________________________________________________
 int IN_PTRS_FIRST_SCAN[3];
 int IN_PTRS_CUBES[3];

@@ -546,6 +546,11 @@ void moveBCSmartAccel(int dist, float startPowB, float startPowC, float endPowB,
     }
 }
 
+void moveBCSmartAccelExtreme(int dist, float startPowB, float startPowC, float endPowB, float endPowC)
+{
+    moveBCSmartAccel(dist, startPowB, startPowC, endPowB, endPowC, EXTREME_START_ACCEL, EXTREME_END_ACCEL);
+}
+
 void moveBCSmartAccelSamePowers(int dist, float powB, float powC, float startAccel = SAFE_START_ACCEL, float endAccel = SAFE_END_ACCEL)
 {
     moveBCSmartAccel(dist, powB, powC, powB, powC, startAccel, endAccel);
@@ -609,4 +614,9 @@ void tankTurnNSSmartAccel(float circleDeg, float startPow, float endPow, float s
     float dist = circleDegToCm(circleDeg);
     float deg = cmToDeg(dist);
     moveBCSmartAccel(deg, startPow * -1, startPow * -1, endPow * -1, endPow * -1, startAccel, endAccel);
+}
+
+void tankTurnNSSmartAccelExtreme(float circleDeg, float startPow, float endPow)
+{
+    tankTurnNSSmartAccel(circleDeg, startPow, endPow, EXTREME_START_ACCEL, EXTREME_END_ACCEL);
 }

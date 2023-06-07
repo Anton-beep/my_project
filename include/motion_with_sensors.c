@@ -3,6 +3,22 @@
 
 // Line forward
 // TODO: smart accels
+
+void lineSen2InDistOnlyBlue(PIDSettings *PIDSet, float dist, float pow, float target)
+{
+    int startDegB = getEncoderB();
+    float endDegB;
+
+    endDegB = startDegB - dist;
+    MOT_PID_SETTINGS.pauseAction = true;
+    while (getEncoderB() > endDegB)
+    {
+        PIDSen2InWorkOnlyBlue(PIDSet, target, pow);
+        sleep(1);
+    }
+    MOT_PID_SETTINGS.pauseAction = false;
+}
+
 void line2SenDist(PIDSettings *PIDSet, float dist, float pow)
 {
     int startDegB = getEncoderB();

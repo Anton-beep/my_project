@@ -11,8 +11,11 @@ const short MOTORS_MIN_POWER = 0;
 
 const short MIN_SEN_POWER = 7;
 
-const float SAFE_START_ACCEL = 1;
-const float SAFE_END_ACCEL = 1;
+const float SAFE_START_ACCEL = 10;
+const float SAFE_END_ACCEL = 6;
+
+const float EXTREME_START_ACCEL = 20;
+const float EXTREME_END_ACCEL = 8;
 
 const float KOEF_ENC_A = 1;
 const float KOEF_ENC_B = 1;
@@ -34,6 +37,7 @@ SenSettings SEN3_CALIBRATION;
 SenSettings SEN3_CALIBRATION_CUBES;
 SenSettings SEN3_CALIBRATION_1CUBE;
 
+PIDSettings GREY_WHITEBLUE_LINE_PID;
 PIDSettings DEFAULT_LINE_PID_SUPRA;
 PIDSettings DEFAULT_LINE_PID_FAST;
 PIDSettings DEFAULT_LINE_PID_MEDIUM;
@@ -140,6 +144,15 @@ void defStructures()
     SEN3_CALIBRATION_CUBES.maxB = 346;
 
     // ----------------------------------
+
+    GREY_WHITEBLUE_LINE_PID.Kp = 1.2;
+    GREY_WHITEBLUE_LINE_PID.Ki = 0.5;
+    GREY_WHITEBLUE_LINE_PID.Kd = 0.004;
+    GREY_WHITEBLUE_LINE_PID.prevErr = 0;
+    GREY_WHITEBLUE_LINE_PID.integral = 0;
+    GREY_WHITEBLUE_LINE_PID.errNow = 0;
+    GREY_WHITEBLUE_LINE_PID.dt = 0.001;
+    GREY_WHITEBLUE_LINE_PID.pauseAction = false;
 
     // power 85 - 100
     DEFAULT_LINE_PID_SUPRA.Kp = 0.29;

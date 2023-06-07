@@ -28,6 +28,18 @@ void PIDSen2InWork(PIDSettings *PIDSet, float target, float pow)
     motor[motC] = max(-1 * MIN_SEN_POWER, pow - err);
 }
 
+SenRGBVals DATA_FOR_PID_SEN2_IN_WORK_ONLY_BLUE;
+
+void PIDSen2InWorkOnlyBlue(PIDSettings *PIDSet, float target, float pow)
+{
+    readCalibratedSenRGB(sen2, &SEN2_CALIBRATION, &DATA_FOR_PID_SEN2_IN_WORK_ONLY_BLUE);
+
+    PIDSet->errNow = DATA_FOR_PID_SEN2_IN_WORK_ONLY_BLUE.B - target;
+    float err = PIDFunction(PIDSet);
+    motor[motB] = min(MIN_SEN_POWER, (pow + err) * -1);
+    motor[motC] = max(-1 * MIN_SEN_POWER, pow - err);
+}
+
 void PIDSen1OutWork(PIDSettings *PIDSet, float target, float pow)
 {
     PIDSet->errNow = readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) - target;

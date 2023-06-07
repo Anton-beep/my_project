@@ -1,4 +1,4 @@
-##pragma config(Sensor, S1,     sen1,           sensorEV3_Color, modeEV3Color_RGB_Raw)
+#pragma config(Sensor, S1,     sen1,           sensorEV3_Color, modeEV3Color_RGB_Raw)
 #pragma config(Sensor, S2,     sen2,           sensorEV3_Color, modeEV3Color_RGB_Raw)
 #pragma config(Sensor, S3,     sen3,           sensorEV3_Color, modeEV3Color_RGB_Raw)
 #pragma config(Motor,  motorA,          motA,          tmotorEV3_Large, openLoop)
@@ -17,7 +17,6 @@
 
 task main (){
 	// define everything
-	motor[motA] = 0;
 	motor[motB] = 0;
 	motor[motC] = 0;
 	motor[motD] = 0;

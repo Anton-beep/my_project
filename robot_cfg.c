@@ -91,23 +91,23 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN1_CALIBRATION.minR = 41;
-    SEN1_CALIBRATION.minG = 52;
-    SEN1_CALIBRATION.minB = 34;
+    SEN1_CALIBRATION.minR = 34;
+    SEN1_CALIBRATION.minG = 45;
+    SEN1_CALIBRATION.minB = 18;
 
-    SEN1_CALIBRATION.maxR = 336;
-    SEN1_CALIBRATION.maxG = 441;
-    SEN1_CALIBRATION.maxB = 322;
+    SEN1_CALIBRATION.maxR = 327;
+    SEN1_CALIBRATION.maxG = 358;
+    SEN1_CALIBRATION.maxB = 191;
 
     // ----------------------------------
 
-    SEN2_CALIBRATION.minR = 41;
-    SEN2_CALIBRATION.minG = 51;
-    SEN2_CALIBRATION.minB = 23;
+    SEN2_CALIBRATION.minR = 36;
+    SEN2_CALIBRATION.minG = 42;
+    SEN2_CALIBRATION.minB = 31;
 
-    SEN2_CALIBRATION.maxR = 369;
-    SEN2_CALIBRATION.maxG = 390;
-    SEN2_CALIBRATION.maxB = 209;
+    SEN2_CALIBRATION.maxR = 339;
+    SEN2_CALIBRATION.maxG = 339;
+    SEN2_CALIBRATION.maxB = 302;
 
     // ----------------------------------
 

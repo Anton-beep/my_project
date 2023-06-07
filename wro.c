@@ -17,7 +17,6 @@
 
 task main (){
 	// define everything
-	motor[motA] = 0;
 	motor[motB] = 0;
 	motor[motC] = 0;
 	motor[motD] = 0;
@@ -27,7 +26,7 @@ task main (){
 	getColorRawRGB(sen3, r, g, b);
 	sleep(200);
 
-	setSoundVolume(20);//	RETURN VOLUME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	setSoundVolume(20);
 	startTask(checkBat);
 	clearTimer(T3);
 	defStructures();

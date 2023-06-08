@@ -26,7 +26,7 @@ task main (){
 	getColorRawRGB(sen3, r, g, b);
 	sleep(200);
 
-	setSoundVolume(20);//	RETURN VOLUME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	setSoundVolume(20);
 	startTask(checkBat);
 	clearTimer(T3);
 	defStructures();

@@ -14,7 +14,7 @@ const short MIN_SEN_POWER = 7;
 const float SAFE_START_ACCEL = 10;
 const float SAFE_END_ACCEL = 6;
 
-const float EXTREME_START_ACCEL = 20;
+const float EXTREME_START_ACCEL = 24;
 const float EXTREME_END_ACCEL = 8;
 
 const float KOEF_ENC_A = 1;
@@ -62,9 +62,9 @@ PIDSettings *MANIP_D_PID_PTR;
 
 void defStructures()
 {
-    MOT_PID_SETTINGS.Kp = 4;
-    MOT_PID_SETTINGS.Ki = 2;
-    MOT_PID_SETTINGS.Kd = 0.002;
+    MOT_PID_SETTINGS.Kp = 4.2;
+    MOT_PID_SETTINGS.Ki = 2.1;
+    MOT_PID_SETTINGS.Kd = 0.0021;
     MOT_PID_SETTINGS.prevErr = 0;
     MOT_PID_SETTINGS.integral = 0;
     MOT_PID_SETTINGS.errNow = 0;
@@ -95,23 +95,23 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN1_CALIBRATION.minR = 34;
-    SEN1_CALIBRATION.minG = 45;
-    SEN1_CALIBRATION.minB = 18;
+    SEN1_CALIBRATION.minR = 33;
+    SEN1_CALIBRATION.minG = 42;
+    SEN1_CALIBRATION.minB = 17;
 
-    SEN1_CALIBRATION.maxR = 327;
-    SEN1_CALIBRATION.maxG = 358;
-    SEN1_CALIBRATION.maxB = 191;
+    SEN1_CALIBRATION.maxR = 352;
+    SEN1_CALIBRATION.maxG = 368;
+    SEN1_CALIBRATION.maxB = 195;
 
     // ----------------------------------
 
-    SEN2_CALIBRATION.minR = 36;
-    SEN2_CALIBRATION.minG = 42;
-    SEN2_CALIBRATION.minB = 31;
+    SEN2_CALIBRATION.minR = 38;
+    SEN2_CALIBRATION.minG = 41;
+    SEN2_CALIBRATION.minB = 33;
 
-    SEN2_CALIBRATION.maxR = 339;
-    SEN2_CALIBRATION.maxG = 339;
-    SEN2_CALIBRATION.maxB = 302;
+    SEN2_CALIBRATION.maxR = 380;
+    SEN2_CALIBRATION.maxG = 363;
+    SEN2_CALIBRATION.maxB = 331;
 
     // ----------------------------------
 

@@ -433,6 +433,11 @@ void line2SenSmartAccel(int dist, float startPow, float endPow, float startAccel
     }
 }
 
+void line2SenSmartAccelExtreme(int dist, float startPow, float endPow)
+{
+    line2SenSmartAccel(dist, startPow, endPow, EXTREME_START_ACCEL, EXTREME_END_ACCEL);
+}
+
 void line2SenCrawl(PIDSettings *PIDSet, float pow, float blackLineSumRGBSen1, float blackLineSumRGBSen2)
 {
     MOT_PID_SETTINGS.pauseAction = true;

@@ -9,8 +9,11 @@ int IN_PTRS_1CUBE[3];
 // ONLY char *_____________________________________________________________
 char *FILENAME = "deb.txt";
 
-// 0 - green, 1 - blue, -1 - no cube
-int CUBES_COLORS[4] = {0, 1, 0, 1};
+// 0 - green, 1 - blue
+int CUBES_COLORS[4] = {0, 1, 1, 0};
+
+// -1 - no cube, 0 - small ship, 1 - big ship
+int CUBES_DELIVERY[4] = {-1, -1, -1, -1};
 
 // ONLY int________________________________________________________________
 int RGB_SUM_SEN1_BEFORE_SEN_CUBES = 510;
@@ -21,7 +24,7 @@ int DEBUG_FILE_HND = fileOpenWrite(FILENAME);
 
 // -2 - err, -1 - no cube, 0 - green, 1 - blue, 
 int FIRST_CUBE_TO_TAKE = 0;
-int SECOND_CUBE_TO_TAKE = 1;
+int SECOND_CUBE_TO_TAKE = 0;
 
 // ONLY SenRGBVals_________________________________________________________
 SenHSVVals GREEN_CUBE_FIRST_SCAN;

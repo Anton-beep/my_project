@@ -10,25 +10,66 @@ void startReadPullShip()
 {
     // set manip
     setTimeManipD(350, 100, 1);
-
-    sleep(600);
-    moveBCAccelPartMainB(150, -20, 20, -35, 35);
-    int *firstScanOut = startReadRowOfObjectsHSV(&NOTHING_FIRST_SCAN, 13, IN_PTRS_FIRST_SCAN, 2, sen3, &SEN3_CALIBRATION);
-    line2SenAccelPart(&DEFAULT_LINE_PID_MEDIUM, 230, 35, 30);
+    moveBCAccelPartMainB(150, -20, 20, -30, 30);
+    int *firstScanOut = startReadRowOfObjectsHSV(&NOTHING_FIRST_SCAN, 11, IN_PTRS_FIRST_SCAN, 2, sen3, &SEN3_CALIBRATION);
+    line2SenAccelPart(&DEFAULT_LINE_PID_MEDIUM, 230, 30, 30);
     setNewMotBCPowersAndRatio(-30, 30);
     waitForSen2(395);
-    moveBCAccelPartMainB(163, -30, 30, -50, 50);
-    moveBCAccelPartMainB(193, -50, 50, -15, 15);
+    moveBCAccelPartMainB(163, -30, 30, -55, 55);
+    moveBCAccelPartMainB(170, -55, 55, -25, 25);
+    setNewMotBCPowersAndRatio(-25, 25);
+    sleep(500);
     stopBC();
     resetMotorEncoder(motD);
     stopTask(readRowOfObjectsHSV);
-    sleep(100);
+
+    short yellowCount = 0;
+    for (int i = 0; i < 10; i++)
+    {
+        if (firstScanOut[i] == &YELLOW_CUBE_FIRST_SCAN)
+        {
+            yellowCount++;
+        }
+    }
+
+    if (yellowCount > 1)
+    {
+        FIRST_CUBE_TO_TAKE = 1;
+        SECOND_CUBE_TO_TAKE = 1;
+    }
+    else if (yellowCount == 1)
+    {
+        FIRST_CUBE_TO_TAKE = 1;
+        SECOND_CUBE_TO_TAKE = 0;
+    }
+    else
+    {
+        FIRST_CUBE_TO_TAKE = 0;
+        SECOND_CUBE_TO_TAKE = 0;
+    }
+
+    eraseDisplay();
+    for (int i = 0; i < 10; i++)
+    {
+        if (firstScanOut[i] == &YELLOW_CUBE_FIRST_SCAN)
+        {
+            displayCenteredTextLine(i, "YELLOW");
+        }
+        else if (firstScanOut[i] == &BLACK_CUBE_FIRST_SCAN)
+        {
+            displayCenteredTextLine(i, "BLACK");
+        }
+        else
+        {
+            displayCenteredTextLine(i, "NONE");
+        }
+    }
     moveBCSmartAccelExtreme(215, 22, -22, 22, -22);
     tankTurnNSSmartAccelExtreme(90, 22, 22);
 
-    line2SenSmartAccelExtreme(940, 30, 20);
-    line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 20, 300, 300);
-    moveBCSmartAccelExtreme(DEG_AFTER_LINE_FOR_TURN, -20, 20, -19, 19);
+    line2SenSmartAccelExtreme(940, 30, 25);
+    line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 25, 300, 300);
+    moveBCSmartAccelExtreme(DEG_AFTER_LINE_FOR_TURN, -25, 25, -19, 19);
 }
 
 void waitForCubes()
@@ -46,7 +87,7 @@ void waitForCubes()
 
 void goToCubes()
 {
-    tankTurnNSSmartAccel(90, -20, -20);
+    tankTurnNSSmartAccelExtreme(90, -20, -20);
 
     line2SenSmartAccel(760, 20, 9, EXTREME_START_ACCEL);
     setNewMotBCPowersAndRatio(-9, 9);
@@ -54,98 +95,6 @@ void goToCubes()
     moveBC(11, 18, -18);
 
     resetMotorEncoder(motD);
-}
-
-void readCubes()
-{
-    int cubesScan[4];
-    moveBC3PartsMainC(27, 128, 34, -6, -22, -12, -44, -6, -22);
-    stopBC();
-
-    cubesScan[0] = readWindowHSV(sen3, &SEN3_CALIBRATION_1CUBE, &NOTHING_CUBES, 13, IN_PTRS_1CUBE, 2);
-
-// POS TO CALIBRATE 1 AND 2 CUBES
-#if DEB_CALIBRATE_CUBES_1PART == 1
-    stopBC();
-    displayCalibrationValues();
-    displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION_1CUBE);
-#endif
-
-    moveBC(30, 13, -13);
-    moveBC3PartsMainC(36, 74, 45, -6, -13, -18, -39, -6, -13);
-    stopBC();
-
-    cubesScan[1] = readWindowHSV(sen3, &SEN3_CALIBRATION_1CUBE, &NOTHING_CUBES, 13, IN_PTRS_1CUBE, 2);
-
-    moveBC(123, -55, 7);
-    stopBC();
-#if DEB_CALIBRATE_CUBES_2PART == 1
-    // POS TO CALIBRATE 3 AND 4 CUBES
-    stopBC();
-    displayCalibrationValues();
-    displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION_CUBES);
-#endif
-    cubesScan[2] = readWindowHSV(sen3, &SEN3_CALIBRATION_CUBES, &NOTHING_CUBES, 13, IN_PTRS_CUBES, 2);
-
-    moveBC(136, -18, 16);
-    stopBC();
-
-    cubesScan[3] = readWindowHSV(sen3, &SEN3_CALIBRATION_CUBES, &NOTHING_CUBES, 13, IN_PTRS_CUBES, 2);
-
-    // for (int i = 0; i < 4; i++)
-    // {
-    //     if (cubesScan[i] == &GREEN_CUBE_CUBES || cubesScan[i] == &ANOTHER_GREEN_CUBE_CUBES)
-    //     {
-    //         CUBES_COLORS[i] = 0;
-    //     }
-    //     else if (cubesScan[i] == &BLUE_CUBE_CUBES || cubesScan[i] == &ANOTHER_BLUE_CUBE_CUBES)
-    //     {
-    //         CUBES_COLORS[i] = 1;
-    //     }
-    //     else
-    //     {
-    //         CUBES_COLORS[i] = -2;
-    //     }
-    // }
-    eraseDisplay();
-    for (int i = 0; i < 4; i++)
-    {
-        if (cubesScan[i] == &GREEN_CUBE_CUBES || cubesScan[i] == &ANOTHER_GREEN_CUBE_CUBES)
-        {
-            displayCenteredTextLine(i * 2, "GREEN");
-        }
-        else if (cubesScan[i] == &BLUE_CUBE_CUBES || cubesScan[i] == &ANOTHER_BLUE_CUBE_CUBES)
-        {
-            displayCenteredTextLine(i * 2, "BLUE");
-        }
-        else if (cubesScan[i] == &NOTHING_CUBES)
-        {
-            displayCenteredTextLine(i * 2, "NOTHING");
-        }
-        else
-        {
-            displayCenteredTextLine(i * 2, "ERROR");
-        }
-    }
-
-#if WRITE_DATA_IN_FILE == 1
-    for (int i = 0; i < 4; i++)
-    {
-        fileWriteChar(DEBUG_FILE_HND, CUBES_COLORS[i]);
-    }
-    fileClose(DEBUG_FILE_HND);
-#endif
-
-    moveBC(130, 20, -20);
-    tankTurnNS3Parts(30, 30, 30, -20, -20, -50, -50, -20, -20);
-
-    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 125, 5, 125, 20, 55, 17);
-
-    tankTurnNS3Parts(36, 99, 45, 30, 30, 90, 90, 17, 17);
-    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 25, 110, 125, 20, 55, 9);
-    setNewMotBCPowersAndRatio(-9, 9);
-    waitForCubes();
-    moveBC(69, 18, -18);
 }
 
 void setDelivery()
@@ -193,20 +142,112 @@ void setDelivery()
     }
 }
 
+void readCubes()
+{
+    int cubesScan[4];
+    moveBC3PartsMainC(27, 128, 34, -6, -22, -12, -44, -6, -22);
+    stopBC();
+
+    cubesScan[0] = readWindowHSV(sen3, &SEN3_CALIBRATION_1CUBE, &NOTHING_CUBES, 13, IN_PTRS_1CUBE, 2);
+
+// POS TO CALIBRATE 1 AND 2 CUBES
+#if DEB_CALIBRATE_CUBES_1PART == 1
+    stopBC();
+    displayCalibrationValues();
+    displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION_1CUBE);
+#endif
+
+    moveBC(30, 13, -13);
+    moveBC3PartsMainC(36, 74, 45, -6, -13, -18, -39, -6, -13);
+    stopBC();
+
+    cubesScan[1] = readWindowHSV(sen3, &SEN3_CALIBRATION_1CUBE, &NOTHING_CUBES, 16, IN_PTRS_1CUBE, 2);
+
+    moveBC(123, -55, 7);
+    stopBC();
+#if DEB_CALIBRATE_CUBES_2PART == 1
+    // POS TO CALIBRATE 3 AND 4 CUBES
+    stopBC();
+    displayCalibrationValues();
+    displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION_CUBES);
+#endif
+    cubesScan[2] = readWindowHSV(sen3, &SEN3_CALIBRATION_CUBES, &NOTHING_CUBES, 20, IN_PTRS_CUBES, 2);
+
+    moveBCSmartAccel(148, -18, 14, -18, 14);
+    stopBC();
+
+    cubesScan[3] = readWindowHSV(sen3, &SEN3_CALIBRATION_CUBES, &NOTHING_CUBES, 20, IN_PTRS_CUBES, 2);
+
+    for (int i = 0; i < 4; i++)
+    {
+        if (cubesScan[i] == &NOTHING_CUBES)
+        {
+            CUBES_COLORS[i] = 0;
+        }
+        else
+        {
+            CUBES_COLORS[i] = 1;
+        }
+    }
+
+    eraseDisplay();
+    for (int i = 0; i < 4; i++)
+    {
+        if (cubesScan[i] == &GREEN_CUBE_CUBES || cubesScan[i] == &ANOTHER_GREEN_CUBE_CUBES)
+        {
+            displayCenteredTextLine(i * 2, "GREEN");
+        }
+        else if (cubesScan[i] == &BLUE_CUBE_CUBES || cubesScan[i] == &ANOTHER_BLUE_CUBE_CUBES)
+        {
+            displayCenteredTextLine(i * 2, "BLUE");
+        }
+        else if (cubesScan[i] == &NOTHING_CUBES)
+        {
+            displayCenteredTextLine(i * 2, "NOTHING");
+        }
+        else
+        {
+            displayCenteredTextLine(i * 2, "ERROR");
+        }
+    }
+
+#if WRITE_DATA_IN_FILE == 1
+    for (int i = 0; i < 4; i++)
+    {
+        fileWriteChar(DEBUG_FILE_HND, CUBES_COLORS[i]);
+    }
+    fileClose(DEBUG_FILE_HND);
+#endif
+
+    setDelivery();
+
+    moveBC(130, 20, -20);
+    tankTurnNS3Parts(30, 30, 30, -20, -20, -50, -50, -20, -20);
+
+    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 125, 115, 125, 20, 55, 17);
+
+    tankTurnNS3Parts(36, 99, 45, 30, 30, 60, 60, 20, 20);
+    tankTurnSenCrawl(20, 20, 17, 17, 400, 400);
+    line2Sen3Parts(&DEFAULT_LINE_PID_SLOW, &DEFAULT_LINE_PID_MEDIUM, &DEFAULT_LINE_PID_SLOW, 25, 230, 125, 20, 40, 10);
+    setNewMotBCPowersAndRatio(-10, 10);
+    waitForCubes();
+    moveBC(69, 18, -18);
+}
+
 // left to right
 void takeCube1()
 {
-    moveBC(229, -24, -60);
-    moveBC(583, 60, 24);
+    moveBC(225, -24, -60);
+    moveBC(555, 60, 24);
 #if SLEEP_ON_CUBES == 1
     stopBC();
     sleep(5000);
 #endif
     stopBC();
-    setDegManipD(103, -50, 0);
+    setDegManipD(107, -50, 0);
     sleep(100);
     waitForManipD();
-    moveBCSmartAccel(205, -20, 20, -15, 15);
+    moveBCSmartAccel(195, -20, 20, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
     setTimeManipD(450, -65, -50);
@@ -221,11 +262,15 @@ void goToLineFrom1Cube()
 
 void goToBigShipFrom1Cube()
 {
-    moveBCSmartAccel(120, 20, -20, -20, 20);
-    tankTurnNSSmartAccel(95, -20, -20);
+    moveBCSmartAccel(125, 20, -20, -20, 20);
+    tankTurnNSSmartAccel(98, -20, -20);
     moveBCSmartAccel(20, -20, 20, -20, 20);
     stopC();
     moveB(10, -40);
+#if SLEEP_ON_CUBES == 1
+    stopBC();
+    sleep(5000);
+#endif
 }
 
 void takeCube2()
@@ -237,10 +282,10 @@ void takeCube2()
     sleep(5000);
 #endif
     stopBC();
-    setDegManipD(103, -50, 0);
+    setDegManipD(107, -50, 0);
     sleep(100);
     waitForManipD();
-    moveBC3Parts(40, 45, 50, -20, 20, -40, 40, -15, 15);
+    moveBC3Parts(40, 30, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
     setTimeManipD(450, -65, -50);
@@ -255,11 +300,15 @@ void goToLineFrom2Cube()
 
 void goToBigShipFrom2Cube()
 {
-    moveBCSmartAccel(120, 20, -20, -20, 20);
-    tankTurnNSSmartAccel(95, -20, -20);
+    moveBCSmartAccel(125, 20, -20, -20, 20);
+    tankTurnNSSmartAccel(98, -20, -20);
     moveBCSmartAccel(210, -20, 20, -20, 20);
     stopC();
     moveB(80, -40);
+#if SLEEP_ON_CUBES == 1
+    stopBC();
+    sleep(5000);
+#endif
 }
 
 void takeCube3()
@@ -271,10 +320,10 @@ void takeCube3()
     sleep(5000);
 #endif
     stopBC();
-    setDegManipD(103, -50, 0);
+    setDegManipD(107, -50, 0);
     sleep(100);
     waitForManipD();
-    moveBC3Parts(40, 45, 50, -20, 20, -40, 40, -15, 15);
+    moveBC3Parts(40, 30, 50, -20, 20, -40, 40, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
     setTimeManipD(450, -65, -50);
@@ -289,11 +338,15 @@ void goToLineFrom3Cube()
 
 void goToBigShipFrom3Cube()
 {
-    moveBCSmartAccel(120, 20, -20, -20, 20);
-    tankTurnNSSmartAccel(95, -20, -20);
+    moveBCSmartAccel(125, 20, -20, -20, 20);
+    tankTurnNSSmartAccel(98, -20, -20);
     moveBCSmartAccel(370, -20, 20, -20, 20);
     stopC();
     moveB(80, -40);
+#if SLEEP_ON_CUBES == 1
+    stopBC();
+    sleep(5000);
+#endif
 }
 
 void takeCube4()
@@ -305,10 +358,10 @@ void takeCube4()
     sleep(5000);
 #endif
     stopBC();
-    setDegManipD(103, -50, 0);
+    setDegManipD(107, -50, 0);
     sleep(100);
     waitForManipD();
-    moveBCSmartAccel(210, -20, 20, -15, 15);
+    moveBCSmartAccel(195, -20, 20, -15, 15);
     moveBC(40, -15, 15);
     stopBC();
     setTimeManipD(450, -65, -50);
@@ -323,11 +376,15 @@ void goToLineFrom4Cube()
 
 void goToBigShipFrom4Cube()
 {
-    moveBCSmartAccel(120, 20, -20, -20, 20);
-    tankTurnNSSmartAccel(95, -20, -20);
+    moveBCSmartAccel(125, 20, -20, -20, 20);
+    tankTurnNSSmartAccel(98, -20, -20);
     moveBCSmartAccel(530, -20, 20, -20, 20);
     stopC();
     moveB(80, -40);
+#if SLEEP_ON_CUBES == 1
+    stopBC();
+    sleep(5000);
+#endif
 }
 
 void moveOnLineToBigShip()
@@ -341,7 +398,7 @@ void moveOnLineToBigShip()
     {
         if ((senData.R + senData.G + senData.B) != 0)
         {
-            if (senData.B / (senData.R + senData.G + senData.B) < 0.43)
+            if (senData.B / (senData.R + senData.G + senData.B) < 0.41)
             {
                 flagWorking = false;
             }
@@ -350,7 +407,7 @@ void moveOnLineToBigShip()
         displayCenteredTextLine(0, "%d", senData.B / (senData.R + senData.G + senData.B));
         sleep(1);
     }
-    stopBC();
+    moveC(70, 40);
     lineSen2InDistOnlyBlue(&GREY_WHITEBLUE_LINE_PID, 250, 40, 105);
     MOT_PID_SETTINGS.pauseAction = true;
     while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) < 260)
@@ -363,8 +420,8 @@ void moveOnLineToBigShip()
 
 void putCubeOnShip()
 {
-    setDegManipD(100, 15, 0, 8);
-    sleep(250);
+    setDegManipD(100, 17, 0, 8);
+    sleep(350);
     waitForManipD();
 }
 
@@ -372,8 +429,8 @@ void put1CubeBigShipAndBack()
 {
     moveOnLineToBigShip();
 
-    moveBCSmartAccel(50, 10, 30, 10, 30);
-    moveBCSmartAccel(150, -30, -10, -30, -10);
+    moveBCSmartAccel(51, 10, 30, 10, 30);
+    moveBCSmartAccel(153, -30, -10, -30, -10);
     stopBC();
     putCubeOnShip();
 
@@ -391,7 +448,7 @@ void put2CubeBigShip()
     moveBCSmartAccelExtreme(351, 40, 30, 40, 30);
     stopBC();
     sleep(200);
-    moveBCSmartAccelExtreme(130, -20, 20, -20, 20);
+    moveBCSmartAccelExtreme(132, -20, 20, -20, 20);
     moveBCSmartAccelExtreme(500, -30, -5, -30, -5);
     stopBC();
     putCubeOnShip();
@@ -446,7 +503,7 @@ void put2CubeSmallShipAndBack()
     stopBC();
 
     putCubeOnShip();
-    moveBCSmartAccel(280, 20, -20, 20, -20);
+    moveBCSmartAccel(300, 20, -20, 20, -20);
     stopBC();
     setTimeManipD(300, 100, 20, 8);
     sleep(200);
@@ -454,30 +511,30 @@ void put2CubeSmallShipAndBack()
     setDegManipD(110, -40, 0, 8);
     moveBCSmartAccel(60, 10, 40, 10, 40);
     moveBCSmartAccel(225, -40, -10, -40, -10);
-    line2SenDist(&DEFAULT_LINE_PID_SLOW, 140, 22);
+    line2SenDist(&DEFAULT_LINE_PID_MEDIUM, 160, 21);
     moveBC(40, -22, 22);
     stopBC();
     sleep(200);
     setTimeManipD(500, -50, -50, 8);
     waitForManipD();
+    sleep(200);
 
-    moveBCSmartAccel(530, 21, -21, 51, -51);
+    moveBCSmartAccel(530, 19, -19, 51, -51);
     setNewMotBCPowersAndRatio(51, -51);
     waitFor2Sen(400, 400);
     moveBCSmartAccel(210, 51, -51, 21, -21);
     stopBC();
     setTimeManipD(700, 100, 20, 8);
     sleep(100);
-    moveBCSmartAccelExtreme(100, 20, -20, 20, -20);
+    moveBCSmartAccel(100, 20, -20, 20, -20);
     tankTurnNSSmartAccel(180, 22, 20);
     setNewMotBCPowersAndRatio(-20, -20);
-    waitForSen1(300);
+    waitForSen1(500);
 }
 
 void putCubes()
 {
     // два кубика на маленький корабль, после второго кубика "подтянуть" кораблик
-    setDelivery();
 
     eraseDisplay();
     for (int i = 0; i < 4; i++)
@@ -617,18 +674,16 @@ void moveBigAndSmallShipToWhite()
     waitForManipD();
 
     tankTurnNSSmartAccelExtreme(100, -24, -24);
-    moveBCSmartAccelExtreme(450, -25, 25, -50, 50);
-    setNewMotBCPowersAndRatio(-50, 50);
+    moveBCSmartAccelExtreme(450, -25, 25, -45, 45);
+    setNewMotBCPowersAndRatio(-45, 45);
     waitFor2Sen(100, 100);
-    moveBCSmartAccelExtreme(125, -50, 50, -20, 20);
+    moveBCSmartAccelExtreme(125, -45, 45, -20, 20);
     tankTurnNSSmartAccelExtreme(90, -24, -24);
     setNewMotBCPowersAndRatio(24, 24);
     waitForSen2(200);
-    line2SenSmartAccelExtreme(270, 25, 30);
-    stopBC();
-    sleep(5000);
-    line2SenDist(&DEFAULT_LINE_PID_MEDIUM, 100, 30);
-    line2SenSmartAccelExtreme(1530, 25, 24);
+    line2SenSmartAccelExtreme(360, 25, 30);
+    line2SenDist(&DEFAULT_LINE_PID_MEDIUM, 20, 30);
+    line2SenSmartAccelExtreme(1430, 25, 24);
     line2SenCrawl(&DEFAULT_LINE_PID_MEDIUM, 24, 400, 400);
 
     moveBCSmartAccel(218, -24, 24, -24, 24);
@@ -649,7 +704,7 @@ void take2WhiteCube()
     setDegManipD(102, -50, 0);
     sleep(300);
     waitForManipD();
-    moveBC3Parts(40, 50, 80, -17, 17, -40, 40, -17, 17);
+    moveBC3Parts(40, 30, 80, -17, 17, -40, 40, -17, 17);
     moveBC(100, -17, 17);
     stopBC();
     setTimeManipD(450, -65, -50);
@@ -662,10 +717,10 @@ void take2WhiteCube()
 void whiteCubeOnBig()
 {
     setTimeManipD(350, 100, 2);
-    line2SenSmartAccelExtreme(758, 17, 15);
+    line2SenSmartAccelExtreme(690, 17, 15);
     setNewMotBCPowersAndRatio(-13, 13);
     resetMotorEncoder(motD);
-    waitFor2Sen(560, 560);
+    waitFor2Sen(580, 580);
     stopBC();
     sleep(200);
 
@@ -678,9 +733,15 @@ void whiteCubeOnBig()
 
     tankTurnNSSmartAccel(98, -21, -21);
 
+    // если нет 2 кубика на большом корабле
     moveBCSmartAccel(150, -20, 20, -20, 20);
     stopBC();
+
+    // если есть 2 кубика
+    // moveBCSmartAccel(141, -20, 20, -20, 20);
+    // stopBC();
     putCubeOnShip();
+    // setTimeManipD(350, -40, -1);
 }
 
 void pushShips()
@@ -692,6 +753,7 @@ void pushShips()
     moveC(400, -80);
     stopC();
     setTimeManipD(350, 100, 2);
+    sleep(300);
     waitForManipD();
     setDegManipD(100, -40, 0, 8);
     line2SenSmartAccelExtreme(420, 20, 22);
@@ -700,20 +762,17 @@ void pushShips()
     setTimeManipD(300, -50, -50, 8);
     sleep(300);
     waitForManipD();
-    line2SenSmartAccelExtreme(1400, 24, 24);
-    line2SenCrawl(&DEFAULT_LINE_PID_MEDIUM, 24, 400, 400);
+    line2SenSmartAccelExtreme(1350, 24, 20);
+    setNewMotBCPowersAndRatio(-20, 20);
+    sleep(350);
+    stopBC();
 }
 
 void conCraneAndFinish()
 {
-    moveC(330, -50);
+    moveC(370, -45);
     setStartDegMotBCAndReset(getEncoderB(), getEncoderC());
     setNewMotBCPowersAndRatio(-35, 35);
-    while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) < 700)
-    {
-        sleep(1);
-    }
-    sleep(100);
     waitForSen2(400);
     sleep(100);
     while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) < 700)
@@ -723,105 +782,130 @@ void conCraneAndFinish()
     waitForSen2(400);
     sleep(100);
     setStartDegMotBCAndReset(getEncoderB(), getEncoderC());
-    setNewMotBCPowersAndRatio(-50, 0);
     stopC();
-    while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) < 700)
+    setNewMotBCPowersAndRatio(-45, 0);
+    while (readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION) < 750)
     {
         sleep(1);
     }
     waitForSen1(500);
-    line2SenDist(&DEFAULT_LINE_PID_SLOW, 200, 30);
+    line2SenDist(&DEFAULT_LINE_PID_SLOW, 110, 22);
+    moveBC(120, 20, -20);
+    line2SenDist(&DEFAULT_LINE_PID_SLOW, 30, 22);
     setStartDegMotBCAndReset(getEncoderB(), getEncoderC());
-    setNewMotBCPowersAndRatio(-80, 80);
-    sleep(500);
+    setNewMotBCPowersAndRatio(-45, 45);
+    sleep(900);
     stopBC();
     moveBC(10, 20, -20);
+    stopBC();
     setTimeManipD(350, 100, 2);
+    sleep(100);
 
     moveBCSmartAccelExtreme(150, 23, -23, 23, -23);
-    tankTurnNSSmartAccelExtreme(180, -24, -24);
+    tankTurnNSSmartAccelExtreme(180, -26, -26);
+    tankTurnSenCrawl(26, 26, 23, 23, 400, 500);
     stopBC();
-    line2SenSmartAccelExtreme(290, 26, 70);
-    setNewMotBCPowersAndRatio(-70, 70);
+    line2SenSmartAccel(200, 26, 40);
+    setNewMotBCPowersAndRatio(-40, 40);
     waitForSen1(400);
-    moveBCSmartAccelExtreme(200, -70, 70, -80, 80);
+    moveBCSmartAccel(100, -40, 40, -50, 50);
 
-    line2SenSmartAccelExtreme(500, 80, 70);
-    moveBCSmartAccelExtreme(220, -70, 70, -30, 30);
+    line2SenSmartAccelExtreme(450, 50, 50);
+    moveBCSmartAccelExtreme(400, -50, 50, -30, 30);
     stopBC();
     setSoundVolume(100);
     playSound(soundException);
 }
 
+void kras()
+{
+    setTimeManipD(350, -100, 1);
+    sleep(400);
+    resetMotorEncoder(motD);
+    setTimeManipD(350, 100, 1);
+    moveBCAccelPartMainB(240, -20, 20, -30, 30);
+    line2SenAccelPart(&DEFAULT_LINE_PID_MEDIUM, 240, 30, 30);
+
+    setNewMotBCPowersAndRatio(-30, 30);
+    waitForSen2(395);
+    moveBCSmartAccel(680, -23, 23, -23, 23);
+    stopBC();
+    sleep(200);
+    tankTurnNSSmartAccel(95, 23, 23);
+    setTimeManipD(350, 100, 1);
+    moveBCSmartAccel(555, -23, 23, -23, 23);
+    stopBC();
+    sleep(200);
+    setDegManipD(320, -60, -5);
+    sleep(3000);
+    moveBCSmartAccel(540, 23, -23, 23, -23);
+    tankTurnNSSmartAccel(125, 23, 23);
+    moveBCSmartAccel(310, -23, 23, -23, 23);
+    stopBC();
+    setTimeManipD(350, 100, 1);
+    sleep(1500);
+    waitForManipD();
+    moveBCSmartAccel(310, 23, -23, 23, -23);
+    tankTurnNSSmartAccel(125, -23, -23);
+    moveBCSmartAccelExtreme(3300, -25, 25, -25, 25);
+    stopBC();
+    moveBCSmartAccel(1000, 23, -23, 23, -23);
+    stopBC();
+    sleep(200);
+    setStartDegMotBCAndReset(getEncoderB(), getEncoderC());
+    setNewMotBCPowersAndRatio(25, -25);
+    while (readCalibratedSenSumRGB(sen2, &SEN2_CALIBRATION) < 700 || readCalibratedSenSumRGB(sen1, &SEN1_CALIBRATION))
+    {
+        sleep(1);
+    }
+    sleep(200);
+    waitFor2Sen(400, 400);
+    stopBC();
+
+    // tankTurnSenCrawl(25, 25, 23, 23, 400, 400);
+}
+
+void whiteCube()
+{
+    moveBCSmartAccel(110, -23, 23, -23, 23);
+    tankTurnNSSmartAccel(90, 23, 23);
+    line2SenCrawl(&DEFAULT_LINE_PID_MEDIUM, 23, 400, 400);
+    tankTurnNSSmartAccel(180, 23, 23); 
+    line2SenDist(&DEFAULT_LINE_PID_MEDIUM, 500, 25);
+    setTimeManipD(350, 100, 1);
+    moveBCSmartAccel(300, -23, 23, -23, 23);
+    setTimeManipA(1000, -50, -5);
+    moveBCSmartAccel(150, 23, -23, 23, -23);
+    tankTurnNSSmartAccel(180, 23, 23);
+    line2SenCrawl(&DEFAULT_LINE_PID_MEDIUM, 23, 400, 400);
+    tankTurnNSSmartAccel(90, -23, -23);
+    moveBCSmartAccel(150, -23, 23, -23, 23);
+    tankTurnNSSmartAccel(90, 23, 23);
+    setTimeManipD(350, 100, 1);
+    moveBCSmartAccel(1000, -23, 23, -23, 23);
+}
+
 void mainLogic()
 {
-    startReadPullShip();
-    goToCubes();
-    readCubes();
-    putCubes();
-    moveBigAndSmallShipToWhite();
-    whiteCubeOnBig();
-    pushShips();
-    conCraneAndFinish();
+    kras();
 }
 
 void testFunc()
 {
-    conCraneAndFinish();
+    // // tankTurnNS3Parts(1, 360 * 3 - 2, 1, 20, 20, 20, 20, 20, 20);
+    // // tankTurnNSSmartAccel(360 * 3, 20, 20);
 
-    // lineSen2InDistOnlyBlue(&GREY_WHITEBLUE_LINE_PID, 2000000, 40, 105);
-    // setTimeManipD(1000, 100, 20, 8);
-    // goToCubes();
-    // readCubes();
-    // putCubes();
+    // // setTimeManipD(350, 100, 1);
+    // // sleep(450);
+    // // resetMotorEncoder(motD);
+    // // goToCubes();
+    // // readCubes();
+    // // takeCube4();
+    // // goToBigShipFrom4Cube();
+    // // moveOnLineToBigShip();
+    // // stopBC();
+    // // sleep(5000);
 
-    // takeCube3();
-    // goToBigShipFrom4Cube();
-    // put2CubeBigShip();
-
-    // setTimeManipD(400, -65, -50);
-    // sleep(3000);
-    // putCubeOnShip();
-
-    // tankTurnNS3Parts(90, 360 * 2, 90, -20, -20, -50, -50, -17, -17);
-
-    // displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION);
-
-    // line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 20, 50, 50);
-
-    // moveBC3PartsMainC(334, 0, 156, 10, 60, 15, 90, 10, 60);
-    // stopBC();
-
-    // line2SenCrawl(&DEFAULT_LINE_PID_SLOW, 40, 50, 50);
-    //  debReadAndShowRGB(sen1, &SEN1_CALIBRATION);
-    //   displayMeanCalibratedRGB(sen2, &SEN2_CALIBRATION);
-
-    // displayCalibrationValues();
-    //     bool *flag = setDegManipD(&MANIP_D_PID_SETTINGS, 150, 2, 10);
-    //     while (*flag)
-    //         ;
-
-    // debReadAndShowHSV(sen3, &SEN3_CALIBRATION);
-
-    // setTimeManipD(150, 100, 2);
-    // sleep(1000);
-    // resetMotorEncoder(motD);
-    // setTimeManipD(500, -50, -20);
-    // sleep(5000);
-    // setDegManipD(&MANIP_D_PID_SETTINGS, 160, 2, 0);
-    // sleep(300);
-    // moveBC(100, 20, -20);
-    // setTimeManipD(500, -30, -10);
-    // moveBC(100, 20, -20);
-    // stopBC();
-
-    // takeCube1();
-    //  setTimeManipD(3000, -50, -50);
-    //  sleep(5000);
-    //  setTimeManipD(3000, 70, 70);
-
-    // line2SenCrawl(&DEFAULT_LINE_PID_SUPRA, 85, 200, 200);
-    // stopBC();
-
-    //  displayCalibrationValues();
+    // setTimeManipD(350, -60, -20);
+    // conCraneAndFinish();
 }

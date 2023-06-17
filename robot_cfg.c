@@ -11,11 +11,11 @@ const short MOTORS_MIN_POWER = 0;
 
 const short MIN_SEN_POWER = 7;
 
-const float SAFE_START_ACCEL = 10;
-const float SAFE_END_ACCEL = 6;
+const float SAFE_START_ACCEL = 5;
+const float SAFE_END_ACCEL = 3;
 
-const float EXTREME_START_ACCEL = 24;
-const float EXTREME_END_ACCEL = 8;
+const float EXTREME_START_ACCEL = 15;
+const float EXTREME_END_ACCEL = 5;
 
 const float KOEF_ENC_A = 1;
 const float KOEF_ENC_B = 1;
@@ -62,9 +62,9 @@ PIDSettings *MANIP_D_PID_PTR;
 
 void defStructures()
 {
-    MOT_PID_SETTINGS.Kp = 4.2;
-    MOT_PID_SETTINGS.Ki = 2.1;
-    MOT_PID_SETTINGS.Kd = 0.0021;
+    MOT_PID_SETTINGS.Kp = 4.3;
+    MOT_PID_SETTINGS.Ki = 2.2;
+    MOT_PID_SETTINGS.Kd = 0.0024;
     MOT_PID_SETTINGS.prevErr = 0;
     MOT_PID_SETTINGS.integral = 0;
     MOT_PID_SETTINGS.errNow = 0;
@@ -95,33 +95,33 @@ void defStructures()
 
     // ----------------------------------
 
-    SEN1_CALIBRATION.minR = 33;
-    SEN1_CALIBRATION.minG = 42;
-    SEN1_CALIBRATION.minB = 17;
+    SEN1_CALIBRATION.minR = 37;
+    SEN1_CALIBRATION.minG = 45;
+    SEN1_CALIBRATION.minB = 31;
 
-    SEN1_CALIBRATION.maxR = 352;
-    SEN1_CALIBRATION.maxG = 368;
-    SEN1_CALIBRATION.maxB = 195;
-
-    // ----------------------------------
-
-    SEN2_CALIBRATION.minR = 38;
-    SEN2_CALIBRATION.minG = 41;
-    SEN2_CALIBRATION.minB = 33;
-
-    SEN2_CALIBRATION.maxR = 380;
-    SEN2_CALIBRATION.maxG = 363;
-    SEN2_CALIBRATION.maxB = 331;
+    SEN1_CALIBRATION.maxR = 339;
+    SEN1_CALIBRATION.maxG = 340;
+    SEN1_CALIBRATION.maxB = 300;
 
     // ----------------------------------
 
-    SEN3_CALIBRATION.minR = 2;
-    SEN3_CALIBRATION.minG = 2;
-    SEN3_CALIBRATION.minB = 2;
+    SEN2_CALIBRATION.minR = 30;
+    SEN2_CALIBRATION.minG = 44;
+    SEN2_CALIBRATION.minB = 16;
 
-    SEN3_CALIBRATION.maxR = 27;
-    SEN3_CALIBRATION.maxG = 26;
-    SEN3_CALIBRATION.maxB = 30;
+    SEN2_CALIBRATION.maxR = 327;
+    SEN2_CALIBRATION.maxG = 358;
+    SEN2_CALIBRATION.maxB = 188;
+
+    // ----------------------------------
+
+    SEN3_CALIBRATION.minR = 3;
+    SEN3_CALIBRATION.minG = 4;
+    SEN3_CALIBRATION.minB = 8;
+
+    SEN3_CALIBRATION.maxR = 37;
+    SEN3_CALIBRATION.maxG = 28;
+    SEN3_CALIBRATION.maxB = 57;
 
     // ----------------------------------
 

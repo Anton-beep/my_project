@@ -1,8 +1,10 @@
 #include "PID_c_sensors.c"
 #include "motion.c"
 
-// Line forward
 // TODO: smart accels
+// TODO: одна удобная функция чтобы контроллировать до какого момента роботу делать какое-то действие: ехать вперед пока белый, двигаться по линии до черного и т.д.
+
+// Line forward
 
 void lineSen2InDistOnlyBlue(PIDSettings *PIDSet, float dist, float pow, float target)
 {

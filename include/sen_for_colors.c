@@ -135,6 +135,7 @@ int NOTHING_MAX_VAL;
 SenSettings *READ_ROW_OF_OBJECTS_SEN_CALIBRATION_PTR;
 bool *READ_ROW_OF_OBJECTS_PTR_WORK_FLAG;
 
+//TODO: улучшить фунции ниже: добавить функционал считывания через определенное количество градусов или при каких-либо других условиях
 // you can moving and start this task to "scan" row with color sensor
 // task changes index of the res array when last el and now el are different
 // do not start it using startTask

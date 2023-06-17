@@ -23,7 +23,7 @@ void defineMain()
     #elif DEB_DISPLAY_MEAN_CALIBRATED_HSV_SEN2 == 1
         displayMeanCalibratedHSV(sen2, &SEN2_CALIBRATION);
     #elif DEB_DISPLAY_MEAN_CALIBRATED_HSV_SEN3 == 1
-        displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION_CUBES);
+        displayMeanCalibratedHSV(sen3, &SEN3_CALIBRATION);
     #elif DEB_DISPLAY_MEAN_CALIBRATED_HSV_SEN4 == 1
         displayMeanCalibratedHSV(sen4, &SEN4_CALIBRATION);
     #elif DEB_DISPLAY_CALIBRATON_VALUES == 1

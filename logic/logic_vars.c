@@ -9,7 +9,7 @@ int IN_PTRS_1CUBE[3];
 // ONLY char *_____________________________________________________________
 char *FILENAME = "deb.txt";
 
-// 0 - green, 1 - blue
+// 0 - black, 1 - yellow
 int CUBES_COLORS[4] = {0, 1, 1, 0};
 
 // -1 - no cube, 0 - small ship, 1 - big ship
@@ -22,13 +22,13 @@ int RGB_SUM_SEN1_BEFORE_CUBES = 510;
 int RGB_SUM_SEN2_BEFORE_CUBES = 510;
 int DEBUG_FILE_HND = fileOpenWrite(FILENAME);
 
-// -2 - err, -1 - no cube, 0 - green, 1 - blue, 
+// -2 - err, -1 - no cube, 0 - black, 1 - yellow 
 int FIRST_CUBE_TO_TAKE = 0;
 int SECOND_CUBE_TO_TAKE = 0;
 
 // ONLY SenRGBVals_________________________________________________________
-SenHSVVals GREEN_CUBE_FIRST_SCAN;
-SenHSVVals BLUE_CUBE_FIRST_SCAN;
+SenHSVVals YELLOW_CUBE_FIRST_SCAN;
+SenHSVVals BLACK_CUBE_FIRST_SCAN;
 SenHSVVals NOTHING_FIRST_SCAN;
 SenHSVVals GREEN_CUBE_CUBES;
 SenHSVVals BLUE_CUBE_CUBES;
@@ -39,13 +39,13 @@ SenHSVVals NOTHING_CUBES;
 void defineForLogic()
 {
     // ONLY SenRGBVals________________________________________________________
-    GREEN_CUBE_FIRST_SCAN.H = 141;
-    GREEN_CUBE_FIRST_SCAN.S = 138.5;
-    GREEN_CUBE_FIRST_SCAN.V = 10.7;
+    YELLOW_CUBE_FIRST_SCAN.H = 141;
+    YELLOW_CUBE_FIRST_SCAN.S = 138.5;
+    YELLOW_CUBE_FIRST_SCAN.V = 10.7;
 
-    BLUE_CUBE_FIRST_SCAN.H = 220;
-    BLUE_CUBE_FIRST_SCAN.S = 104.6;
-    BLUE_CUBE_FIRST_SCAN.V = 24.6;
+    BLACK_CUBE_FIRST_SCAN.H = 220;
+    BLACK_CUBE_FIRST_SCAN.S = 104.6;
+    BLACK_CUBE_FIRST_SCAN.V = 24.6;
 
     NOTHING_FIRST_SCAN.H = 0;
     NOTHING_FIRST_SCAN.S = 0;
@@ -73,8 +73,8 @@ void defineForLogic()
 
     // ONLY int *_____________________________________________________________
 
-    IN_PTRS_FIRST_SCAN[0] = (int)&GREEN_CUBE_FIRST_SCAN;
-    IN_PTRS_FIRST_SCAN[1] = (int)&BLUE_CUBE_FIRST_SCAN;
+    IN_PTRS_FIRST_SCAN[0] = (int)&BLACK_CUBE_FIRST_SCAN;
+    IN_PTRS_FIRST_SCAN[1] = (int)&BLACK_CUBE_FIRST_SCAN;
 
     IN_PTRS_1CUBE[0] = (int)&ANOTHER_GREEN_CUBE_CUBES;
     IN_PTRS_1CUBE[1] = (int)&ANOTHER_BLUE_CUBE_CUBES;

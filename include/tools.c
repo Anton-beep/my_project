@@ -1,6 +1,8 @@
 #include "../robot_cfg.c"
 #include "structures.c"
 
+// TODO: адекватный способ записи данных отладки в файл
+
 char *floatToString(float val)
 {
     char str[10];

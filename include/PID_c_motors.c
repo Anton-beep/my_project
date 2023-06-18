@@ -22,6 +22,13 @@ short ERR_MODE;
 По хорошему нужно придумать механическое устройство
 */
 
+/*
+TODO:
+- Учет ошибки с прошлого действия. Cейчас ПИД регулятор сбрасывается после каждого действия, я хочу, чтобы регулятор исправлял прошлую ошибку в процессе следующего действия
+- Сделать свой механизм остановки: если прописать stopBC(), то робот должен в итоге основится с теми градусами моторов, с которым была активирована функция.
+- Детектор проскальзованй моторов 
+*/
+
 float getEncoderA()
 {
     return nMotorEncoder[motA] * KOEF_ENC_A;
@@ -239,77 +246,6 @@ void pausePIDMot()
 void resumePIDMot()
 {
     MOT_PID_SETTINGS.pauseAction = false;
-}
-
-bool KEEP_MOVING_B_WORKING = false;
-bool KEEP_MOVING_C_WORKING = false;
-bool PAUSE_KEEP_MOVING_B = false;
-bool PAUSE_KEEP_MOVING_C = false;
-
-task keepBMoving()
-{
-    float startTimeKeepMovingB = 0;
-    while (true)
-    {
-        if (!(PAUSE_KEEP_MOVING_B))
-        {
-            if (getMotorRPM(motB) == 0 && POWER_MOT_B != 0)
-            {
-                if (!(KEEP_MOVING_B_WORKING))
-                {
-                    clearTimer(T1);
-                    KEEP_MOVING_B_WORKING = true;
-                }
-                KEEP_MOVING_B_SETTINGS.errNow = time1[T1];
-                if (POWER_MOT_B > 0)
-                {
-                    motor[motB] += PIDFunction(&KEEP_MOVING_B_SETTINGS);
-                }
-                else
-                {
-                    motor[motB] -= PIDFunction(&KEEP_MOVING_B_SETTINGS);
-                }
-                sleep(KEEP_MOVING_B_SETTINGS.dt * 1000);
-            }
-            else
-            {
-                KEEP_MOVING_B_WORKING = false;
-            }
-        }
-    }
-}
-
-task keepCMoving()
-{
-    float startTimeKeepMovingC = 0;
-    while (true)
-    {
-        if (!(PAUSE_KEEP_MOVING_C))
-        {
-            if (getMotorRPM(motC) == 0 && POWER_MOT_C != 0)
-            {
-                if (!(KEEP_MOVING_C_WORKING))
-                {
-                    clearTimer(T2);
-                    KEEP_MOVING_C_WORKING = true;
-                }
-                KEEP_MOVING_C_SETTINGS.errNow = time1[T2];
-                if (POWER_MOT_C > 0)
-                {
-                    motor[motC] += PIDFunction(&KEEP_MOVING_C_SETTINGS);
-                }
-                else
-                {
-                    motor[motC] -= PIDFunction(&KEEP_MOVING_C_SETTINGS);
-                }
-                sleep(KEEP_MOVING_C_SETTINGS.dt * 1000);
-            }
-            else
-            {
-                KEEP_MOVING_C_WORKING = false;
-            }
-        }
-    }
 }
 
 float TEST_CALIBRATION_POWB;

@@ -1,6 +1,11 @@
 #include "tools.c"
 #include "structures.c"
 
+/*
+TODO:
+- добавить возможность кодирования датчиком
+*/
+
 void readCalibratedSenRGB(short sen, SenSettings *senParams, SenRGBVals *outParams)
 {
     int r, g, b;

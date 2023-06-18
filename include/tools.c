@@ -1,7 +1,10 @@
 #include "../robot_cfg.c"
 #include "structures.c"
 
-// TODO: адекватный способ записи данных отладки в файл
+/*
+TODO:
+- адекватный способ записи данных отладки в файл
+*/
 
 char *floatToString(float val)
 {
@@ -75,4 +78,8 @@ int getSignedRPM(short mot)
     {
         return -getMotorRPM(mot);
     }
+}
+
+queue *initQueue(int size) {
+    queue *q = memset()
 }

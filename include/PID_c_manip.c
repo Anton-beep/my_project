@@ -2,6 +2,13 @@
 #include "PID_c.c"
 #include "../robot_cfg.c"
 
+/*
+TODO:
+- тест waitForManip (wait может срботать до активации функции)
+- попробовать управлять не просто мощностью, а скоростью моторов, чтобы держать стабильную скорость движения
+захватов (ПИД регулятор на RPM)
+*/
+
 void stopA()
 {
     motor[motA] = 0;
@@ -64,11 +71,17 @@ void testAdjust()
     }
 }
 
+bool FUNCTION_MANIP_A_ACIVATED = false;
+bool FUNCTION_MANIP_D_ACTIVATED = false;
 bool MANIP_A_READY = true;
 bool MANIP_D_READY = true;
 
 void waitForManipA()
 {
+    while (!FUNCTION_MANIP_A_ACIVATED)
+    {
+        sleep(1);
+    }
     while (!MANIP_A_READY)
     {
         sleep(1);
@@ -77,6 +90,10 @@ void waitForManipA()
 
 void waitForManipD()
 {
+    while (!FUNCTION_MANIP_D_ACTIVATED)
+    {
+        sleep(1);
+    }
     while (!MANIP_D_READY)
     {
         sleep(1);
@@ -90,11 +107,13 @@ int TIME_MANIP_A_TIME;
 
 task moveTimeManipA()
 {
+    FUNCTION_MANIP_A_ACIVATED = true;
     MANIP_A_READY = false;
     setPowerAdjustBatteryManipA(TIME_MANIP_A_START_POW, TIME_MANIP_A_VOLTAGE);
     sleep(TIME_MANIP_A_TIME);
     setPowerAdjustBatteryManipA(TIME_MANIP_A_AFTER_POW, TIME_MANIP_A_VOLTAGE);
     MANIP_A_READY = true;
+    FUNCTION_MANIP_A_ACIVATED = false;
 }
 
 short TIME_MANIP_D_START_POW;
@@ -104,11 +123,13 @@ int TIME_MANIP_D_TIME;
 
 task moveTimeManipD()
 {
+    FUNCTION_MANIP_D_ACTIVATED = true;
     MANIP_D_READY = false;
     setPowerAdjustBatteryManipD(TIME_MANIP_D_START_POW, TIME_MANIP_D_VOLTAGE);
     sleep(TIME_MANIP_D_TIME);
     setPowerAdjustBatteryManipD(TIME_MANIP_D_AFTER_POW, TIME_MANIP_D_VOLTAGE);
     MANIP_D_READY = true;
+    FUNCTION_MANIP_D_ACTIVATED = false;
 }
 
 int DEG_MANIP_A_DEG;

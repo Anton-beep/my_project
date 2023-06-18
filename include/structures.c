@@ -1,3 +1,9 @@
+typedef struct queue
+{
+    float *data;
+};
+
+
 typedef struct SenSettings
 {
     short minR;

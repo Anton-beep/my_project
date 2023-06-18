@@ -4,6 +4,13 @@
 #include "sen_calibration.c"
 #include "PID_c_motors.c"
 
+/*
+TODO:
+- Изменить определение функций, сейчас слишком много функций просто копируют друг друга, надо сократить количество
+строк в коде и сделать его чище.
+- И добавить следования по всяким другим условиям, например только по синей составляющей, или только по зеленой.
+*/
+
 void PID2SensWork(PIDSettings *PIDSet, float pow)
 {
     PIDSet->errNow = readCalibratedSenSumRGB(sen1, SEN1_CALIBRATION) - readCalibratedSenSumRGB(sen2, SEN2_CALIBRATION);

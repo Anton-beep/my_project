@@ -26,6 +26,8 @@ task main (){
 	getColorRawRGB(sen3, r, g, b);
 	sleep(200);
 
+	// попробовать сократить время иницализации
+
 	setSoundVolume(20);
 	startTask(checkBat);
 	clearTimer(T3);
@@ -35,8 +37,6 @@ task main (){
 	//setMotorBrakeMode(motD, motorCoast);
 	startTask(PIDEngineMot, 7);
 	//startTask(checkMotorProblems, 7);
-	//startTask(keepBMoving);
-	//startTask(keepCMoving);
 
 	defineForLogic();
 
